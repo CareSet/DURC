@@ -45,7 +45,8 @@ this will be automatically overwritten by future DURC runs.
 		$file = LaravelRouteGenerator::getFile();
 
 
-		$snippet = "
+		$snippet = " 
+//DURC->	$database.$table
 Route::resource('$class_name', '$class_name"."Controller');
 ";
 
