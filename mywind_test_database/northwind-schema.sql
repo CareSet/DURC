@@ -5,9 +5,9 @@ CREATE SCHEMA IF NOT EXISTS `northwind_model` DEFAULT CHARACTER SET latin1 ;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`customers`
+-- Table `northwind_model`.`customer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`customers` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`customer` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `company` VARCHAR(50) NULL DEFAULT NULL,
   `lastName` VARCHAR(50) NULL DEFAULT NULL,
@@ -38,9 +38,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`employees`
+-- Table `northwind_model`.`employee`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`employees` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`employee` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `company` VARCHAR(50) NULL DEFAULT NULL,
   `lastName` VARCHAR(50) NULL DEFAULT NULL,
@@ -71,9 +71,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`privileges`
+-- Table `northwind_model`.`privilege`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`privileges` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`privilege` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `privilegeName` VARCHAR(50) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
@@ -82,22 +82,22 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`employeePrivileges`
+-- Table `northwind_model`.`employeePrivilege`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`employeePrivileges` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`employeePrivilege` (
   `employee_id` INT(11) NOT NULL,
   `privilege_id` INT(11) NOT NULL,
   PRIMARY KEY (`employee_id`, `privilege_id`),
   INDEX `employee_id` (`employee_id` ASC),
   INDEX `privilege_id` (`privilege_id` ASC),
-  CONSTRAINT `fkEmployeePrivilegesEmployees1`
+  CONSTRAINT `fkEmployeePrivilegeEmployees1`
     FOREIGN KEY (`employee_id`)
-    REFERENCES `northwind_model`.`employees` (`id`)
+    REFERENCES `northwind_model`.`employee` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkEmployeePrivilegesPrivileges1`
+  CONSTRAINT `fkEmployeePrivilegePrivilege1`
     FOREIGN KEY (`privilege_id`)
-    REFERENCES `northwind_model`.`privileges` (`id`)
+    REFERENCES `northwind_model`.`privilege` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -105,9 +105,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`inventoryTransactionTypes`
+-- Table `northwind_model`.`inventoryTransactionType`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`inventoryTransactionTypes` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`inventoryTransactionType` (
   `id` TINYINT(4) NOT NULL,
   `typeName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
@@ -149,9 +149,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`ordersTaxStatus`
+-- Table `northwind_model`.`orderTaxStatus`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`ordersTaxStatus` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`orderTaxStatus` (
   `id` TINYINT(4) NOT NULL,
   `taxStatusName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
@@ -160,9 +160,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`ordersStatus`
+-- Table `northwind_model`.`orderStatus`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`ordersStatus` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`orderStatus` (
   `id` TINYINT(4) NOT NULL,
   `statusName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
@@ -172,9 +172,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`products`
+-- Table `northwind_model`.`product`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`products` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`product` (
   `supplier_ids` LONGTEXT NULL DEFAULT NULL,
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `productCode` VARCHAR(25) NULL DEFAULT NULL,
@@ -207,9 +207,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`suppliers`
+-- Table `northwind_model`.`supplier`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`suppliers` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`supplier` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `company` VARCHAR(50) NULL DEFAULT NULL,
   `lastName` VARCHAR(50) NULL DEFAULT NULL,
@@ -241,9 +241,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`orderDetailsStatus`
+-- Table `northwind_model`.`orderDetailStatus`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`orderDetailsStatus` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`orderDetailStatus` (
   `id` INT(11) NOT NULL,
   `statusName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
@@ -253,9 +253,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`salesReports`
+-- Table `northwind_model`.`salesReport`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`salesReports` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`salesReport` (
   `groupBy` VARCHAR(50) NOT NULL,
   `display` VARCHAR(50) NULL DEFAULT NULL,
   `title` VARCHAR(50) NULL DEFAULT NULL,
@@ -267,9 +267,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`strings`
+-- Table `northwind_model`.`string`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`strings` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`string` (
   `string_id` INT(11) NOT NULL AUTO_INCREMENT,
   `stringData` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`string_id`))
@@ -282,9 +282,9 @@ CREATE SCHEMA IF NOT EXISTS `northwind_data` DEFAULT CHARACTER SET latin1 ;
 
 
 -- -----------------------------------------------------
--- Table `northwind_data`.`orders`
+-- Table `northwind_data`.`order`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_data`.`orders` (
+CREATE TABLE IF NOT EXISTS `northwind_data`.`order` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `employee_id` INT(11) NULL DEFAULT NULL,
   `customer_id` INT(11) NULL DEFAULT NULL,
@@ -312,38 +312,38 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`orders` (
   INDEX `shipper_id` (`shipper_id` ASC),
   INDEX `taxStatus` (`taxStatus_id` ASC),
   INDEX `shipZipPostalCode` (`shipZipPostalCode` ASC),
-  CONSTRAINT `fkOrdersCustomers`
+  CONSTRAINT `fkOrderCustomers`
     FOREIGN KEY (`customer_id`)
-    REFERENCES `northwind_model`.`customers` (`id`)
+    REFERENCES `northwind_model`.`customer` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkOrdersEmployees1`
+  CONSTRAINT `fkOrderEmployees1`
     FOREIGN KEY (`employee_id`)
-    REFERENCES `northwind_model`.`employees` (`id`)
+    REFERENCES `northwind_model`.`employee` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkOrdersShippers1`
+  CONSTRAINT `fkOrderShippers1`
     FOREIGN KEY (`shipper_id`)
     REFERENCES `northwind_model`.`shippers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkOrdersOrdersTaxStatus1`
+  CONSTRAINT `fkOrderOrderTaxStatus1`
     FOREIGN KEY (`taxStatus_id`)
-    REFERENCES `northwind_model`.`ordersTaxStatus` (`id`)
+    REFERENCES `northwind_model`.`orderTaxStatus` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkOrdersOrdersStatus1`
+  CONSTRAINT `fkOrderOrderStatus1`
     FOREIGN KEY (`status_id`)
-    REFERENCES `northwind_model`.`ordersStatus` (`id`)
+    REFERENCES `northwind_model`.`orderStatus` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
--- Table `northwind_data`.`purchaseOrders`
+-- Table `northwind_data`.`purchaseOrder`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_data`.`purchaseOrders` (
+CREATE TABLE IF NOT EXISTS `northwind_data`.`purchaseOrder` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `supplier_id` INT(11) NULL DEFAULT NULL,
   `createdBy` INT(11) NULL DEFAULT NULL,
@@ -365,19 +365,19 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`purchaseOrders` (
   INDEX `createdBy` (`createdBy` ASC),
   INDEX `status_id` (`status_id` ASC),
   INDEX `supplier_id` (`supplier_id` ASC),
-  CONSTRAINT `fkPurchaseOrdersEmployees1`
+  CONSTRAINT `fkPurchaseOrderEmployees1`
     FOREIGN KEY (`createdBy`)
-    REFERENCES `northwind_model`.`employees` (`id`)
+    REFERENCES `northwind_model`.`employee` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkPurchaseOrdersPurchaseOrderStatus1`
+  CONSTRAINT `fkPurchaseOrderPurchaseOrderStatus1`
     FOREIGN KEY (`status_id`)
     REFERENCES `northwind_model`.`purchaseOrderStatus` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkPurchaseOrdersSuppliers1`
+  CONSTRAINT `fkPurchaseOrderSuppliers1`
     FOREIGN KEY (`supplier_id`)
-    REFERENCES `northwind_model`.`suppliers` (`id`)
+    REFERENCES `northwind_model`.`supplier` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -385,9 +385,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_data`.`inventoryTransactions`
+-- Table `northwind_data`.`inventoryTransaction`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_data`.`inventoryTransactions` (
+CREATE TABLE IF NOT EXISTS `northwind_data`.`inventoryTransaction` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `transactionType` TINYINT(4) NOT NULL,
   `transactionCreatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -402,24 +402,24 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`inventoryTransactions` (
   INDEX `product_id` (`product_id` ASC),
   INDEX `purchaseOrder_id` (`purchaseOrder_id` ASC),
   INDEX `transactionType` (`transactionType` ASC),
-  CONSTRAINT `fkInventoryTransactionsOrders1`
+  CONSTRAINT `fkInventoryTransactionOrder1`
     FOREIGN KEY (`customerOrder_id`)
-    REFERENCES `northwind_data`.`orders` (`id`)
+    REFERENCES `northwind_data`.`order` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkInventoryTransactionsProducts1`
+  CONSTRAINT `fkInventoryTransactionProducts1`
     FOREIGN KEY (`product_id`)
-    REFERENCES `northwind_model`.`products` (`id`)
+    REFERENCES `northwind_model`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkInventoryTransactionsPurchaseOrders1`
+  CONSTRAINT `fkInventoryTransactionPurchaseOrder1`
     FOREIGN KEY (`purchaseOrder_id`)
-    REFERENCES `northwind_data`.`purchaseOrders` (`id`)
+    REFERENCES `northwind_data`.`purchaseOrder` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkInventoryTransactionsInventoryTransactionTypes1`
+  CONSTRAINT `fkInventoryTransactionInventoryTransactionType1`
     FOREIGN KEY (`transactionType`)
-    REFERENCES `northwind_model`.`inventoryTransactionTypes` (`id`)
+    REFERENCES `northwind_model`.`inventoryTransactionType` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -427,9 +427,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_data`.`invoices`
+-- Table `northwind_data`.`invoice`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_data`.`invoices` (
+CREATE TABLE IF NOT EXISTS `northwind_data`.`invoice` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `order_id` INT(11) NULL DEFAULT NULL,
   `invoiceDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -439,19 +439,19 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`invoices` (
   `amountDue` DECIMAL(19,4) NULL DEFAULT '0.0000',
   PRIMARY KEY (`id`),
   INDEX `id` (`id` ASC),
-  INDEX `fkInvoicesOrders1_idx` (`order_id` ASC),
-  CONSTRAINT `fkInvoicesOrders1`
+  INDEX `fkInvoicesOrder1_idx` (`order_id` ASC),
+  CONSTRAINT `fkInvoicesOrder1`
     FOREIGN KEY (`order_id`)
-    REFERENCES `northwind_model`.`orders` (`id`)
+    REFERENCES `northwind_model`.`order` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
--- Table `northwind_data`.`orderDetails`
+-- Table `northwind_data`.`orderDetail`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_data`.`orderDetails` (
+CREATE TABLE IF NOT EXISTS `northwind_data`.`orderDetail` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `order_id` INT(11) NOT NULL,
   `product_id` INT(11) NULL DEFAULT NULL,
@@ -467,21 +467,21 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`orderDetails` (
   INDEX `inventory_id` (`inventory_id` ASC),
   INDEX `product_id` (`product_id` ASC),
   INDEX `purchaseOrder_id` (`purchaseOrder_id` ASC),
-  INDEX `fkOrderDetailsOrders1_idx` (`order_id` ASC),
-  INDEX `fkOrderDetailsOrderDetailsStatus1_idx` (`status_id` ASC),
-  CONSTRAINT `fkOrderDetailsOrders1`
+  INDEX `fkOrderDetailOrder1_idx` (`order_id` ASC),
+  INDEX `fkOrderDetailOrderDetailStatus1_idx` (`status_id` ASC),
+  CONSTRAINT `fkOrderDetailOrder1`
     FOREIGN KEY (`order_id`)
-    REFERENCES `northwind_model`.`orders` (`id`)
+    REFERENCES `northwind_model`.`order` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkOrderDetailsProducts1`
+  CONSTRAINT `fkOrderDetailProducts1`
     FOREIGN KEY (`product_id`)
-    REFERENCES `northwind_model`.`products` (`id`)
+    REFERENCES `northwind_model`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkOrderDetailsOrderDetailsStatus1`
+  CONSTRAINT `fkOrderDetailOrderDetailStatus1`
     FOREIGN KEY (`status_id`)
-    REFERENCES `northwind_model`.`orderDetailsStatus` (`id`)
+    REFERENCES `northwind_model`.`orderDetailStatus` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -489,9 +489,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_data`.`purchaseOrderDetails`
+-- Table `northwind_data`.`purchaseOrderDetail`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_data`.`purchaseOrderDetails` (
+CREATE TABLE IF NOT EXISTS `northwind_data`.`purchaseOrderDetail` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `purchaseOrder_id` INT(11) NOT NULL,
   `product_id` INT(11) NULL DEFAULT NULL,
@@ -505,19 +505,19 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`purchaseOrderDetails` (
   INDEX `inventory_id` (`inventory_id` ASC),
   INDEX `purchaseOrder_id` (`purchaseOrder_id` ASC),
   INDEX `product_id` (`product_id` ASC),
-  CONSTRAINT `fkPurchaseOrderDetailsInventoryTransactions1`
+  CONSTRAINT `fkPurchaseOrderDetailInventoryTransaction1`
     FOREIGN KEY (`inventory_id`)
-    REFERENCES `northwind_data`.`inventoryTransactions` (`id`)
+    REFERENCES `northwind_data`.`inventoryTransaction` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkPurchaseOrderDetailsProducts1`
+  CONSTRAINT `fkPurchaseOrderDetailProducts1`
     FOREIGN KEY (`product_id`)
-    REFERENCES `northwind_model`.`products` (`id`)
+    REFERENCES `northwind_model`.`product` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fkPurchaseOrderDetailsPurchaseOrders1`
+  CONSTRAINT `fkPurchaseOrderDetailPurchaseOrder1`
     FOREIGN KEY (`purchaseOrder_id`)
-    REFERENCES `northwind_data`.`purchaseOrders` (`id`)
+    REFERENCES `northwind_data`.`purchaseOrder` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
