@@ -35,10 +35,8 @@ class DURC{
 					$tables[$column->TABLE_NAME] = [];
 				}
 	                	$tables[$column->TABLE_NAME][] = [
-					'column_name' => $column->COLUMN_NAME;
-					'data_type' => $column->DATA_TYPE;
-					
-
+					'column_name' => $column->COLUMN_NAME,
+					'data_type' => $column->DATA_TYPE,
 					]
 	            	}
 			return($tables);
