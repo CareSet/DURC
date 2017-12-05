@@ -3,6 +3,9 @@ Test database
 This is a hacked  fork of https://github.com/dalers/mywind
 Which is itself an example of the Microsoft Northwind database
 
+It is super helpful to see the diagram:
+https://raw.githubusercontent.com/dalers/mywind/master/northwind-erd.png
+
 It is modified specifically as a test platform for https://github.com/CareSet/DURC
 
 Which means that it splits the original databases into multiple database, in order to intentionally add complexity to 
