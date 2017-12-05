@@ -17,7 +17,7 @@ class DURCGenerator{
 	}
 
 
-	public statuc funcion finish(){
+	public static function finish(){
 		//nothing here.. override me if you like..
 	}
 

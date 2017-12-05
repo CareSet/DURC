@@ -8,13 +8,17 @@
 namespace CareSet\DURC;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
+use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\DB;
 
 class LaravelRouteGenerator extends DURCGenerator {
 
 
 	//so that we target the same file the whole time..
-	public static getFile(){
-		$file_name = get_path()."/route/durc.php";
+	public static function getFile(){
+		$file_name = base_path()."/routes/durc.php";
 		return($file_name);
 	}
 
@@ -30,7 +34,7 @@ this will be automatically overwritten by future DURC runs.
 
 ";
 
-		file_put_contents($file,''); //empty the current file..
+		file_put_contents($file,$header); //empty the current file..
 
 	}
 
@@ -41,7 +45,9 @@ this will be automatically overwritten by future DURC runs.
 		$file = LaravelRouteGenerator::getFile();
 
 
-		$snippet = "$class_name snippet";
+		$snippet = "
+Route::resource('$class_name', '$class_name"."Controller');
+";
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);
 
