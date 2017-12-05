@@ -1,4 +1,10 @@
 <?php
+/*
+	This is the place where the actual command is orchestrated.
+	it ends up being our "main()"
+
+
+*/
 namespace CareSet\DURC;
 
 use Illuminate\Console\Command;
@@ -14,12 +20,46 @@ class DURCCommand extends Command{
 	//what does this do?
 	echo "You are running inside handle: You rule the world!\n";
 
-	$databases = $this->option('DB');
+	//only one code generator for now...
+	$generatorClasses = [
+			'LaravelEloquentGenerator',
+			'MustacheViewGenerator',
+		];
 
+	$databases = $this->option('DB');
 
 	$db_struct = DURC::getDBStruct($databases);
 
-	var_export($db_struct);
+	$results = 
+	//each generator handles the creation of different type of file...
+	foreach($generatorClasses as $this_generator){
+
+		foreach($db_struct as $this_db => $db_data){
+			foreach($db_data as $this_table=> $table_data){
+				$this_class_name = $this_table;
+				$generated_results = 
+					$this_generator::generate(
+						$this_class_name,
+						$this_db,
+						$this_table,
+						$table_data
+					);
+
+				foreach($generated_results as $file_details){
+					//now we write the generated content...
+					file_put_contents($file_details['full_file_name'],$file_details['file_text']);
+				}
+
+			}
+		}
+
+	}
+
+//	$has_many_struct = DURC::getHasMany($db_struct);
+//	$belongs_to_struct = DURC::getHasMany($db_struct);
+	
 
     }
+
+
 }
