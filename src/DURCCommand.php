@@ -30,7 +30,6 @@ class DURCCommand extends Command{
 
 	$db_struct = DURC::getDBStruct($databases);
 
-	$results = 
 	//each generator handles the creation of different type of file...
 	foreach($generatorClasses as $this_generator){
 
