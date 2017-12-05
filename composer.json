@@ -1,0 +1,39 @@
+{
+    "name": "careset/durc",
+    "description": "DURC is reverse CRUD",
+    "type": "library",
+    "license": "AGPL-3.0",
+     "keywords": [
+		"laravel",
+		"crud",
+		"orm"
+    ],
+    "authors": [
+        {
+            "name": "Fred Trotter",
+            "email": "fred.trotter@gmail.com",
+            "homepage": "https://www.careset.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+	"php" : "^7.0"
+    },
+    "psr-4": {
+            "App\\": "app/",
+            "CareSet\\DURC\\": "packages/careset/durc/src"
+    },
+    "autoload": {
+	"psr-4": {
+		"CareSet\\DURC\\": "src/"
+	}
+    },
+	"extra": {
+		"laravel": {
+			"providers": [
+				"CareSet\\DURC\\DURCServiceProvider"
+			]
+		}
+	}
+}
