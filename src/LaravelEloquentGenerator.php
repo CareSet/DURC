@@ -11,7 +11,6 @@ namespace CareSet\DURC;
 class LaravelEloquentGenerator extends DURCGenerator {
 
 
-	public static $suggested_output_dir = 'app/';
 
 	public static function run_generator($class_name,$database,$table,$fields){
 
@@ -70,7 +69,7 @@ class LaravelEloquentGenerator extends DURCGenerator {
 
 		$parent_class_text = "<?php
 
-namespace App;
+namespace App\DURC\Models;
 
 use CareSet\DURC\DURCModel;
 /*
@@ -104,32 +103,36 @@ This class started life as a DURC model, but itwill no longer be overwritten by 
 this is safe to edit.
 
 */
-class $class_name extends $parent_class_name
+class $class_name extends \App\DURC\Models\\$parent_class_name
 {
 
+	//your stuff goes here..
 	
 
-}
+}//end $class_name
 ";
 
-		$my_path = base_path() . '/'. LaravelEloquentGenerator::$suggested_output_dir;
-		
-		$return_me = [
-			'laravel_parent_class' => [
-				'full_file_name' => $my_path.$parent_file_name,
-				'file_name' 	=> $parent_file_name,
-				'file_text'	=> $parent_class_text,
-				],
-			'laravel_child_class' => [
-				'full_file_name' => $my_path.$child_file_name,
-				'file_name' 	=> $child_file_name,
-				'file_text' 	=> $child_class_text,
-				],
-		];
+		$app_path = base_path() . '/app/'; //we put the editable file in the main app directory where all of the others live..
+		$durc_app_path = base_path() . '/app/DURC/Models/'; //we put the auto-genertated parent classes in a directory above that..
 
-		foreach($return_me as $file_details){
-			file_put_contents($file_details['full_file_name'],$file_details['file_text']);
+		if(!is_dir($durc_app_path)){
+			if (!mkdir($durc_app_path, 0777, true)) {
+
+    				die("DURC needs to create the $durc_app_path directory... but it could not.. what if it already existed? What then?");
+			}
 		}
+
+		$child_file = $app_path.$child_file_name;
+		$parent_file = $durc_app_path.$parent_file_name;
+
+		if(!file_exists($child_file)){
+			//we will only create this file the first time...
+			//so getting here means that it does not exist, this is the first creation pass.
+			file_put_contents($child_file,$child_class_text);
+		}
+
+		//but we always overwrite the parent class with the auto-generated stuff..
+		file_put_contents($parent_file,$parent_class_text);
 
 		return(true);
 
