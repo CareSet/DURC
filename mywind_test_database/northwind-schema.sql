@@ -1,6 +1,3 @@
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 DROP SCHEMA IF EXISTS `northwind` ;
 CREATE SCHEMA IF NOT EXISTS `northwind` DEFAULT CHARACTER SET latin1 ;
@@ -12,29 +9,29 @@ USE `northwind` ;
 CREATE TABLE IF NOT EXISTS `northwind`.`customers` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `company` VARCHAR(50) NULL DEFAULT NULL,
-  `last_name` VARCHAR(50) NULL DEFAULT NULL,
-  `first_name` VARCHAR(50) NULL DEFAULT NULL,
-  `email_address` VARCHAR(50) NULL DEFAULT NULL,
-  `job_title` VARCHAR(50) NULL DEFAULT NULL,
-  `business_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `home_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `mobile_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `fax_number` VARCHAR(25) NULL DEFAULT NULL,
+  `lastName` VARCHAR(50) NULL DEFAULT NULL,
+  `firstName` VARCHAR(50) NULL DEFAULT NULL,
+  `emailAddress` VARCHAR(50) NULL DEFAULT NULL,
+  `jobTitle` VARCHAR(50) NULL DEFAULT NULL,
+  `businessPhone` VARCHAR(25) NULL DEFAULT NULL,
+  `homePhone` VARCHAR(25) NULL DEFAULT NULL,
+  `mobilePhone` VARCHAR(25) NULL DEFAULT NULL,
+  `faxNumber` VARCHAR(25) NULL DEFAULT NULL,
   `address` LONGTEXT NULL DEFAULT NULL,
   `city` VARCHAR(50) NULL DEFAULT NULL,
-  `state_province` VARCHAR(50) NULL DEFAULT NULL,
-  `zip_postal_code` VARCHAR(15) NULL DEFAULT NULL,
-  `country_region` VARCHAR(50) NULL DEFAULT NULL,
-  `web_page` LONGTEXT NULL DEFAULT NULL,
+  `stateProvince` VARCHAR(50) NULL DEFAULT NULL,
+  `zipPostalCode` VARCHAR(15) NULL DEFAULT NULL,
+  `countryRegion` VARCHAR(50) NULL DEFAULT NULL,
+  `webPage` LONGTEXT NULL DEFAULT NULL,
   `notes` LONGTEXT NULL DEFAULT NULL,
   `attachments` LONGBLOB NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `city` (`city` ASC),
   INDEX `company` (`company` ASC),
-  INDEX `first_name` (`first_name` ASC),
-  INDEX `last_name` (`last_name` ASC),
-  INDEX `zip_postal_code` (`zip_postal_code` ASC),
-  INDEX `state_province` (`state_province` ASC))
+  INDEX `firstName` (`firstName` ASC),
+  INDEX `lastName` (`lastName` ASC),
+  INDEX `zipPostalCode` (`zipPostalCode` ASC),
+  INDEX `stateProvince` (`stateProvince` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -45,29 +42,29 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `northwind`.`employees` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `company` VARCHAR(50) NULL DEFAULT NULL,
-  `last_name` VARCHAR(50) NULL DEFAULT NULL,
-  `first_name` VARCHAR(50) NULL DEFAULT NULL,
-  `email_address` VARCHAR(50) NULL DEFAULT NULL,
-  `job_title` VARCHAR(50) NULL DEFAULT NULL,
-  `business_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `home_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `mobile_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `fax_number` VARCHAR(25) NULL DEFAULT NULL,
+  `lastName` VARCHAR(50) NULL DEFAULT NULL,
+  `firstName` VARCHAR(50) NULL DEFAULT NULL,
+  `emailAddress` VARCHAR(50) NULL DEFAULT NULL,
+  `jobTitle` VARCHAR(50) NULL DEFAULT NULL,
+  `businessPhone` VARCHAR(25) NULL DEFAULT NULL,
+  `homePhone` VARCHAR(25) NULL DEFAULT NULL,
+  `mobilePhone` VARCHAR(25) NULL DEFAULT NULL,
+  `faxNumber` VARCHAR(25) NULL DEFAULT NULL,
   `address` LONGTEXT NULL DEFAULT NULL,
   `city` VARCHAR(50) NULL DEFAULT NULL,
-  `state_province` VARCHAR(50) NULL DEFAULT NULL,
-  `zip_postal_code` VARCHAR(15) NULL DEFAULT NULL,
-  `country_region` VARCHAR(50) NULL DEFAULT NULL,
-  `web_page` LONGTEXT NULL DEFAULT NULL,
+  `stateProvince` VARCHAR(50) NULL DEFAULT NULL,
+  `zipPostalCode` VARCHAR(15) NULL DEFAULT NULL,
+  `countryRegion` VARCHAR(50) NULL DEFAULT NULL,
+  `webPage` LONGTEXT NULL DEFAULT NULL,
   `notes` LONGTEXT NULL DEFAULT NULL,
   `attachments` LONGBLOB NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `city` (`city` ASC),
   INDEX `company` (`company` ASC),
-  INDEX `first_name` (`first_name` ASC),
-  INDEX `last_name` (`last_name` ASC),
-  INDEX `zip_postal_code` (`zip_postal_code` ASC),
-  INDEX `state_province` (`state_province` ASC))
+  INDEX `firstName` (`firstName` ASC),
+  INDEX `lastName` (`lastName` ASC),
+  INDEX `zipPostalCode` (`zipPostalCode` ASC),
+  INDEX `stateProvince` (`stateProvince` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -77,29 +74,29 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `northwind`.`privileges` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `privilege_name` VARCHAR(50) NULL DEFAULT NULL,
+  `privilegeName` VARCHAR(50) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`employee_privileges`
+-- Table `northwind`.`employeePrivileges`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`employee_privileges` (
-  `employee_id` INT(11) NOT NULL,
-  `privilege_id` INT(11) NOT NULL,
-  PRIMARY KEY (`employee_id`, `privilege_id`),
-  INDEX `employee_id` (`employee_id` ASC),
-  INDEX `privilege_id` (`privilege_id` ASC),
-  INDEX `privilege_id_2` (`privilege_id` ASC),
-  CONSTRAINT `fk_employee_privileges_employees1`
-    FOREIGN KEY (`employee_id`)
+CREATE TABLE IF NOT EXISTS `northwind`.`employeePrivileges` (
+  `employeeId` INT(11) NOT NULL,
+  `privilegeId` INT(11) NOT NULL,
+  PRIMARY KEY (`employeeId`, `privilegeId`),
+  INDEX `employeeId` (`employeeId` ASC),
+  INDEX `privilegeId` (`privilegeId` ASC),
+  INDEX `privilegeId_2` (`privilegeId` ASC),
+  CONSTRAINT `fkEmployeePrivilegesEmployees1`
+    FOREIGN KEY (`employeeId`)
     REFERENCES `northwind`.`employees` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_employee_privileges_privileges1`
-    FOREIGN KEY (`privilege_id`)
+  CONSTRAINT `fkEmployeePrivilegesPrivileges1`
+    FOREIGN KEY (`privilegeId`)
     REFERENCES `northwind`.`privileges` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -108,11 +105,11 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`inventory_transaction_types`
+-- Table `northwind`.`inventoryTransactionTypes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`inventory_transaction_types` (
+CREATE TABLE IF NOT EXISTS `northwind`.`inventoryTransactionTypes` (
   `id` TINYINT(4) NOT NULL,
-  `type_name` VARCHAR(50) NOT NULL,
+  `typeName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -124,50 +121,50 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `northwind`.`shippers` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `company` VARCHAR(50) NULL DEFAULT NULL,
-  `last_name` VARCHAR(50) NULL DEFAULT NULL,
-  `first_name` VARCHAR(50) NULL DEFAULT NULL,
-  `email_address` VARCHAR(50) NULL DEFAULT NULL,
-  `job_title` VARCHAR(50) NULL DEFAULT NULL,
-  `business_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `home_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `mobile_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `fax_number` VARCHAR(25) NULL DEFAULT NULL,
+  `lastName` VARCHAR(50) NULL DEFAULT NULL,
+  `firstName` VARCHAR(50) NULL DEFAULT NULL,
+  `emailAddress` VARCHAR(50) NULL DEFAULT NULL,
+  `jobTitle` VARCHAR(50) NULL DEFAULT NULL,
+  `businessPhone` VARCHAR(25) NULL DEFAULT NULL,
+  `homePhone` VARCHAR(25) NULL DEFAULT NULL,
+  `mobilePhone` VARCHAR(25) NULL DEFAULT NULL,
+  `faxNumber` VARCHAR(25) NULL DEFAULT NULL,
   `address` LONGTEXT NULL DEFAULT NULL,
   `city` VARCHAR(50) NULL DEFAULT NULL,
-  `state_province` VARCHAR(50) NULL DEFAULT NULL,
-  `zip_postal_code` VARCHAR(15) NULL DEFAULT NULL,
-  `country_region` VARCHAR(50) NULL DEFAULT NULL,
-  `web_page` LONGTEXT NULL DEFAULT NULL,
+  `stateProvince` VARCHAR(50) NULL DEFAULT NULL,
+  `zipPostalCode` VARCHAR(15) NULL DEFAULT NULL,
+  `countryRegion` VARCHAR(50) NULL DEFAULT NULL,
+  `webPage` LONGTEXT NULL DEFAULT NULL,
   `notes` LONGTEXT NULL DEFAULT NULL,
   `attachments` LONGBLOB NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `city` (`city` ASC),
   INDEX `company` (`company` ASC),
-  INDEX `first_name` (`first_name` ASC),
-  INDEX `last_name` (`last_name` ASC),
-  INDEX `zip_postal_code` (`zip_postal_code` ASC),
-  INDEX `state_province` (`state_province` ASC))
+  INDEX `firstName` (`firstName` ASC),
+  INDEX `lastName` (`lastName` ASC),
+  INDEX `zipPostalCode` (`zipPostalCode` ASC),
+  INDEX `stateProvince` (`stateProvince` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`orders_tax_status`
+-- Table `northwind`.`ordersTaxStatus`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`orders_tax_status` (
+CREATE TABLE IF NOT EXISTS `northwind`.`ordersTaxStatus` (
   `id` TINYINT(4) NOT NULL,
-  `tax_status_name` VARCHAR(50) NOT NULL,
+  `taxStatusName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`orders_status`
+-- Table `northwind`.`ordersStatus`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`orders_status` (
+CREATE TABLE IF NOT EXISTS `northwind`.`ordersStatus` (
   `id` TINYINT(4) NOT NULL,
-  `status_name` VARCHAR(50) NOT NULL,
+  `statusName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -178,60 +175,60 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `northwind`.`orders` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `employee_id` INT(11) NULL DEFAULT NULL,
-  `customer_id` INT(11) NULL DEFAULT NULL,
-  `order_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `shipped_date` DATETIME NULL DEFAULT NULL,
-  `shipper_id` INT(11) NULL DEFAULT NULL,
-  `ship_name` VARCHAR(50) NULL DEFAULT NULL,
-  `ship_address` LONGTEXT NULL DEFAULT NULL,
-  `ship_city` VARCHAR(50) NULL DEFAULT NULL,
-  `ship_state_province` VARCHAR(50) NULL DEFAULT NULL,
-  `ship_zip_postal_code` VARCHAR(50) NULL DEFAULT NULL,
-  `ship_country_region` VARCHAR(50) NULL DEFAULT NULL,
-  `shipping_fee` DECIMAL(19,4) NULL DEFAULT '0.0000',
+  `employeeId` INT(11) NULL DEFAULT NULL,
+  `customerId` INT(11) NULL DEFAULT NULL,
+  `orderDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `shippedDate` DATETIME NULL DEFAULT NULL,
+  `shipperId` INT(11) NULL DEFAULT NULL,
+  `shipName` VARCHAR(50) NULL DEFAULT NULL,
+  `shipAddress` LONGTEXT NULL DEFAULT NULL,
+  `shipCity` VARCHAR(50) NULL DEFAULT NULL,
+  `shipStateProvince` VARCHAR(50) NULL DEFAULT NULL,
+  `shipZipPostalCode` VARCHAR(50) NULL DEFAULT NULL,
+  `shipCountryRegion` VARCHAR(50) NULL DEFAULT NULL,
+  `shippingFee` DECIMAL(19,4) NULL DEFAULT '0.0000',
   `taxes` DECIMAL(19,4) NULL DEFAULT '0.0000',
-  `payment_type` VARCHAR(50) NULL DEFAULT NULL,
-  `paid_date` DATETIME NULL DEFAULT NULL,
+  `paymentType` VARCHAR(50) NULL DEFAULT NULL,
+  `paidDate` DATETIME NULL DEFAULT NULL,
   `notes` LONGTEXT NULL DEFAULT NULL,
-  `tax_rate` DOUBLE NULL DEFAULT '0',
-  `tax_status_id` TINYINT(4) NULL DEFAULT NULL,
-  `status_id` TINYINT(4) NULL DEFAULT '0',
+  `taxRate` DOUBLE NULL DEFAULT '0',
+  `taxStatusId` TINYINT(4) NULL DEFAULT NULL,
+  `statusId` TINYINT(4) NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  INDEX `customer_id` (`customer_id` ASC),
-  INDEX `customer_id_2` (`customer_id` ASC),
-  INDEX `employee_id` (`employee_id` ASC),
-  INDEX `employee_id_2` (`employee_id` ASC),
+  INDEX `customerId` (`customerId` ASC),
+  INDEX `customerId_2` (`customerId` ASC),
+  INDEX `employeeId` (`employeeId` ASC),
+  INDEX `employeeId_2` (`employeeId` ASC),
   INDEX `id` (`id` ASC),
   INDEX `id_2` (`id` ASC),
-  INDEX `shipper_id` (`shipper_id` ASC),
-  INDEX `shipper_id_2` (`shipper_id` ASC),
+  INDEX `shipperId` (`shipperId` ASC),
+  INDEX `shipperId_2` (`shipperId` ASC),
   INDEX `id_3` (`id` ASC),
-  INDEX `tax_status` (`tax_status_id` ASC),
-  INDEX `ship_zip_postal_code` (`ship_zip_postal_code` ASC),
-  CONSTRAINT `fk_orders_customers`
-    FOREIGN KEY (`customer_id`)
+  INDEX `taxStatus` (`taxStatusId` ASC),
+  INDEX `shipZipPostalCode` (`shipZipPostalCode` ASC),
+  CONSTRAINT `fkOrdersCustomers`
+    FOREIGN KEY (`customerId`)
     REFERENCES `northwind`.`customers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_employees1`
-    FOREIGN KEY (`employee_id`)
+  CONSTRAINT `fkOrdersEmployees1`
+    FOREIGN KEY (`employeeId`)
     REFERENCES `northwind`.`employees` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_shippers1`
-    FOREIGN KEY (`shipper_id`)
+  CONSTRAINT `fkOrdersShippers1`
+    FOREIGN KEY (`shipperId`)
     REFERENCES `northwind`.`shippers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_orders_tax_status1`
-    FOREIGN KEY (`tax_status_id`)
-    REFERENCES `northwind`.`orders_tax_status` (`id`)
+  CONSTRAINT `fkOrdersOrdersTaxStatus1`
+    FOREIGN KEY (`taxStatusId`)
+    REFERENCES `northwind`.`ordersTaxStatus` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_orders_status1`
-    FOREIGN KEY (`status_id`)
-    REFERENCES `northwind`.`orders_status` (`id`)
+  CONSTRAINT `fkOrdersOrdersStatus1`
+    FOREIGN KEY (`statusId`)
+    REFERENCES `northwind`.`ordersStatus` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -242,30 +239,30 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `northwind`.`products`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `northwind`.`products` (
-  `supplier_ids` LONGTEXT NULL DEFAULT NULL,
+  `supplierIds` LONGTEXT NULL DEFAULT NULL,
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `product_code` VARCHAR(25) NULL DEFAULT NULL,
-  `product_name` VARCHAR(50) NULL DEFAULT NULL,
+  `productCode` VARCHAR(25) NULL DEFAULT NULL,
+  `productName` VARCHAR(50) NULL DEFAULT NULL,
   `description` LONGTEXT NULL DEFAULT NULL,
-  `standard_cost` DECIMAL(19,4) NULL DEFAULT '0.0000',
-  `list_price` DECIMAL(19,4) NOT NULL DEFAULT '0.0000',
-  `reorder_level` INT(11) NULL DEFAULT NULL,
-  `target_level` INT(11) NULL DEFAULT NULL,
-  `quantity_per_unit` VARCHAR(50) NULL DEFAULT NULL,
+  `standardCost` DECIMAL(19,4) NULL DEFAULT '0.0000',
+  `listPrice` DECIMAL(19,4) NOT NULL DEFAULT '0.0000',
+  `reorderLevel` INT(11) NULL DEFAULT NULL,
+  `targetLevel` INT(11) NULL DEFAULT NULL,
+  `quantityPerUnit` VARCHAR(50) NULL DEFAULT NULL,
   `discontinued` TINYINT(1) NOT NULL DEFAULT '0',
-  `minimum_reorder_quantity` INT(11) NULL DEFAULT NULL,
+  `minimumReorderQuantity` INT(11) NULL DEFAULT NULL,
   `category` VARCHAR(50) NULL DEFAULT NULL,
   `attachments` LONGBLOB NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `product_code` (`product_code` ASC))
+  INDEX `productCode` (`productCode` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`purchase_order_status`
+-- Table `northwind`.`purchaseOrderStatus`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`purchase_order_status` (
+CREATE TABLE IF NOT EXISTS `northwind`.`purchaseOrderStatus` (
   `id` INT(11) NOT NULL,
   `status` VARCHAR(50) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
@@ -279,72 +276,72 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `northwind`.`suppliers` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `company` VARCHAR(50) NULL DEFAULT NULL,
-  `last_name` VARCHAR(50) NULL DEFAULT NULL,
-  `first_name` VARCHAR(50) NULL DEFAULT NULL,
-  `email_address` VARCHAR(50) NULL DEFAULT NULL,
-  `job_title` VARCHAR(50) NULL DEFAULT NULL,
-  `business_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `home_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `mobile_phone` VARCHAR(25) NULL DEFAULT NULL,
-  `fax_number` VARCHAR(25) NULL DEFAULT NULL,
+  `lastName` VARCHAR(50) NULL DEFAULT NULL,
+  `firstName` VARCHAR(50) NULL DEFAULT NULL,
+  `emailAddress` VARCHAR(50) NULL DEFAULT NULL,
+  `jobTitle` VARCHAR(50) NULL DEFAULT NULL,
+  `businessPhone` VARCHAR(25) NULL DEFAULT NULL,
+  `homePhone` VARCHAR(25) NULL DEFAULT NULL,
+  `mobilePhone` VARCHAR(25) NULL DEFAULT NULL,
+  `faxNumber` VARCHAR(25) NULL DEFAULT NULL,
   `address` LONGTEXT NULL DEFAULT NULL,
   `city` VARCHAR(50) NULL DEFAULT NULL,
-  `state_province` VARCHAR(50) NULL DEFAULT NULL,
-  `zip_postal_code` VARCHAR(15) NULL DEFAULT NULL,
-  `country_region` VARCHAR(50) NULL DEFAULT NULL,
-  `web_page` LONGTEXT NULL DEFAULT NULL,
+  `stateProvince` VARCHAR(50) NULL DEFAULT NULL,
+  `zipPostalCode` VARCHAR(15) NULL DEFAULT NULL,
+  `countryRegion` VARCHAR(50) NULL DEFAULT NULL,
+  `webPage` LONGTEXT NULL DEFAULT NULL,
   `notes` LONGTEXT NULL DEFAULT NULL,
   `attachments` LONGBLOB NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `city` (`city` ASC),
   INDEX `company` (`company` ASC),
-  INDEX `first_name` (`first_name` ASC),
-  INDEX `last_name` (`last_name` ASC),
-  INDEX `zip_postal_code` (`zip_postal_code` ASC),
-  INDEX `state_province` (`state_province` ASC))
+  INDEX `firstName` (`firstName` ASC),
+  INDEX `lastName` (`lastName` ASC),
+  INDEX `zipPostalCode` (`zipPostalCode` ASC),
+  INDEX `stateProvince` (`stateProvince` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`purchase_orders`
+-- Table `northwind`.`purchaseOrders`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`purchase_orders` (
+CREATE TABLE IF NOT EXISTS `northwind`.`purchaseOrders` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `supplier_id` INT(11) NULL DEFAULT NULL,
-  `created_by` INT(11) NULL DEFAULT NULL,
-  `submitted_date` DATETIME NULL DEFAULT NULL,
-  `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status_id` INT(11) NULL DEFAULT '0',
-  `expected_date` DATETIME NULL DEFAULT NULL,
-  `shipping_fee` DECIMAL(19,4) NOT NULL DEFAULT '0.0000',
+  `supplierId` INT(11) NULL DEFAULT NULL,
+  `createdBy` INT(11) NULL DEFAULT NULL,
+  `submittedDate` DATETIME NULL DEFAULT NULL,
+  `creationDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `statusId` INT(11) NULL DEFAULT '0',
+  `expectedDate` DATETIME NULL DEFAULT NULL,
+  `shippingFee` DECIMAL(19,4) NOT NULL DEFAULT '0.0000',
   `taxes` DECIMAL(19,4) NOT NULL DEFAULT '0.0000',
-  `payment_date` DATETIME NULL DEFAULT NULL,
-  `payment_amount` DECIMAL(19,4) NULL DEFAULT '0.0000',
-  `payment_method` VARCHAR(50) NULL DEFAULT NULL,
+  `paymentDate` DATETIME NULL DEFAULT NULL,
+  `paymentAmount` DECIMAL(19,4) NULL DEFAULT '0.0000',
+  `paymentMethod` VARCHAR(50) NULL DEFAULT NULL,
   `notes` LONGTEXT NULL DEFAULT NULL,
-  `approved_by` INT(11) NULL DEFAULT NULL,
-  `approved_date` DATETIME NULL DEFAULT NULL,
-  `submitted_by` INT(11) NULL DEFAULT NULL,
+  `approvedBy` INT(11) NULL DEFAULT NULL,
+  `approvedDate` DATETIME NULL DEFAULT NULL,
+  `submittedBy` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id` (`id` ASC),
-  INDEX `created_by` (`created_by` ASC),
-  INDEX `status_id` (`status_id` ASC),
+  INDEX `createdBy` (`createdBy` ASC),
+  INDEX `statusId` (`statusId` ASC),
   INDEX `id_2` (`id` ASC),
-  INDEX `supplier_id` (`supplier_id` ASC),
-  INDEX `supplier_id_2` (`supplier_id` ASC),
-  CONSTRAINT `fk_purchase_orders_employees1`
-    FOREIGN KEY (`created_by`)
+  INDEX `supplierId` (`supplierId` ASC),
+  INDEX `supplierId_2` (`supplierId` ASC),
+  CONSTRAINT `fkPurchaseOrdersEmployees1`
+    FOREIGN KEY (`createdBy`)
     REFERENCES `northwind`.`employees` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_purchase_orders_purchase_order_status1`
-    FOREIGN KEY (`status_id`)
-    REFERENCES `northwind`.`purchase_order_status` (`id`)
+  CONSTRAINT `fkPurchaseOrdersPurchaseOrderStatus1`
+    FOREIGN KEY (`statusId`)
+    REFERENCES `northwind`.`purchaseOrderStatus` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_purchase_orders_suppliers1`
-    FOREIGN KEY (`supplier_id`)
+  CONSTRAINT `fkPurchaseOrdersSuppliers1`
+    FOREIGN KEY (`supplierId`)
     REFERENCES `northwind`.`suppliers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -353,44 +350,44 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`inventory_transactions`
+-- Table `northwind`.`inventoryTransactions`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`inventory_transactions` (
+CREATE TABLE IF NOT EXISTS `northwind`.`inventoryTransactions` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `transaction_type` TINYINT(4) NOT NULL,
-  `transaction_created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `transaction_modified_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `product_id` INT(11) NOT NULL,
+  `transactionType` TINYINT(4) NOT NULL,
+  `transactionCreatedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `transactionModifiedDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `productId` INT(11) NOT NULL,
   `quantity` INT(11) NOT NULL,
-  `purchase_order_id` INT(11) NULL DEFAULT NULL,
-  `customer_order_id` INT(11) NULL DEFAULT NULL,
+  `purchaseOrderId` INT(11) NULL DEFAULT NULL,
+  `customerOrderId` INT(11) NULL DEFAULT NULL,
   `comments` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `customer_order_id` (`customer_order_id` ASC),
-  INDEX `customer_order_id_2` (`customer_order_id` ASC),
-  INDEX `product_id` (`product_id` ASC),
-  INDEX `product_id_2` (`product_id` ASC),
-  INDEX `purchase_order_id` (`purchase_order_id` ASC),
-  INDEX `purchase_order_id_2` (`purchase_order_id` ASC),
-  INDEX `transaction_type` (`transaction_type` ASC),
-  CONSTRAINT `fk_inventory_transactions_orders1`
-    FOREIGN KEY (`customer_order_id`)
+  INDEX `customerOrderId` (`customerOrderId` ASC),
+  INDEX `customerOrderId_2` (`customerOrderId` ASC),
+  INDEX `productId` (`productId` ASC),
+  INDEX `productId_2` (`productId` ASC),
+  INDEX `purchaseOrderId` (`purchaseOrderId` ASC),
+  INDEX `purchaseOrderId_2` (`purchaseOrderId` ASC),
+  INDEX `transactionType` (`transactionType` ASC),
+  CONSTRAINT `fkInventoryTransactionsOrders1`
+    FOREIGN KEY (`customerOrderId`)
     REFERENCES `northwind`.`orders` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_inventory_transactions_products1`
-    FOREIGN KEY (`product_id`)
+  CONSTRAINT `fkInventoryTransactionsProducts1`
+    FOREIGN KEY (`productId`)
     REFERENCES `northwind`.`products` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_inventory_transactions_purchase_orders1`
-    FOREIGN KEY (`purchase_order_id`)
-    REFERENCES `northwind`.`purchase_orders` (`id`)
+  CONSTRAINT `fkInventoryTransactionsPurchaseOrders1`
+    FOREIGN KEY (`purchaseOrderId`)
+    REFERENCES `northwind`.`purchaseOrders` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_inventory_transactions_inventory_transaction_types1`
-    FOREIGN KEY (`transaction_type`)
-    REFERENCES `northwind`.`inventory_transaction_types` (`id`)
+  CONSTRAINT `fkInventoryTransactionsInventoryTransactionTypes1`
+    FOREIGN KEY (`transactionType`)
+    REFERENCES `northwind`.`inventoryTransactionTypes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -402,18 +399,18 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `northwind`.`invoices` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `order_id` INT(11) NULL DEFAULT NULL,
-  `invoice_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `due_date` DATETIME NULL DEFAULT NULL,
+  `orderId` INT(11) NULL DEFAULT NULL,
+  `invoiceDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dueDate` DATETIME NULL DEFAULT NULL,
   `tax` DECIMAL(19,4) NULL DEFAULT '0.0000',
   `shipping` DECIMAL(19,4) NULL DEFAULT '0.0000',
-  `amount_due` DECIMAL(19,4) NULL DEFAULT '0.0000',
+  `amountDue` DECIMAL(19,4) NULL DEFAULT '0.0000',
   PRIMARY KEY (`id`),
   INDEX `id` (`id` ASC),
   INDEX `id_2` (`id` ASC),
-  INDEX `fk_invoices_orders1_idx` (`order_id` ASC),
-  CONSTRAINT `fk_invoices_orders1`
-    FOREIGN KEY (`order_id`)
+  INDEX `fkInvoicesOrders1Idx` (`orderId` ASC),
+  CONSTRAINT `fkInvoicesOrders1`
+    FOREIGN KEY (`orderId`)
     REFERENCES `northwind`.`orders` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -422,55 +419,55 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`order_details_status`
+-- Table `northwind`.`orderDetailsStatus`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`order_details_status` (
+CREATE TABLE IF NOT EXISTS `northwind`.`orderDetailsStatus` (
   `id` INT(11) NOT NULL,
-  `status_name` VARCHAR(50) NOT NULL,
+  `statusName` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`order_details`
+-- Table `northwind`.`orderDetails`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`order_details` (
+CREATE TABLE IF NOT EXISTS `northwind`.`orderDetails` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `order_id` INT(11) NOT NULL,
-  `product_id` INT(11) NULL DEFAULT NULL,
+  `orderId` INT(11) NOT NULL,
+  `productId` INT(11) NULL DEFAULT NULL,
   `quantity` DECIMAL(18,4) NOT NULL DEFAULT '0.0000',
-  `unit_price` DECIMAL(19,4) NULL DEFAULT '0.0000',
+  `unitPrice` DECIMAL(19,4) NULL DEFAULT '0.0000',
   `discount` DOUBLE NOT NULL DEFAULT '0',
-  `status_id` INT(11) NULL DEFAULT NULL,
-  `date_allocated` DATETIME NULL DEFAULT NULL,
-  `purchase_order_id` INT(11) NULL DEFAULT NULL,
-  `inventory_id` INT(11) NULL DEFAULT NULL,
+  `statusId` INT(11) NULL DEFAULT NULL,
+  `dateAllocated` DATETIME NULL DEFAULT NULL,
+  `PurchaseOrderId` INT(11) NULL DEFAULT NULL,
+  `inventoryId` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `id` (`id` ASC),
-  INDEX `inventory_id` (`inventory_id` ASC),
-  INDEX `id_2` (`id` ASC),
+  INDEX `inventoryId` (`inventoryId` ASC),
+  INDEX `Id_2` (`id` ASC),
   INDEX `id_3` (`id` ASC),
   INDEX `id_4` (`id` ASC),
-  INDEX `product_id` (`product_id` ASC),
-  INDEX `product_id_2` (`product_id` ASC),
-  INDEX `purchase_order_id` (`purchase_order_id` ASC),
+  INDEX `productId` (`productId` ASC),
+  INDEX `productId_2` (`productId` ASC),
+  INDEX `purchaseOrderId` (`purchaseOrderId` ASC),
   INDEX `id_5` (`id` ASC),
-  INDEX `fk_order_details_orders1_idx` (`order_id` ASC),
-  INDEX `fk_order_details_order_details_status1_idx` (`status_id` ASC),
-  CONSTRAINT `fk_order_details_orders1`
-    FOREIGN KEY (`order_id`)
+  INDEX `fkOrderDetailsOrders1Idx` (`orderId` ASC),
+  INDEX `fkOrderDetailsOrderDetailsStatus1Idx` (`statusId` ASC),
+  CONSTRAINT `fkOrderDetailsOrders1`
+    FOREIGN KEY (`orderId`)
     REFERENCES `northwind`.`orders` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_order_details_products1`
-    FOREIGN KEY (`product_id`)
+  CONSTRAINT `fkOrderDetailsProducts1`
+    FOREIGN KEY (`productId`)
     REFERENCES `northwind`.`products` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_order_details_order_details_status1`
-    FOREIGN KEY (`status_id`)
-    REFERENCES `northwind`.`order_details_status` (`id`)
+  CONSTRAINT `fkOrderDetailsOrderDetailsStatus1`
+    FOREIGN KEY (`statusId`)
+    REFERENCES `northwind`.`orderDetailsStatus` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -478,38 +475,38 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`purchase_order_details`
+-- Table `northwind`.`purchaseOrderDetails`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`purchase_order_details` (
+CREATE TABLE IF NOT EXISTS `northwind`.`purchaseOrderDetails` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `purchase_order_id` INT(11) NOT NULL,
-  `product_id` INT(11) NULL DEFAULT NULL,
+  `purchaseOrderId` INT(11) NOT NULL,
+  `productId` INT(11) NULL DEFAULT NULL,
   `quantity` DECIMAL(18,4) NOT NULL,
-  `unit_cost` DECIMAL(19,4) NOT NULL,
-  `date_received` DATETIME NULL DEFAULT NULL,
-  `posted_to_inventory` TINYINT(1) NOT NULL DEFAULT '0',
-  `inventory_id` INT(11) NULL DEFAULT NULL,
+  `unitCost` DECIMAL(19,4) NOT NULL,
+  `dateReceived` DATETIME NULL DEFAULT NULL,
+  `postedToInventory` TINYINT(1) NOT NULL DEFAULT '0',
+  `inventoryId` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `id` (`id` ASC),
-  INDEX `inventory_id` (`inventory_id` ASC),
-  INDEX `inventory_id_2` (`inventory_id` ASC),
-  INDEX `purchase_order_id` (`purchase_order_id` ASC),
-  INDEX `product_id` (`product_id` ASC),
-  INDEX `product_id_2` (`product_id` ASC),
-  INDEX `purchase_order_id_2` (`purchase_order_id` ASC),
-  CONSTRAINT `fk_purchase_order_details_inventory_transactions1`
-    FOREIGN KEY (`inventory_id`)
-    REFERENCES `northwind`.`inventory_transactions` (`id`)
+  INDEX `inventoryId` (`inventoryId` ASC),
+  INDEX `inventoryId_2` (`inventoryId` ASC),
+  INDEX `purchaseOrderId` (`purchaseOrderId` ASC),
+  INDEX `productId` (`productId` ASC),
+  INDEX `productId_2` (`productId` ASC),
+  INDEX `purchaseOrderId_2` (`purchaseOrderId` ASC),
+  CONSTRAINT `fkPurchaseOrderDetailsInventoryTransactions1`
+    FOREIGN KEY (`inventoryId`)
+    REFERENCES `northwind`.`inventoryTransactions` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_purchase_order_details_products1`
-    FOREIGN KEY (`product_id`)
+  CONSTRAINT `fkPurchaseOrderDetailsProducts1`
+    FOREIGN KEY (`productId`)
     REFERENCES `northwind`.`products` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_purchase_order_details_purchase_orders1`
-    FOREIGN KEY (`purchase_order_id`)
-    REFERENCES `northwind`.`purchase_orders` (`id`)
+  CONSTRAINT `fkPurchaseOrderDetailsPurchaseOrders1`
+    FOREIGN KEY (`purchaseOrderId`)
+    REFERENCES `northwind`.`purchaseOrders` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -517,15 +514,15 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind`.`sales_reports`
+-- Table `northwind`.`salesReports`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind`.`sales_reports` (
-  `group_by` VARCHAR(50) NOT NULL,
+CREATE TABLE IF NOT EXISTS `northwind`.`salesReports` (
+  `groupBy` VARCHAR(50) NOT NULL,
   `display` VARCHAR(50) NULL DEFAULT NULL,
   `title` VARCHAR(50) NULL DEFAULT NULL,
-  `filter_row_source` LONGTEXT NULL DEFAULT NULL,
+  `filterRowSource` LONGTEXT NULL DEFAULT NULL,
   `default` TINYINT(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`group_by`))
+  PRIMARY KEY (`groupBy`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -534,13 +531,9 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `northwind`.`strings`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `northwind`.`strings` (
-  `string_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `string_data` VARCHAR(255) NULL DEFAULT NULL,
-  PRIMARY KEY (`string_id`))
+  `stringId` INT(11) NOT NULL AUTO_INCREMENT,
+  `stringData` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`stringId`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
