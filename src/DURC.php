@@ -18,7 +18,7 @@ class DURC{
 		foreach($db_array as $this_db){
 			$db_struct[$this_db] = DURC::getTables($this_db);
 		}
-
+		ksort($db_struct); //has the effect of putting the aaaDurctest DB first in the routes which is helpful for testing
 		return($db_struct);
 	}
 
@@ -39,6 +39,7 @@ class DURC{
 					'data_type' => $column->DATA_TYPE,
 					];
 	            	}
+			ksort($tables);
 			return($tables);
 	        } else {
 	     		return false;
