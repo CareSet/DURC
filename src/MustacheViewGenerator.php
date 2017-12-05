@@ -11,11 +11,11 @@ namespace CareSet\DURC;
 class MustacheViewGenerator {
 
 
-	public static $suggested_output_dir = 'view/resources/';
+	public static $suggested_output_dir = 'resources/views/';
 
 	public static function generate($class_name,$database,$table,$fields){
 
-		$parent_file_name = "$parent_class_name.mustache";	
+		$parent_file_name = "$class_name.mustache";	
 
 
 		$template_text = "
@@ -23,21 +23,23 @@ class MustacheViewGenerator {
 <ul>
 ";
 		foreach($fields as $this_field => $field_data){
-			$template_text .= "<li> $this_field  <ul> ";
+			$template_text .= "<li> $this_field  <ul>\n ";
 			foreach($field_data as $key => $value){
-				$template_text .= "<li> $key -> $value </li>";
+				$template_text .= "<li> $key -> $value </li>\n";
 			}
-			$template_text .= "</ul> </li>";
+			$template_text .= "</ul> </li>\n";
 		}
 
-		$template_text .= "</ul>";
+		$template_text .= "</ul>\n";
+
+		$my_path = base_path() . '/'. MustacheViewGenerator::$suggested_output_dir;
 
 		
 		$return_me = [
 			'mostache_template' => [
-                                'full_file_name' => base_path().$parent_file_name,
+                                'full_file_name' => $my_path.$parent_file_name,
 				'file_name' 	=> $parent_file_name,
-				'file_text'	=> $text_template_text,
+				'file_text'	=> $template_text,
 				],
 		];
 

@@ -22,8 +22,8 @@ class DURCCommand extends Command{
 
 	//only one code generator for now...
 	$generatorClasses = [
-			'LaravelEloquentGenerator',
-			'MustacheViewGenerator',
+			'CareSet\DURC\LaravelEloquentGenerator',
+			'CareSet\DURC\MustacheViewGenerator',
 		];
 
 	$databases = $this->option('DB');
@@ -43,6 +43,8 @@ class DURCCommand extends Command{
 						$this_table,
 						$table_data
 					);
+
+				var_export($generated_results);
 
 				foreach($generated_results as $file_details){
 					//now we write the generated content...
