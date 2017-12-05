@@ -126,7 +126,7 @@ class DURC_$class_name"."Controller extends DURCController
      * @param  \App\\$class_name  \$$class_name
      * @return \Illuminate\Http\Response
      */
-    public function update(Request \$request, $class_name $\$class_name){
+    public function update(Request \$request, $class_name \$$class_name){
         
     }
 
