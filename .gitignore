@@ -1,0 +1,55 @@
+
+#Always ignore configuration files. Always use yaml for configuration. Keep passwords and credentials OUT of GIT.
+*.yaml
+
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.vi
+*.csv
+*~
+*.sass-cache
+
+# OS or Editor folders
+.DS_Store
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+nbproject
+
+#Laravel 4 specific
+/bootstrap/compiled.php
+vendor/
+composer.phar
+composer.lock
+
+
+#DG specific
+*/config/*
+config/*
+*/cache/*
+cache/*
+*/log/*
+log/*
+db_scripts/*.yaml
+/public/rockmongo*
+/mirror/*
+/archive/*
+/data/*
+scripts/nvert-links
+
+notgit/
+ 
+#ignore vagrant
+.vagrant/
+
+#ignore local data files
+*.data
