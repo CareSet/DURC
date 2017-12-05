@@ -116,9 +116,9 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `northwind_model`.`shippers`
+-- Table `northwind_model`.`shipper`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `northwind_model`.`shippers` (
+CREATE TABLE IF NOT EXISTS `northwind_model`.`shipper` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `company` VARCHAR(50) NULL DEFAULT NULL,
   `lastName` VARCHAR(50) NULL DEFAULT NULL,
@@ -324,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`order` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fkOrderShippers1`
     FOREIGN KEY (`shipper_id`)
-    REFERENCES `northwind_model`.`shippers` (`id`)
+    REFERENCES `northwind_model`.`shipper` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fkOrderOrderTaxStatus1`
