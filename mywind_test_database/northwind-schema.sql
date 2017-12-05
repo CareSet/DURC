@@ -307,14 +307,9 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`orders` (
   `status_id` TINYINT(4) NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   INDEX `customer_id` (`customer_id` ASC),
-  INDEX `customer_id_2` (`customer_id` ASC),
   INDEX `employee_id` (`employee_id` ASC),
-  INDEX `employee_id_2` (`employee_id` ASC),
   INDEX `id` (`id` ASC),
-  INDEX `id_2` (`id` ASC),
   INDEX `shipper_id` (`shipper_id` ASC),
-  INDEX `shipper_id_2` (`shipper_id` ASC),
-  INDEX `id_3` (`id` ASC),
   INDEX `taxStatus` (`taxStatus_id` ASC),
   INDEX `shipZipPostalCode` (`shipZipPostalCode` ASC),
   CONSTRAINT `fkOrdersCustomers`
@@ -369,9 +364,7 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`purchaseOrders` (
   UNIQUE INDEX `id` (`id` ASC),
   INDEX `createdBy` (`createdBy` ASC),
   INDEX `status_id` (`status_id` ASC),
-  INDEX `id_2` (`id` ASC),
   INDEX `supplier_id` (`supplier_id` ASC),
-  INDEX `supplier_id_2` (`supplier_id` ASC),
   CONSTRAINT `fkPurchaseOrdersEmployees1`
     FOREIGN KEY (`createdBy`)
     REFERENCES `northwind_model`.`employees` (`id`)
@@ -406,11 +399,8 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`inventoryTransactions` (
   `comments` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `customerOrder_id` (`customerOrder_id` ASC),
-  INDEX `customerOrder_id_2` (`customerOrder_id` ASC),
   INDEX `product_id` (`product_id` ASC),
-  INDEX `product_id_2` (`product_id` ASC),
   INDEX `purchaseOrder_id` (`purchaseOrder_id` ASC),
-  INDEX `purchaseOrder_id_2` (`purchaseOrder_id` ASC),
   INDEX `transactionType` (`transactionType` ASC),
   CONSTRAINT `fkInventoryTransactionsOrders1`
     FOREIGN KEY (`customerOrder_id`)
@@ -449,7 +439,6 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`invoices` (
   `amountDue` DECIMAL(19,4) NULL DEFAULT '0.0000',
   PRIMARY KEY (`id`),
   INDEX `id` (`id` ASC),
-  INDEX `id_2` (`id` ASC),
   INDEX `fkInvoicesOrders1_idx` (`order_id` ASC),
   CONSTRAINT `fkInvoicesOrders1`
     FOREIGN KEY (`order_id`)
@@ -476,13 +465,8 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`orderDetails` (
   PRIMARY KEY (`id`),
   INDEX `id` (`id` ASC),
   INDEX `inventory_id` (`inventory_id` ASC),
-  INDEX `_id_2` (`id` ASC),
-  INDEX `id_3` (`id` ASC),
-  INDEX `id_4` (`id` ASC),
   INDEX `product_id` (`product_id` ASC),
-  INDEX `product_id_2` (`product_id` ASC),
   INDEX `purchaseOrder_id` (`purchaseOrder_id` ASC),
-  INDEX `id_5` (`id` ASC),
   INDEX `fkOrderDetailsOrders1_idx` (`order_id` ASC),
   INDEX `fkOrderDetailsOrderDetailsStatus1_idx` (`status_id` ASC),
   CONSTRAINT `fkOrderDetailsOrders1`
@@ -519,11 +503,8 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`purchaseOrderDetails` (
   PRIMARY KEY (`id`),
   INDEX `id` (`id` ASC),
   INDEX `inventory_id` (`inventory_id` ASC),
-  INDEX `inventory_id_2` (`inventory_id` ASC),
   INDEX `purchaseOrder_id` (`purchaseOrder_id` ASC),
   INDEX `product_id` (`product_id` ASC),
-  INDEX `product_id_2` (`product_id` ASC),
-  INDEX `purchaseOrder_id_2` (`purchaseOrder_id` ASC),
   CONSTRAINT `fkPurchaseOrderDetailsInventoryTransactions1`
     FOREIGN KEY (`inventory_id`)
     REFERENCES `northwind_data`.`inventoryTransactions` (`id`)
@@ -541,5 +522,7 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`purchaseOrderDetails` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+SET FOREIGN_KEY_CHECKS=1;
 
 
