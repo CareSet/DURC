@@ -8,7 +8,7 @@
 namespace CareSet\DURC;
 
 
-class LaravelEloquentGenerator {
+class LaravelEloquentGenerator extends DURCGenerator {
 
 
 	public static $suggested_output_dir = 'app/';

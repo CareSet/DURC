@@ -9,7 +9,7 @@ namespace CareSet\DURC;
 
 use Illuminate\Support\Facades\Artisan;
 
-class LaravelControllerGenerator {
+class LaravelControllerGenerator extends DURCGenerator {
 
 
 

@@ -8,7 +8,7 @@
 namespace CareSet\DURC;
 
 
-class MustacheViewGenerator {
+class MustacheViewGenerator extends DURCGenerator {
 
 
 	public static $suggested_output_dir = 'resources/views/';

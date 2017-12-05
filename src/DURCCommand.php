@@ -34,6 +34,8 @@ class DURCCommand extends Command{
 	//each generator handles the creation of different type of file...
 	foreach($generatorClasses as $this_generator){
 
+		$this_generator::start();
+
 		foreach($db_struct as $this_db => $db_data){
 			foreach($db_data as $this_table=> $table_data){
 				$this_class_name = $this_table;
@@ -48,6 +50,8 @@ class DURCCommand extends Command{
 
 			}
 		}
+
+		$this_generator::finish();
 
 	}
 
