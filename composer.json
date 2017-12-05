@@ -2,7 +2,7 @@
     "name": "careset/durc",
     "description": "DURC is reverse CRUD",
     "type": "library",
-    "license": "AGPL-3.0",
+    "license": "MIT",
      "keywords": [
 		"laravel",
 		"crud",
@@ -18,7 +18,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-	"php" : "^7.0"
+	"php" : "^7.0",
+	"illuminate/console": "^5.5.0"
     },
     "psr-4": {
             "App\\": "app/",
