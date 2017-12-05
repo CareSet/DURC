@@ -12,7 +12,7 @@ class LaravelEloquentGenerator extends DURCGenerator {
 
 
 
-	public static function run_generator($class_name,$database,$table,$fields){
+	public static function run_generator($class_name,$database,$table,$fields,$squash = false){
 
 		//possible created_at field names... 
 		//in reverse order of priority. we pick the last one.

@@ -13,7 +13,7 @@ use Symfony\Component\Process\Process;
 
 class DURCCommand extends Command{
 
-    protected $signature = 'DURC {--DB=*}';
+    protected $signature = 'DURC {--squash} {--DB=*}';
     protected $description = 'DURC generates Templates and Eloquent Classe, inferred from your DB structure';
 
     public function handle(){
@@ -30,6 +30,8 @@ class DURCCommand extends Command{
 
 	$databases = $this->option('DB');
 
+	$squash = $this->option('squash');
+
 	$db_struct = DURC::getDBStruct($databases);
 
 	//each generator handles the creation of different type of file...
@@ -45,7 +47,8 @@ class DURCCommand extends Command{
 						$this_class_name,
 						$this_db,
 						$this_table,
-						$table_data
+						$table_data,
+						$squash
 					);
 
 

@@ -33,12 +33,12 @@ this will be automatically overwritten by future DURC runs.
 */
 
 ";
-
+		//note that this function ignores the squash for now...
 		file_put_contents($file,$header); //empty the current file..
 
 	}
 
-	public static function run_generator($class_name,$database,$table,$fields){
+	public static function run_generator($class_name,$database,$table,$fields,$squash = false){
 
 
 		//we just need to add a little snippet to the route file..

@@ -12,7 +12,7 @@ class LaravelControllerGenerator extends DURCGenerator {
 
 
 
-	public static function run_generator($class_name,$database,$table,$fields){
+	public static function run_generator($class_name,$database,$table,$fields,$squash = false){
 
 		//possible created_at field names... 
 		//in reverse order of priority. we pick the last one.
@@ -236,7 +236,7 @@ class $class_name"."Controller extends DURC_$class_name"."Controller
 		$child_file = $app_path.$child_file_name;
 		$parent_file = $durc_app_path.$parent_file_name;
 
-		if(!file_exists($child_file)){
+		if(!file_exists($child_file) || $squash){
 			//we will only create this file the first time...
 			//so getting here means that it does not exist, this is the first creation pass.
 			file_put_contents($child_file,$child_class_text);

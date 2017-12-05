@@ -13,7 +13,7 @@ class MustacheViewGenerator extends DURCGenerator {
 
 	public static $suggested_output_dir = 'resources/views/';
 
-	public static function run_generator($class_name,$database,$table,$fields){
+	public static function run_generator($class_name,$database,$table,$fields,$squash = false){
 
 		$parent_file_name = "$class_name.mustache";	
 
@@ -35,16 +35,9 @@ class MustacheViewGenerator extends DURCGenerator {
 		$my_path = base_path() . '/'. MustacheViewGenerator::$suggested_output_dir;
 
 		
-		$return_me = [
-			'mostache_template' => [
-                                'full_file_name' => $my_path.$parent_file_name,
-				'file_name' 	=> $parent_file_name,
-				'file_text'	=> $template_text,
-				],
-		];
-
-                foreach($return_me as $file_details){
-                        file_put_contents($file_details['full_file_name'],$file_details['file_text']);
+		//if it does not exist.. write it... if the squash argument is possed in as true.. write it..
+		if(!file_exists($my_path.$parent_file_name) || $squash){
+                       	file_put_contents($my_path.$parent_file_name,$template_text);
                 }
 
 		return(true);
