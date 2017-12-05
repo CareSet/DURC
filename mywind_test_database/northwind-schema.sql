@@ -2,6 +2,9 @@
 DROP SCHEMA IF EXISTS `northwind_model` ;
 CREATE SCHEMA IF NOT EXISTS `northwind_model` DEFAULT CHARACTER SET latin1 ;
 
+DROP SCHEMA IF EXISTS `northwind_data` ;
+CREATE SCHEMA IF NOT EXISTS `northwind_data` DEFAULT CHARACTER SET latin1 ;
+
 -- -----------------------------------------------------
 -- Table `northwind_model`.`customers`
 -- -----------------------------------------------------
@@ -370,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`inventoryTransactions` (
   INDEX `transactionType` (`transactionType` ASC),
   CONSTRAINT `fkInventoryTransactionsOrders1`
     FOREIGN KEY (`customerOrder_id`)
-    REFERENCES `northwind_model`.`orders` (`id`)
+    REFERENCES `northwind_data`.`orders` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fkInventoryTransactionsProducts1`
@@ -380,7 +383,7 @@ CREATE TABLE IF NOT EXISTS `northwind_data`.`inventoryTransactions` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fkInventoryTransactionsPurchaseOrders1`
     FOREIGN KEY (`purchaseOrder_id`)
-    REFERENCES `northwind_model`.`purchaseOrders` (`id`)
+    REFERENCES `northwind_data`.`purchaseOrders` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fkInventoryTransactionsInventoryTransactionTypes1`
