@@ -13,7 +13,7 @@ class MustacheViewGenerator {
 
 	public static $suggested_output_dir = 'resources/views/';
 
-	public static function generate($class_name,$database,$table,$fields){
+	public static function run_generator($class_name,$database,$table,$fields){
 
 		$parent_file_name = "$class_name.mustache";	
 
@@ -43,9 +43,11 @@ class MustacheViewGenerator {
 				],
 		];
 
+                foreach($return_me as $file_details){
+                        file_put_contents($file_details['full_file_name'],$file_details['file_text']);
+                }
 
-		return($return_me);
-
+		return(true);
 
 	}//end generate function
 
