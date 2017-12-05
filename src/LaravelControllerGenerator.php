@@ -82,7 +82,7 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        
+	return $class_name::all();        
     }
 
     /**
@@ -90,7 +90,7 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function create(){
-        
+        return('mostashe here soon');
     }
 
     /**
@@ -99,7 +99,7 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function store(Request \$request){
-        
+        //not really sure why you would want to to this..
     }
 
     /**
@@ -108,7 +108,7 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function show($class_name \$$class_name){
-        
+        return \$$class_name"."->toJson();
     }
 
     /**
@@ -117,7 +117,7 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function edit($class_name \$$class_name){
-        
+        return('mostash here soon');
     }
 
     /**
@@ -136,7 +136,7 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function destroy($class_name \$$class_name){
-        
+
     }
 }
 ";
@@ -148,7 +148,9 @@ class DURC_$class_name"."Controller extends DURCController
 namespace App\Http\Controllers;
 
 use App\\$class_name;
+use App\DURC\Controllers\DURC_$class_name"."Controller;
 use Illuminate\Http\Request;
+
 
 class $class_name"."Controller extends DURC_$class_name"."Controller
 {

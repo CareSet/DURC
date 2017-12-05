@@ -26,6 +26,7 @@ class DURCCommand extends Command{
 			'CareSet\DURC\LaravelControllerGenerator',
 			'CareSet\DURC\MustacheViewGenerator',
 			'CareSet\DURC\LaravelRouteGenerator',	
+			'CareSet\DURC\LaravelTestRouteGenerator',	
 		];
 
 	$databases = $this->option('DB');

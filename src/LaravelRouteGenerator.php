@@ -47,7 +47,7 @@ this will be automatically overwritten by future DURC runs.
 
 		$snippet = " 
 //DURC->	$database.$table
-Route::resource('$class_name', '$class_name"."Controller');
+Route::resource('/DURC/$class_name', '$class_name"."Controller');
 ";
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);

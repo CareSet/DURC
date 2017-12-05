@@ -85,6 +85,7 @@ class $parent_class_name extends DURCModel
         // the datbase for this model
         protected \$table = '$database.$table';
 
+
 	$timestamp_code
 	$updated_at_code
 	$created_at_code
@@ -106,6 +107,18 @@ this is safe to edit.
 class $class_name extends \App\DURC\Models\\$parent_class_name
 {
 
+	//you can uncomment fields to prevent them from being serialized into the API!
+	protected  \$hidden = [
+";
+
+		//lets add a 'visible' array for access control at this layer''
+		foreach($fields as $field_data){
+			$this_field = $field_data['column_name'];
+			$child_class_text .= "			//'$this_field',\n";
+		}
+
+
+		$child_class_text .= "		]; //end hidden array
 	//your stuff goes here..
 	
 
@@ -125,7 +138,7 @@ class $class_name extends \App\DURC\Models\\$parent_class_name
 		$child_file = $app_path.$child_file_name;
 		$parent_file = $durc_app_path.$parent_file_name;
 
-		if(!file_exists($child_file)){
+		if(!file_exists($child_file) || $squash){ //overwrite if it does not exist or if we are squashing
 			//we will only create this file the first time...
 			//so getting here means that it does not exist, this is the first creation pass.
 			file_put_contents($child_file,$child_class_text);
