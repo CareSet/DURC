@@ -74,6 +74,8 @@ namespace App\DURC\Controllers;
 use App\\$class_name;
 use Illuminate\Http\Request;
 use CareSet\DURC\DURCController;
+use Illuminate\Support\Facades\View;
+
 
 class DURC_$class_name"."Controller extends DURCController
 {
@@ -82,7 +84,8 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function index(){
-	return $class_name::all();        
+	\$these = $class_name::all();
+	return view('$class_name',\$these->toArray());        
     }
 
     /**
@@ -108,7 +111,7 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function show($class_name \$$class_name){
-        return \$$class_name"."->toJson();
+        return view('$class_name',\$$class_name"."->toArray());
     }
 
     /**
