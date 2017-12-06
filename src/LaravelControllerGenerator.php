@@ -88,6 +88,10 @@ use Illuminate\Support\Facades\View;
 
 class DURC_$class_name"."Controller extends DURCController
 {
+
+
+	public \$view_data = [];
+
     /**
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
@@ -97,41 +101,40 @@ class DURC_$class_name"."Controller extends DURCController
 
 	\$these = $class_name::paginate(100);
 
-	\$view_data = [];
         foreach(\$these->toArray() as \$key => \$value){ //add the contents of the obj to the the view 
-                \$view_data[\$key] = \$value;
+                \$this->view_data[\$key] = \$value;
         }
 
 	//helps with logic-less templating...
-	if(\$view_data['first_page_url'] == \$view_data['last_page_url']){
-		\$view_data['is_need_paging'] = false;
+	if(\$this->view_data['first_page_url'] == \$this->view_data['last_page_url']){
+		\$this->view_data['is_need_paging'] = false;
 	}else{
-		\$view_data['is_need_paging'] = true;
+		\$this->view_data['is_need_paging'] = true;
 	}
 
-	if(\$view_data['current_page'] == 1){
-		\$view_data['first_page_class'] = 'disabled';
-		\$view_data['prev_page_class'] = 'disabled';
+	if(\$this->view_data['current_page'] == 1){
+		\$this->view_data['first_page_class'] = 'disabled';
+		\$this->view_data['prev_page_class'] = 'disabled';
 	}else{
-		\$view_data['first_page_class'] = '';
-		\$view_data['prev_page_class'] = '';
+		\$this->view_data['first_page_class'] = '';
+		\$this->view_data['prev_page_class'] = '';
 	}
 
 
-	if(\$view_data['current_page'] == \$view_data['last_page']){
-		\$view_data['next_page_class'] = 'disabled';
-		\$view_data['last_page_class'] = 'disabled';
+	if(\$this->view_data['current_page'] == \$this->view_data['last_page']){
+		\$this->view_data['next_page_class'] = 'disabled';
+		\$this->view_data['last_page_class'] = 'disabled';
 	}else{
-		\$view_data['next_page_class'] = '';
-		\$view_data['last_page_class'] = '';
+		\$this->view_data['next_page_class'] = '';
+		\$this->view_data['last_page_class'] = '';
 	}
 
 
 	if(\$request->has('debug')){
-		var_export(\$view_data);
+		var_export(\$this->view_data);
 		exit();
 	}
-	\$durc_template_results = view('DURC.$class_name.index',\$view_data);        
+	\$durc_template_results = view('DURC.$class_name.index',\$this->view_data);        
 	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
@@ -181,34 +184,33 @@ class DURC_$class_name"."Controller extends DURCController
     public function edit($class_name \$$class_name, \$is_new = false){
 
 	\$main_template_name = \$this->_getMainTemplateName();
-	\$view_data = [];
 
 	//do we have a status message in the session? The view needs it...
-	\$view_data['session_status'] = session('status',false);
-	if(\$view_data['session_status']){
-		\$view_data['has_session_status'] = true;
+	\$this->view_data['session_status'] = session('status',false);
+	if(\$this->view_data['session_status']){
+		\$this->view_data['has_session_status'] = true;
 	}else{
-		\$view_data['has_session_status'] = false;
+		\$this->view_data['has_session_status'] = false;
 	}
 
-	\$view_data['csrf_token'] = csrf_token();
+	\$this->view_data['csrf_token'] = csrf_token();
 
 	if(!\$is_new){	//we will not have old data if this is a new object
 
 		//put the contents into the view...
 		foreach(\$$class_name"."->toArray() as \$key => \$value){
-			\$view_data[\$key] = \$value;
+			\$this->view_data[\$key] = \$value;
 		}
 
 		//what is this object called?
-		\$view_data['durc_instance_name'] = \$$class_name"."->_getBestName();
-		\$view_data['is_new'] = false;
+		\$this->view_data['durc_instance_name'] = \$$class_name"."->_getBestName();
+		\$this->view_data['is_new'] = false;
 	}else{
-		\$view_data['is_new'] = true;
+		\$this->view_data['is_new'] = true;
 	}
 	
 
-	\$durc_template_results = view('DURC.$class_name.edit',\$view_data);        
+	\$durc_template_results = view('DURC.$class_name.edit',\$this->view_data);        
 	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
@@ -261,6 +263,15 @@ class $class_name"."Controller extends DURC_$class_name"."Controller
      */
     public function index(Request \$request){
         // enter your stuff here if you want...
+
+	//anything you put into \$this->view_data will be available in the view...
+	//\$this->view_data['how_cool_is_fred'] = 'very'
+	//will mean that you can use {{how_cool_is_fred}} etc etc..
+	//remember to look in /resources/views/DURC
+	//to find the DURC generated views. Once you override those views..
+	//DURC will not overwrite them anymore... same thing with this file.. you can change it and it will not
+	//be overwritten by subsequent files...
+
 	return(parent::index(\$request));
     }
 

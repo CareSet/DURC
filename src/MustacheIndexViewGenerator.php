@@ -34,10 +34,44 @@ class MustacheIndexViewGenerator extends DURCGenerator {
 			}
 		}
 
+$paging_widget = "
+{{^is_need_paging}}
+<p>
+{{total}} results. All rows shown.
+</p>
+{{/is_need_paging}}
+
+{{#is_need_paging}}
+
+<div class='dataTables_paginate paging_simple_numbers' id='table_$class_name"."_page'>
+	<ul class='pagination'>
+		<li class='paginate_button page-item previous {{first_page_class}}' 
+			id='table_$class_name"."_previous'>
+			<a href='{{first_page_url}}' aria-controls='table_$class_name' data-dt-idx='0' tabindex='0' class='page-link'>First</a>
+		</li>
+		<li class='paginate_button page-item {{prev_page_class}}'>
+			<a href={{prev_page_url}}' aria-controls='table_$class_name' data-dt-idx='1' tabindex='0' class='page-link'>Previous</a>
+		</li>
+		<li class='paginate_button page-item active'>
+			<a href='#' aria-controls='table_$class_name' data-dt-idx='2' tabindex='0' class='page-link'>{{current_page}}</a>
+		</li>
+		<li class='paginate_button page-item {{next_page_class}} '>
+			<a href='{{next_page_url}}' aria-controls='table_$class_name' data-dt-idx='3' tabindex='0' class='page-link'>Next</a>
+		</li>
+		<li class='paginate_button page-item {{last_page_class}}'>
+			<a href='{{last_page_url}}' aria-controls='table_$class_name' data-dt-idx='4' tabindex='0' class='page-link'>Last</a>
+		</li>
+	</ul>
+</div>
+{{/is_need_paging}}
+";
 
 
 		$template_text = "
 <h1>$class_name list </h1>
+
+$paging_widget
+
 <table id='table_$class_name' class='table table-bordered table-hover table-responsive table-sm'>
 <thead><tr>
 $header_row
@@ -64,35 +98,9 @@ $header_row
 ";
 
 		$template_text .= "<tbody></table>\n
-{{^is_need_paging}}
-<p>
-{{total}} results. All rows shown.
-</p>
-{{/is_need_paging}}
 
-{{#is_need_paging}}
+$paging_widget
 
-<div class='dataTables_paginate paging_simple_numbers' id='table_$class_name'>
-	<ul class='pagination'>
-		<li class='paginate_button page-item previous {{first_page_class}}' 
-			id='table_$class_name"."_previous'>
-			<a href='{{first_page_url}}' aria-controls='table_$class_name' data-dt-idx='0' tabindex='0' class='page-link'>First</a>
-		</li>
-		<li class='paginate_button page-item {{prev_page_class}}'>
-			<a href={{prev_page_url}}' aria-controls='table_$class_name' data-dt-idx='1' tabindex='0' class='page-link'>Previous</a>
-		</li>
-		<li class='paginate_button page-item active'>
-			<a href='#' aria-controls='table_$class_name' data-dt-idx='2' tabindex='0' class='page-link'>{{current_page}}</a>
-		</li>
-		<li class='paginate_button page-item {{next_page_class}} '>
-			<a href='{{next_page_url}}' aria-controls='table_$class_name' data-dt-idx='3' tabindex='0' class='page-link'>Next</a>
-		</li>
-		<li class='paginate_button page-item {{last_page_class}}'>
-			<a href='{{last_page_url}}' aria-controls='table_$class_name' data-dt-idx='4' tabindex='0' class='page-link'>Last</a>
-		</li>
-	</ul>
-</div>
-{{/is_need_paging}}
 
 <script type='text/javascript'>
 //we need a way to check to see if the page is loaded before we call DataTable()
