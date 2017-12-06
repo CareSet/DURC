@@ -47,7 +47,7 @@ class MustacheIndexViewGenerator extends DURCGenerator {
 
 		foreach($col_list as $column_name){
 			if($column_name == 'id'){ //we want to scope this field as the row id...
-				$template_text .= "<th scope='row'>{{id}}</th>";
+				$template_text .= "<th scope='row'><a href='/DURC/$class_name/{{id}}/'> {{id}} </a></th>";
 			}else{	
 				$template_text .= "<td>{{"."$column_name"."}}</td>\n"; 
 			}

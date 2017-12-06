@@ -76,6 +76,8 @@ class MustacheEditViewGenerator extends DURCGenerator {
     <input type='hidden' name='_method' value='PUT'>
 {{/is_new}}
 
+<h1> $class_name </h1>
+<h4> <a href='/DURC/$class_name/'>Return to $class_name list</a> </h4>
   <fieldset>
     <legend>Edit $class_name {{durc_instance_name}}  </legend>
 	<input type='hidden' name='_token' value='{{csrf_token}}'>
