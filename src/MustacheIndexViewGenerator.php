@@ -8,7 +8,7 @@
 namespace CareSet\DURC;
 
 
-class MustacheViewGenerator extends DURCGenerator {
+class MustacheIndexViewGenerator extends DURCGenerator {
 
 
 
@@ -65,7 +65,7 @@ class MustacheViewGenerator extends DURCGenerator {
 
                 if(!is_dir($my_path)){
                         if (!mkdir($my_path, 0777, true)) {
-                                die("MustacheViewGenerator: DURC needs to create the $my_path directory... but it could not.. what if it already existed? What then?");
+                                die("MustacheIndexViewGenerator: DURC needs to create the $my_path directory... but it could not.. what if it already existed? What then?");
                         }
                 }
 

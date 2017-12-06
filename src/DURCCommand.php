@@ -24,7 +24,8 @@ class DURCCommand extends Command{
 	$generatorClasses = [
 			'CareSet\DURC\LaravelEloquentGenerator',
 			'CareSet\DURC\LaravelControllerGenerator',
-			'CareSet\DURC\MustacheViewGenerator',
+			'CareSet\DURC\MustacheEditViewGenerator',
+			'CareSet\DURC\MustacheIndexViewGenerator',
 			'CareSet\DURC\LaravelRouteGenerator',	
 			'CareSet\DURC\LaravelTestRouteGenerator',	
 		];
