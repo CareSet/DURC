@@ -84,8 +84,15 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function index(){
+	\$main_template_name = \$this->_getMainTemplateName();
 	\$these = $class_name::all();
-	return view('$class_name',\$these->toArray());        
+
+	\$view_data = [];
+	\$view_data['data'] = \$these->toArray();
+	\$view_data['data_count'] = \$view_data['data'];
+
+	\$durc_template_results = view('DURC.$class_name.index',\$view_data);        
+	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
     /**
@@ -93,7 +100,9 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function create(){
-        return('mostashe here soon');
+	\$main_template_name = \$this->_getMainTemplateName();
+	\$durc_template_results = view('DURC.$class_name.create');        
+	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
     /**
@@ -102,7 +111,9 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function store(Request \$request){
-        //not really sure why you would want to to this..
+	\$main_template_name = \$this->_getMainTemplateName();
+	\$durc_template_results = view('DURC.$class_name.store');        
+	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
     /**
@@ -111,7 +122,7 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function show($class_name \$$class_name){
-        return view('$class_name',\$$class_name"."->toArray());
+	return(\$this->edit(\$$class_name));
     }
 
     /**
@@ -120,7 +131,10 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function edit($class_name \$$class_name){
-        return('mostash here soon');
+	\$main_template_name = \$this->_getMainTemplateName();
+	\$these = $class_name::all();
+	\$durc_template_results = view('DURC.$class_name.edit',\$$class_name"."->toArray());        
+	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
     /**
@@ -130,6 +144,9 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function update(Request \$request, $class_name \$$class_name){
+	\$main_template_name = \$this->_getMainTemplateName();
+	\$durc_template_results = view('DURC.$class_name.update',\$$class_name"."->toArray());        
+	return view(\$main_template_name,['content' => \$durc_template_results]);
         
     }
 
@@ -139,7 +156,9 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function destroy($class_name \$$class_name){
-
+	\$main_template_name = \$this->_getMainTemplateName();
+	\$durc_template_results = view('DURC.$class_name.destroy');        
+	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 }
 ";

@@ -9,6 +9,9 @@ use App\Http\Controllers\Controller;
 */
 class DURCController extends Controller{
 
-
+	public function _getMainTemplateName(){
+		//hardcoded for now.. lets get smarter!!
+		return('DURC.durc_html');
+	}
 
 }

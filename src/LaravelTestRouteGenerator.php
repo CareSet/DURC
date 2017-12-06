@@ -69,7 +69,10 @@ Route::get('durctest', function () {
 	return \$html;
 }); //end DURC test route closure
 
-
+Route::get('/',function () {
+	\$test_data = ['content' => '<h1>This is test content</h1>'];
+	return view('main_html',\$test_data);
+});
 ";
 
 	
