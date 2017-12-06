@@ -67,6 +67,15 @@ class LaravelControllerGenerator extends DURCGenerator {
 		$parent_file_name = "$parent_class_name"."Controller.php";	
 		$child_file_name = "$class_name"."Controller.php";	
 
+	$field_update_from_request = '';
+	foreach($fields as $field_data){
+			$this_field = $field_data['column_name'];
+			$data_type = $field_data['data_type'];
+			$field_update_from_request .= "		\$tmp_$class_name"."->$this_field = \$request->$this_field; \n";
+	}	
+	$field_update_from_request .= "		\$tmp_$class_name"."->save();\n";
+
+
 		$parent_class_text = "<?php
 
 namespace App\DURC\Controllers;
@@ -100,21 +109,29 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function create(){
-	\$main_template_name = \$this->_getMainTemplateName();
-	\$durc_template_results = view('DURC.$class_name.create');        
-	return view(\$main_template_name,['content' => \$durc_template_results]);
+	// but really, we are just going to edit a new object..
+	\$new_instance = new $class_name();
+	\$is_new = true;
+	return \$this->edit(\$new_instance,\$is_new);
     }
 
     /**
      * Store a newly created resource in storage.
      * @param  \Illuminate\Http\Request  \$request
      * @return \Illuminate\Http\Response
-     */
+    */ 
     public function store(Request \$request){
-	\$main_template_name = \$this->_getMainTemplateName();
-	\$durc_template_results = view('DURC.$class_name.store');        
-	return view(\$main_template_name,['content' => \$durc_template_results]);
-    }
+
+	\$myNew$class_name = new $class_name();
+
+	//the games we play to easily auto-generate code..
+	\$tmp_$class_name = \$myNew$class_name;
+	$field_update_from_request
+
+	\$new_id = \$myNew$class_name"."->id;
+
+	return redirect(\"/DURC/$class_name/\$new_id\")->with('status', 'Data Saved!');
+    }//end store function
 
     /**
      * Display the specified resource.
@@ -130,10 +147,37 @@ class DURC_$class_name"."Controller extends DURCController
      * @param  \App\\$class_name  \$$class_name
      * @return \Illuminate\Http\Response
      */
-    public function edit($class_name \$$class_name){
+    public function edit($class_name \$$class_name, \$is_new = false){
+
 	\$main_template_name = \$this->_getMainTemplateName();
-	\$these = $class_name::all();
-	\$durc_template_results = view('DURC.$class_name.edit',\$$class_name"."->toArray());        
+	\$view_data = [];
+
+	//do we have a status message in the session? The view needs it...
+	\$view_data['session_status'] = session('status',false);
+	if(\$view_data['session_status']){
+		\$view_data['has_session_status'] = true;
+	}else{
+		\$view_data['has_session_status'] = false;
+	}
+
+	\$view_data['csrf_token'] = csrf_token();
+
+	if(!\$is_new){	//we will not have old data if this is a new object
+
+		//put the contents into the view...
+		foreach(\$$class_name"."->toArray() as \$key => \$value){
+			\$view_data[\$key] = \$value;
+		}
+
+		//what is this object called?
+		\$view_data['durc_instance_name'] = \$$class_name"."->_getBestName();
+		\$view_data['is_new'] = false;
+	}else{
+		\$view_data['is_new'] = true;
+	}
+	
+
+	\$durc_template_results = view('DURC.$class_name.edit',\$view_data);        
 	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
@@ -144,9 +188,13 @@ class DURC_$class_name"."Controller extends DURCController
      * @return \Illuminate\Http\Response
      */
     public function update(Request \$request, $class_name \$$class_name){
-	\$main_template_name = \$this->_getMainTemplateName();
-	\$durc_template_results = view('DURC.$class_name.update',\$$class_name"."->toArray());        
-	return view(\$main_template_name,['content' => \$durc_template_results]);
+
+	\$tmp_$class_name = \$$class_name;
+	$field_update_from_request
+
+	\$id = \$$class_name"."->id;
+
+	return redirect(\"/DURC/$class_name/\$id\")->with('status', 'Data Saved!');
         
     }
 
@@ -219,7 +267,7 @@ class $class_name"."Controller extends DURC_$class_name"."Controller
      * @param  \App\\$class_name  \$$class_name
      * @return \Illuminate\Http\Response
      */
-    public function edit($class_name \$$class_name){
+    public function edit($class_name \$$class_name, \$is_new = false){
         // enter your stuff here if you want...
 	return(parent::edit(\$$class_name));
     }

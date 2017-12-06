@@ -37,7 +37,7 @@ class LaravelTestRouteGenerator extends DURCGenerator {
 
 //This closure lists all of the index routes that DURC knows about...
 Route::get('durctest', function () {
-    \$index_list = [ 
+    \$route_list = [ 
 
 
 
@@ -55,13 +55,13 @@ Route::get('durctest', function () {
 		$trailer = "
 
 
-	]; //end index_list
+	]; //end route_list
 
 	\$html = '<html><head><title>DURC Test Page</title><body><h1>DURC Test Page</h1><h3>DO NOT USE IN PRODUCTION!!!</h3>';
 
 	\$html .= '<ul>';
 
-	foreach(\$index_list as \$this_relative_link){
+	foreach(\$route_list as \$this_relative_link){
 		\$html  .= \"<li><a href='\$this_relative_link'>\$this_relative_link </a> </li> \";
 	}
 
@@ -89,6 +89,9 @@ Route::get('/',function () {
 
 
 		$snippet = "\n 			'/DURC/$class_name', //from: $database.$table ";
+		$snippet = "\n 			'/DURC/$class_name/create', //from: $database.$table ";
+		$snippet = "\n 			'/DURC/$class_name/1', //from: $database.$table ";
+		$snippet = "\n 			'/DURC/$class_name/1/edit', //from: $database.$table ";
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);
 
