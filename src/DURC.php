@@ -26,20 +26,32 @@ class DURC{
 	public static function getTables($db_name){
 
 	        $table_columns = DB::select('SELECT * FROM information_schema.COLUMNS where TABLE_SCHEMA = ? ORDER BY TABLE_NAME,ORDINAL_POSITION', [$db_name]);
+
 	        if(is_array($table_columns) && !empty($table_columns))
 	        {
 	            	$tables = [];
+			$bad_tables = [];
 	            	foreach($table_columns as $column)
 	            	{
-	                	if(!isset($tables[$column->TABLE_NAME])){
-					$tables[$column->TABLE_NAME] = [];
+				if(strpos($column->TABLE_NAME,' ') !== false){
+					//then this table has a space in it... f*!& that noise.
+					$bad_tables[$column->TABLE_NAME] = 'table name as a space in it';
+				}else{
+	                		if(!isset($tables[$column->TABLE_NAME])){
+						$tables[$column->TABLE_NAME] = [];
+					}
+	                		$tables[$column->TABLE_NAME][] = [
+						'column_name' => $column->COLUMN_NAME,
+						'data_type' => $column->DATA_TYPE,
+						];
 				}
-	                	$tables[$column->TABLE_NAME][] = [
-					'column_name' => $column->COLUMN_NAME,
-					'data_type' => $column->DATA_TYPE,
-					];
 	            	}
 			ksort($tables);
+
+			//need to log the problems here... TODO
+			foreach($bad_tables as $table => $problem){
+				echo "Rejected $table because $problem\n";
+			}
 			return($tables);
 	        } else {
 	     		return false;
