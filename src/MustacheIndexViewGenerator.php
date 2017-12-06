@@ -24,23 +24,28 @@ class MustacheIndexViewGenerator extends DURCGenerator {
 			$col_list[] = $field_data['column_name'];
 		}
 
-		$template_text = "
-<h1>$class_name list </h1>
-<table class='table table-bordered table-hover table-responsive table-sm'>
- <caption>List of $class_name</caption>
-  <thead>
-    <tr>
-	
-";
+
+	$header_row = '';
 		foreach($col_list as $column_name){
 			if($column_name == 'id'){ //we want to scope this field as the row id...
-				$template_text .= "<th scope='col'>#</th>";
+				$header_row .= "<th scope='col'>#</th>";
 			}else{
-				$template_text .= "<th scope='col'>$column_name</th>\n"; 
+				$header_row .= "<th scope='col'>$column_name</th>\n"; 
 			}
 		}
 
-		$template_text .= "</tr></thead><tbody>
+
+
+		$template_text = "
+<h1>$class_name list </h1>
+<table id='table_$class_name' class='table table-bordered table-hover table-responsive table-sm'>
+<thead><tr>
+$header_row
+</tr></thead>
+<tfoot><tr>
+$header_row
+</tr></tfoot>
+<tbody>
   {{#data}}
     <tr>
 	";
@@ -58,7 +63,58 @@ class MustacheIndexViewGenerator extends DURCGenerator {
 
 ";
 
-		$template_text .= "<tbody></table>\n";
+		$template_text .= "<tbody></table>\n
+{{^is_need_paging}}
+<p>
+{{total}} results. All rows shown.
+</p>
+{{/is_need_paging}}
+
+{{#is_need_paging}}
+
+<div class='dataTables_paginate paging_simple_numbers' id='table_$class_name'>
+	<ul class='pagination'>
+		<li class='paginate_button page-item previous {{first_page_class}}' 
+			id='table_$class_name"."_previous'>
+			<a href='{{first_page_url}}' aria-controls='table_$class_name' data-dt-idx='0' tabindex='0' class='page-link'>First</a>
+		</li>
+		<li class='paginate_button page-item {{prev_page_class}}'>
+			<a href={{prev_page_url}}' aria-controls='table_$class_name' data-dt-idx='1' tabindex='0' class='page-link'>Previous</a>
+		</li>
+		<li class='paginate_button page-item active'>
+			<a href='#' aria-controls='table_$class_name' data-dt-idx='2' tabindex='0' class='page-link'>{{current_page}}</a>
+		</li>
+		<li class='paginate_button page-item {{next_page_class}} '>
+			<a href='{{next_page_url}}' aria-controls='table_$class_name' data-dt-idx='3' tabindex='0' class='page-link'>Next</a>
+		</li>
+		<li class='paginate_button page-item {{last_page_class}}'>
+			<a href='{{last_page_url}}' aria-controls='table_$class_name' data-dt-idx='4' tabindex='0' class='page-link'>Last</a>
+		</li>
+	</ul>
+</div>
+{{/is_need_paging}}
+
+<script type='text/javascript'>
+//we need a way to check to see if the page is loaded before we call DataTable()
+//but we frequently do not have JQuery yet... it could be loaded at the bottom of the page...
+//so we have a pure JS alternative to the ready() function..
+var DURC_checkReadyState = setInterval(() => {
+  if (document.readyState === 'complete') {
+    clearInterval(DURC_checkReadyState);
+    // document is ready
+    $('#table_$class_name').DataTable(
+{
+        'paging':   false,
+        'info':     false
+}
+);
+  }
+}, 100);
+
+
+</script>
+
+";
 
 		$my_path = base_path() . "/resources/views/DURC/$class_name/";
 

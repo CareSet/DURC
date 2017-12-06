@@ -92,14 +92,45 @@ class DURC_$class_name"."Controller extends DURCController
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index(){
+    public function index(Request \$request){
 	\$main_template_name = \$this->_getMainTemplateName();
-	\$these = $class_name::all();
+
+	\$these = $class_name::paginate(100);
 
 	\$view_data = [];
-	\$view_data['data'] = \$these->toArray();
-	\$view_data['data_count'] = \$view_data['data'];
+        foreach(\$these->toArray() as \$key => \$value){ //add the contents of the obj to the the view 
+                \$view_data[\$key] = \$value;
+        }
 
+	//helps with logic-less templating...
+	if(\$view_data['first_page_url'] == \$view_data['last_page_url']){
+		\$view_data['is_need_paging'] = false;
+	}else{
+		\$view_data['is_need_paging'] = true;
+	}
+
+	if(\$view_data['current_page'] == 1){
+		\$view_data['first_page_class'] = 'disabled';
+		\$view_data['prev_page_class'] = 'disabled';
+	}else{
+		\$view_data['first_page_class'] = '';
+		\$view_data['prev_page_class'] = '';
+	}
+
+
+	if(\$view_data['current_page'] == \$view_data['last_page']){
+		\$view_data['next_page_class'] = 'disabled';
+		\$view_data['last_page_class'] = 'disabled';
+	}else{
+		\$view_data['next_page_class'] = '';
+		\$view_data['last_page_class'] = '';
+	}
+
+
+	if(\$request->has('debug')){
+		var_export(\$view_data);
+		exit();
+	}
 	\$durc_template_results = view('DURC.$class_name.index',\$view_data);        
 	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
@@ -228,9 +259,9 @@ class $class_name"."Controller extends DURC_$class_name"."Controller
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
      */
-    public function index(){
+    public function index(Request \$request){
         // enter your stuff here if you want...
-	return(parent::index());
+	return(parent::index(\$request));
     }
 
     /**
