@@ -5,14 +5,14 @@
 
 
 */
-namespace CareSet\DURC;
+namespace CareSet\DURC\Generators;
 
 
-class MustacheEditViewGenerator extends DURCGenerator {
+class MustacheEditViewGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 
-	public static function run_generator($class_name,$database,$table,$fields,$squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
 
 
 		$column_type_map = [

@@ -5,14 +5,14 @@
 
 
 */
-namespace CareSet\DURC;
+namespace CareSet\DURC\Generators;
 
 
-class LaravelControllerGenerator extends DURCGenerator {
+class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 
-	public static function run_generator($class_name,$database,$table,$fields,$squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
 
 		//possible created_at field names... 
 		//in reverse order of priority. we pick the last one.

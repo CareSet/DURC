@@ -81,7 +81,7 @@ Route::get('/',function () {
 	} 
 
 
-	public static function run_generator($class_name,$database,$table,$fields,$squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
 
 
 		//we just need to add a little snippet to the route file..

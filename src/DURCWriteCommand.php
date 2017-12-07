@@ -40,23 +40,18 @@ class DURCWriteCommand extends Command{
 
 	$config = DURC::readDURCDesignConfigJSON($config_file);
 
-	/*
-	file_put_contents(base_path().'/config_struct.json',json_encode($db_struct,JSON_PRETTY_PRINT));
-
-	$db_list = array_keys($db_struct);
-	$raw_db_struct = DURC::getDBStruct($db_list);
-	file_put_contents(base_path().'/orig_struct.json',json_encode($raw_db_struct,JSON_PRETTY_PRINT));
-	exit();
-	*/
-
 	//each generator handles the creation of different type of file...
 	foreach($generatorClasses as $this_generator){
 
 		$this_generator::start();
 
 		foreach($config as $this_db => $db_data){
-			foreach($db_data as $this_table=> $table_data){
+			foreach($db_data as $this_table => $table_data){
+	
 				$this_class_name = strtolower($this_table);
+				echo "Processing $this_class_name\n";
+		
+
 				$column_data = $table_data['column_data'];
 
 				$has_many = $this->_get_or_null($table_data,'has_many');

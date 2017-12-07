@@ -5,7 +5,7 @@
 
 
 */
-namespace CareSet\DURC;
+namespace CareSet\DURC\Generators;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\Command;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\DB;
 
-class LaravelRouteGenerator extends DURCGenerator {
+class LaravelRouteGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 	//so that we target the same file the whole time..
@@ -38,7 +38,7 @@ this will be automatically overwritten by future DURC runs.
 
 	}
 
-	public static function run_generator($class_name,$database,$table,$fields,$squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
 
 
 		//we just need to add a little snippet to the route file..

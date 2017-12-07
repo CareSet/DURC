@@ -8,7 +8,7 @@
 namespace CareSet\DURC\Generators;
 
 
-class LaravelEloquentGenerator extends CareSet\DURC\DURCGenerator {
+class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 
