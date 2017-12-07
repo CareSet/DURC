@@ -40,7 +40,7 @@ class DURCMineCommand extends Command{
 				$ignored_tables[$table_tag] = "This table name is used twice...";
 			}else{
 				$table_namespace[$table_name]  = $table_name; //use to prevent name collisions which are on the table level, not the db.table level..
-				$new_struct[$db][$table_name] = [
+				$new_struct[$db][strtolower($table_name)] = [
 						'table_name' => $table_name,
 						'db' => $db,
 						'column_data' => $column_data,
@@ -78,7 +78,7 @@ class DURCMineCommand extends Command{
 					$my_object_name = strtolower($table_name);
 
 					//but if 'something' is not the name of another table.. there is no other table to link to. 
-					if(isset($new_struct[$db][$other_table_tag])){
+					if(isset($new_struct[$db][strtolower($other_table_tag)])){
 						//then this table exists as a target..
 
 						//Has Many Calculation
@@ -92,7 +92,7 @@ class DURCMineCommand extends Command{
 						}else{
                     					$has_many_key = $relationship.'_'.$my_object_name;
 						}
-                    				$new_struct[$db][$other_table_tag]['has_many'][$has_many_key] = $has_many_tmp;
+                    				$new_struct[$db][strtolower($other_table_tag)]['has_many'][$has_many_key] = $has_many_tmp;
 
 
 
@@ -107,7 +107,7 @@ class DURCMineCommand extends Command{
 						}else{
 							$belongs_to_key = $relationship.'_'.$other_table_tag;
 						}
-                    				$new_struct[$db][$my_object_name]['belongs_to'][$belongs_to_key] = $belongs_to_tmp;
+                    				$new_struct[$db][strtolower($my_object_name)]['belongs_to'][$belongs_to_key] = $belongs_to_tmp;
 
 					}
 
