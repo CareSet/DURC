@@ -25,5 +25,14 @@ $ php artisan vendor:publish --provider="CareSet\DURC\DURCServiceProvider"
 
 **Command:**
 ```bash
-$ php artisan DURC --DB=thefirst_db_name --DB=the_second_db --DB=the_third (etc...)
+$ php artisan DURC:mine --DB=thefirst_db_name --DB=the_second_db --DB=the_third (etc...)
+$ php artisan DURC:write
 ```
+
+DURC:mine and DURC:write are two steps to allow for a auto-generated durc_conf.json file to be generated in config
+
+This project requires datatables for bootstrap 4 to be available in the html
+We use a webpack requirement for this, but you JS system might be different.
+
+https://datatables.net/examples/styling/bootstrap4.html
+
