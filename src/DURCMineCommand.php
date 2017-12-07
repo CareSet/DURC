@@ -92,6 +92,7 @@ class DURCMineCommand extends Command{
                             				'type'   => $my_object_name,
 							'from_table'   => $other_table,
 							'from_db' => $other_db, 
+							'from_column' => $column_name,
                             			];
 						if(is_null($relationship)){
 							$has_many_key = $my_object_name;

@@ -14,6 +14,9 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 	public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
 
+		$model_namespace = 'App';
+
+
 		//possible created_at field names... 
 		//in reverse order of priority. we pick the last one.
 		$valid_created_at_fields = [
@@ -67,9 +70,12 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 		$parent_file_name = "$parent_class_name.php";	
 		$child_file_name = "$class_name.php";	
 
+
+		//STARTING DURC CLASS
+
 		$parent_class_text = "<?php
 
-namespace App\DURC\Models;
+namespace $model_namespace\DURC\Models;
 
 use CareSet\DURC\DURCModel;
 /*
@@ -104,11 +110,56 @@ class $parent_class_name extends DURCModel{
 
 
 		$parent_class_text .= "			]; //end field_type_map
+
+	";
+
+	
+	$parent_class_text .= "//DURC HAS_MANY SECTION";
+	if(!is_null($has_many)){
+		foreach($has_many as $other_table_name => $relate_details){
+		
+			$prefix = $relate_details['prefix'];	
+			$type = $relate_details['type'];	
+			$from_table = $relate_details['from_table'];	
+			$from_db = $relate_details['from_db'];	
+			$from_column = $relate_details['from_column']; 
+
+			$local_key = 'id';
+
+			$parent_class_text .= "
+/**
+*	get all the $type for this $parent_class_name
+*/
+	public function $type(){
+		return \$this->hasMany($model_namespace\\$type,$from_column,'$local_key');
+	}
+
+";
+	
+		}
+	}else{
+		$parent_class_text .= "//DURC did not detect any has_many relationships";
+	}
+
+
+	//TODO
+	//make sure the has_many relationship is actually working..
+	//then add the belongs_to logic
+
+
+
+//finish the file
+$parent_class_text .= "
+
 }//end $parent_class_name";
+
+
+
+		//STARTING CHILD CLASS
 
 		$child_class_text = "<?php
 
-namespace App;
+namespace $model_namespace;
 /*
 	$class_name: controls $database.$table
 
@@ -116,7 +167,7 @@ This class started life as a DURC model, but itwill no longer be overwritten by 
 this is safe to edit.
 
 */
-class $class_name extends \App\DURC\Models\\$parent_class_name
+class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 {
 
 	//you can uncomment fields to prevent them from being serialized into the API!
@@ -133,7 +184,46 @@ class $class_name extends \App\DURC\Models\\$parent_class_name
 
 		$child_class_text .= "		]; //end hidden array
 
+";
 
+
+	$child_class_text .= "//DURC HAS_MANY SECTION";
+	if(!is_null($has_many)){
+		foreach($has_many as $other_table_name => $relate_details){
+		
+			$prefix = $relate_details['prefix'];	
+			$type = $relate_details['type'];	
+			$from_table = $relate_details['from_table'];	
+			$from_db = $relate_details['from_db'];	
+			$from_column = $relate_details['from_column']; 
+
+			$local_key = 'id';
+
+			$child_class_text .= "
+/**
+*	DURC is handling the $type for this $class_name in $parent_class_name
+*       but you can extend or override the defaults by editing this function...
+*/
+	public function $type(){
+		return parent::$type();
+	}
+
+";
+	
+		}
+	}else{
+		$parent_class_text .= "//DURC did not detect any has_many relationships";
+	}
+
+
+//finish the file
+$parent_class_text .= "
+
+}//end $parent_class_name";
+
+
+
+$child_class_text .= "
 	//your stuff goes here..
 	
 

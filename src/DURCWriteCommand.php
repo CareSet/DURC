@@ -49,10 +49,14 @@ class DURCWriteCommand extends Command{
 			foreach($db_data as $this_table => $table_data){
 	
 				$this_class_name = strtolower($this_table);
-				echo "Processing $this_class_name\n";
+				//echo "Processing $this_class_name\n";
 		
 
-				$column_data = $table_data['column_data'];
+				$column_data = $this->_get_or_null($table_data,'column_data');
+				if(is_null($column_data)){
+					echo "Error: $this_db.$this_table did not have columns defined\n";
+					exit();
+				}
 
 				$has_many = $this->_get_or_null($table_data,'has_many');
 				$belongs_to = $this->_get_or_null($table_data,'belongs_to');
