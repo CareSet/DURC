@@ -71,7 +71,7 @@ Route::get('durctest', function () {
 
 Route::get('/',function () {
 	\$test_data = ['content' => '<h1>This is test content</h1>'];
-	return view('DRUC.durc_html',\$test_data);
+	return view('DURC.durc_html',\$test_data);
 });
 ";
 
