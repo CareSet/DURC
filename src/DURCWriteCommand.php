@@ -13,7 +13,7 @@ use Symfony\Component\Process\Process;
 
 class DURCWriteCommand extends Command{
 
-    protected $signature = 'DURC:write {--squash} {--DB=*}';
+    protected $signature = 'DURC:write {--squash} {--config_file}';
     protected $description = 'DURC:write generates Templates and Eloquent Classe, inferred from your DB structure';
 
     public function handle(){
@@ -22,34 +22,58 @@ class DURCWriteCommand extends Command{
 
 	//only one code generator for now...
 	$generatorClasses = [
-			'CareSet\DURC\LaravelEloquentGenerator',
-			'CareSet\DURC\LaravelControllerGenerator',
-			'CareSet\DURC\MustacheEditViewGenerator',
-			'CareSet\DURC\MustacheIndexViewGenerator',
-			'CareSet\DURC\LaravelRouteGenerator',	
-			'CareSet\DURC\LaravelTestRouteGenerator',	
+			'CareSet\DURC\Generators\LaravelEloquentGenerator',
+//			'CareSet\DURC\Generators\LaravelControllerGenerator',
+//			'CareSet\DURC\Generators\MustacheEditViewGenerator',
+//			'CareSet\DURC\Generators\MustacheIndexViewGenerator',
+//			'CareSet\DURC\Generators\LaravelRouteGenerator',	
+//			'CareSet\DURC\Generators\LaravelTestRouteGenerator',	
 		];
 
-	$databases = $this->option('DB');
+	$config_file = $this->option('config_file');
+
+	if(!$config_file){
+		$config_file = base_path()."/config/DURC_config.edit_me.json"; //this is the user edited default config file..
+	}
 
 	$squash = $this->option('squash');
 
-	$db_struct = DURC::getDBStruct($databases);
+	$config = DURC::readDURCDesignConfigJSON($config_file);
+
+	/*
+	file_put_contents(base_path().'/config_struct.json',json_encode($db_struct,JSON_PRETTY_PRINT));
+
+	$db_list = array_keys($db_struct);
+	$raw_db_struct = DURC::getDBStruct($db_list);
+	file_put_contents(base_path().'/orig_struct.json',json_encode($raw_db_struct,JSON_PRETTY_PRINT));
+	exit();
+	*/
 
 	//each generator handles the creation of different type of file...
 	foreach($generatorClasses as $this_generator){
 
 		$this_generator::start();
 
-		foreach($db_struct as $this_db => $db_data){
+		foreach($config as $this_db => $db_data){
 			foreach($db_data as $this_table=> $table_data){
-				$this_class_name = $this_table;
-				$generated_results = 
-					$this_generator::run_generator(
+				$this_class_name = strtolower($this_table);
+				$column_data = $table_data['column_data'];
+
+				$has_many = $this->_get_or_null($table_data,'has_many');
+				$belongs_to = $this->_get_or_null($table_data,'belongs_to');
+				$many_many = $this->_get_or_null($table_data,'many_many');
+				$many_through = $this->_get_or_null($table_data,'many_through');
+
+
+				$generated_results = $this_generator::run_generator(
 						$this_class_name,
 						$this_db,
 						$this_table,
-						$table_data,
+						$column_data,
+						$has_many,
+						$belongs_to,
+						$many_many,
+						$many_through,
 						$squash
 					);
 
@@ -66,6 +90,14 @@ class DURCWriteCommand extends Command{
 	
 
     }
+
+	private function _get_or_null($array,$key){
+		if(isset($array[$key])){
+			return($array[$key]);
+		}else{
+			return(null);
+		}
+	}
 
 
 }
