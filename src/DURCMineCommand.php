@@ -32,16 +32,19 @@ class DURCMineCommand extends Command{
 	$new_struct = [];
 	$table_namespace = [];
 	foreach($db_struct as $db => $table_list){
-		foreach($table_list as $table_name => $column_data){
+		foreach($table_list as $this_table_name => $column_data){
 			
-			$table_tag = strtolower($table_name); //lets use lowercase for linking purposes
+			$table_tag = strtolower($this_table_name); //lets use lowercase for linking purposes
 
-			if(isset($table_namespace[$table_name])){	//shit
+			if(isset($table_namespace[$table_tag])){	//shit
 				$ignored_tables[$table_tag] = "This table name is used twice...";
 			}else{
-				$table_namespace[$table_name]  = $table_name; //use to prevent name collisions which are on the table level, not the db.table level..
-				$new_struct[$db][strtolower($table_name)] = [
-						'table_name' => $table_name,
+				$table_namespace[$table_tag]  = [
+							'db' => $db,
+							'table' => $this_table_name,
+						]; //use to prevent name collisions which are on the table level, not the db.table level..
+				$new_struct[$db][strtolower($this_table_name)] = [
+						'table_name' => $this_table_name,
 						'db' => $db,
 						'column_data' => $column_data,
 					];
@@ -52,8 +55,8 @@ class DURCMineCommand extends Command{
 	//in the second pass we look for links to those tables...
 
 	//and start the second pass..
-	foreach($db_struct as $db => $table_list){
-		foreach($table_list as $table_name => $column_data){
+	foreach($db_struct as $this_db => $table_list){
+		foreach($table_list as $this_table_name => $column_data){
 			foreach($column_data as $column_name => $column_data){
 				$column_name = $column_data['column_name'];
 				$data_type = $column_data['data_type'];
@@ -75,24 +78,27 @@ class DURCMineCommand extends Command{
                     				$relationship = null; //which means it the same as 'something_something_id'
                 			}
 
-					$my_object_name = strtolower($table_name);
+					$my_object_name = strtolower($this_table_name);
 
 					//but if 'something' is not the name of another table.. there is no other table to link to. 
-					if(isset($new_struct[$db][strtolower($other_table_tag)])){
+					if(isset($table_namespace[strtolower($other_table_tag)])){
 						//then this table exists as a target..
+						$other_table = $table_namespace[strtolower($other_table_tag)]['table'];
+						$other_db = $table_namespace[strtolower($other_table_tag)]['db'];
 
 						//Has Many Calculation
                     				$has_many_tmp = [
                             				'prefix' => $relationship,
                             				'type'   => $my_object_name,
-							'from' => 'has_many_tmp',
+							'from_table'   => $other_table,
+							'from_db' => $other_db, 
                             			];
 						if(is_null($relationship)){
 							$has_many_key = $my_object_name;
 						}else{
                     					$has_many_key = $relationship.'_'.$my_object_name;
 						}
-                    				$new_struct[$db][strtolower($other_table_tag)]['has_many'][$has_many_key] = $has_many_tmp;
+                    				$new_struct[$other_db][strtolower($other_table_tag)]['has_many'][$has_many_key] = $has_many_tmp;
 
 
 
@@ -100,14 +106,15 @@ class DURCMineCommand extends Command{
                     				$belongs_to_tmp = [
                             				'prefix' => $relationship,
                             				'type'   => $other_table_tag,
-							'from' => 'belongs_to_tmp',
+							'to_table' => $this_table_name,
+							'to_db' => $this_db,
                             			];
 						if(is_null($relationship)){
 							$belongs_to_key = $other_table_tag;
 						}else{
 							$belongs_to_key = $relationship.'_'.$other_table_tag;
 						}
-                    				$new_struct[$db][strtolower($my_object_name)]['belongs_to'][$belongs_to_key] = $belongs_to_tmp;
+                    				$new_struct[$this_db][strtolower($my_object_name)]['belongs_to'][$belongs_to_key] = $belongs_to_tmp;
 
 					}
 
