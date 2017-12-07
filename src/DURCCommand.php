@@ -24,6 +24,11 @@ class DURCCommand extends Command{
 	$squash = $this->option('squash');
 
 	//pass these options to to two other commands...
+	echo "Running DURCCommand main command...\n";
+
+	$db_struct = DURC::getDBStruct($databases);
+
+	var_export($db_struct);
 
 
 

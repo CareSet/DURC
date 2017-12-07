@@ -21,6 +21,8 @@ class DURCServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 DURCCommand::class,
+                DURCMineCommand::class,
+                DURCWriteCommand::class,
             ]);
         }
     }
