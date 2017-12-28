@@ -5,15 +5,16 @@
 
 
 */
-namespace CareSet\DURC;
+namespace CareSet\DURC\Generators;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\DB;
+use CareSet\DURC\DURC;
 
-class LaravelTestRouteGenerator extends DURCGenerator {
+class LaravelTestRouteGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 	//so that we target the same file the whole time..
@@ -25,6 +26,8 @@ class LaravelTestRouteGenerator extends DURCGenerator {
 	public static function start(){
 		$file = LaravelTestRouteGenerator::getFile();
 
+                $gen_string = DURC::get_gen_string();
+
 		$header = "
 /*
 	This test route can be added to the web.php route file..
@@ -33,6 +36,7 @@ class LaravelTestRouteGenerator extends DURCGenerator {
 
 	cat routes/durc_test.routes >> routes/web.php
 
+	$gen_string
 */
 
 //This closure lists all of the index routes that DURC knows about...
@@ -89,9 +93,9 @@ Route::get('/',function () {
 
 
 		$snippet = "\n 			'/DURC/$class_name', //from: $database.$table ";
-		$snippet = "\n 			'/DURC/$class_name/create', //from: $database.$table ";
-		$snippet = "\n 			'/DURC/$class_name/1', //from: $database.$table ";
-		$snippet = "\n 			'/DURC/$class_name/1/edit', //from: $database.$table ";
+		$snippet .= "\n 			'/DURC/$class_name/create', //from: $database.$table ";
+		$snippet .= "\n 			'/DURC/$class_name/1', //from: $database.$table ";
+		$snippet .= "\n 			'/DURC/$class_name/1/edit', //from: $database.$table ";
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);
 

@@ -23,11 +23,12 @@ class DURCWriteCommand extends Command{
 	//only one code generator for now...
 	$generatorClasses = [
 			'CareSet\DURC\Generators\LaravelEloquentGenerator',
-//			'CareSet\DURC\Generators\LaravelControllerGenerator',
-//			'CareSet\DURC\Generators\MustacheEditViewGenerator',
-//			'CareSet\DURC\Generators\MustacheIndexViewGenerator',
-//			'CareSet\DURC\Generators\LaravelRouteGenerator',	
-//			'CareSet\DURC\Generators\LaravelTestRouteGenerator',	
+			'CareSet\DURC\Generators\LaravelControllerGenerator',
+			'CareSet\DURC\Generators\MustacheEditViewGenerator',
+			'CareSet\DURC\Generators\MustacheIndexViewGenerator',
+			'CareSet\DURC\Generators\LaravelRouteGenerator',	
+			'CareSet\DURC\Generators\LaravelTestRouteGenerator',	
+			'CareSet\DURC\Generators\MustacheMenuGenerator',	
 		];
 
 	$config_file = $this->option('config_file');

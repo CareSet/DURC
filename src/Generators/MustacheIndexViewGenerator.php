@@ -7,14 +7,23 @@
 */
 namespace CareSet\DURC\Generators;
 
+use CareSet\DURC\DURC;
 
 class MustacheIndexViewGenerator extends \CareSet\DURC\DURCGenerator {
 
+	public static function start(){
+
+	}
+
+	public static function finish(){
+
+	}
 
 
         public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
 
 
+                $gen_string = DURC::get_gen_string();
 		
 		$parent_file_names = [
 			 "index.mustache",
@@ -70,7 +79,7 @@ $paging_widget = "
 
 		$template_text = "
 <h1>$class_name list </h1>
-
+<h6>$gen_string</h6>
 $paging_widget
 
 <table id='table_$class_name' class='table table-bordered table-hover table-responsive table-sm'>

@@ -12,8 +12,12 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\DB;
-
+use CareSet\DURC\DURC;
 class LaravelRouteGenerator extends \CareSet\DURC\DURCGenerator {
+
+        public static function finish(){
+
+        }
 
 
 	//so that we target the same file the whole time..
@@ -22,13 +26,17 @@ class LaravelRouteGenerator extends \CareSet\DURC\DURCGenerator {
 		return($file_name);
 	}
 
+
 	public static function start(){
 		$file = LaravelRouteGenerator::getFile();
 
+		$gen_string = DURC::get_gen_string();
 		$header = "<?php
 /*
 This is an auto generated route file from DURC
 this will be automatically overwritten by future DURC runs.
+
+$gen_string
 
 */
 

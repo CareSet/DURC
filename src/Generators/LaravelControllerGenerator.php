@@ -7,12 +7,17 @@
 */
 namespace CareSet\DURC\Generators;
 
+use CareSet\DURC\DURC;
 
 class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 
         public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
+
+
+                $gen_string = DURC::get_gen_string();
+
 
 		//possible created_at field names... 
 		//in reverse order of priority. we pick the last one.
@@ -85,7 +90,7 @@ use Illuminate\Http\Request;
 use CareSet\DURC\DURCController;
 use Illuminate\Support\Facades\View;
 
-
+//$gen_string
 class DURC_$class_name"."Controller extends DURCController
 {
 
@@ -254,7 +259,7 @@ use App\\$class_name;
 use App\DURC\Controllers\DURC_$class_name"."Controller;
 use Illuminate\Http\Request;
 
-
+//$gen_string
 class $class_name"."Controller extends DURC_$class_name"."Controller
 {
     /**

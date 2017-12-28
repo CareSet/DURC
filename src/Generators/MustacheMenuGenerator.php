@@ -1,4 +1,34 @@
-<!doctype html>
+<?php
+/*
+        This is the place where the actual command is orchestrated.
+        it ends up being our "main()"
+
+
+*/
+namespace CareSet\DURC\Generators;
+
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
+use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\DB;
+use CareSet\DURC\DURC;
+
+class MustacheMenuGenerator extends \CareSet\DURC\DURCGenerator {
+
+
+	//so that we target the same file the whole time..
+	public static function getFile(){
+		$file_name = base_path()."/resources/views/DURC/durc_html.mustache";
+		return($file_name);
+	}
+
+	public static function start(){
+
+		$file = MustacheMenuGenerator::getFile();
+	
+		//the start of our menu html...
+		$header = '<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -11,32 +41,18 @@
 
     <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-<link rel='stylesheet' href='https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css'>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+
 
 <style>
-/*
- * Base structure
- */
-
-/* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
   padding-top: 3.5rem;
 }
-
-/*
- * Typography
- */
-
 h1 {
   padding-bottom: 9px;
   margin-bottom: 20px;
   border-bottom: 1px solid #eee;
 }
-
-/*
- * Sidebar
- */
-
 .sidebar {
   position: fixed;
   top: 51px;
@@ -48,43 +64,27 @@ h1 {
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
   border-right: 1px solid #eee;
 }
-
 .sidebar .nav {
   margin-bottom: 20px;
 }
-
 .sidebar .nav-item {
   width: 100%;
 }
-
 .sidebar .nav-item + .nav-item {
   margin-left: 0;
 }
-
 .sidebar .nav-link {
   border-radius: 0;
 }
-
-/*
- * Dashboard
- */
-
-/* Placeholders */
 .placeholders {
   padding-bottom: 3rem;
 }
-
 .placeholder img {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
-
 </style>
-
-
-    <!-- Custom styles for this template -->
   </head>
-
   <body>
     <header>
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -103,58 +103,29 @@ h1 {
       </nav>
     </header>
 
-REPLACEME_WITH_GENERATED_CONTENT
-
-
     <div class="container-fluid">
       <div class="row">
         <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
           <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Overview <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Reports</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Analytics</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Export</a>
-            </li>
-          </ul>
 
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Nav item</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Nav item again</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">One more nav</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Another nav item</a>
-            </li>
-          </ul>
+';	
 
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Nav item again</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">One more nav</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Another nav item</a>
-            </li>
+
+	file_put_contents($file,$header);
+
+	}
+
+	public static function finish(){
+	
+		$file = MustacheMenuGenerator::getFile();
+
+
+		$trailer = '
           </ul>
         </nav>
-
         <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-	<h1> DURC Generated Menu </h1>
-		{{{content}}}
+        <h1> DURC Generated Menu </h1>
+                {{{content}}}
         </main>
       </div>
     </div>
@@ -165,8 +136,43 @@ REPLACEME_WITH_GENERATED_CONTENT
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-<script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
-<script src='https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js'></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 
   </body>
 </html>
+';
+
+		file_put_contents($file, $trailer, FILE_APPEND | LOCK_EX);
+
+	} 
+
+
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
+
+
+		//we just need to add a little snippet to the route file..
+		$file = MustacheMenuGenerator::getFile();
+
+
+		$snippet = "
+            <li class='nav-item'>
+              <a class='nav-link' href='/DURC/$class_name/'>$class_name</a>
+            </li>
+";
+
+		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);
+
+		return(true);
+		
+
+	}//end generate function
+
+
+
+
+
+
+
+
+}//end class
