@@ -97,6 +97,53 @@ class DURC_$class_name"."Controller extends DURCController
 
 	public \$view_data = [];
 
+
+	private function _get_index_list(Request \$request){
+
+		\$return_me = [];
+
+		\$these = $class_name::paginate(100);
+
+        	foreach(\$these->toArray() as \$key => \$value){ //add the contents of the obj to the the view 
+                	\$return_me[\$key] = \$value;
+        	}
+
+		//helps with logic-less templating...
+		if(\$return_me['first_page_url'] == \$return_me['last_page_url']){
+			\$return_me['is_need_paging'] = false;
+		}else{
+			\$return_me['is_need_paging'] = true;
+		}
+
+		if(\$return_me['current_page'] == 1){
+			\$return_me['first_page_class'] = 'disabled';
+			\$return_me['prev_page_class'] = 'disabled';
+		}else{
+			\$return_me['first_page_class'] = '';
+			\$return_me['prev_page_class'] = '';
+		}
+
+
+		if(\$return_me['current_page'] == \$return_me['last_page']){
+			\$return_me['next_page_class'] = 'disabled';
+			\$return_me['last_page_class'] = 'disabled';
+		}else{
+			\$return_me['next_page_class'] = '';
+			\$return_me['last_page_class'] = '';
+		}
+
+		return(\$return_me);
+	}
+
+
+   	public function search(Request \$request){
+
+
+
+
+	}
+
+
     /**
      * Display a listing of the resource.
      * @return \Illuminate\Http\Response
@@ -106,34 +153,7 @@ class DURC_$class_name"."Controller extends DURCController
 
 	\$these = $class_name::paginate(100);
 
-        foreach(\$these->toArray() as \$key => \$value){ //add the contents of the obj to the the view 
-                \$this->view_data[\$key] = \$value;
-        }
-
-	//helps with logic-less templating...
-	if(\$this->view_data['first_page_url'] == \$this->view_data['last_page_url']){
-		\$this->view_data['is_need_paging'] = false;
-	}else{
-		\$this->view_data['is_need_paging'] = true;
-	}
-
-	if(\$this->view_data['current_page'] == 1){
-		\$this->view_data['first_page_class'] = 'disabled';
-		\$this->view_data['prev_page_class'] = 'disabled';
-	}else{
-		\$this->view_data['first_page_class'] = '';
-		\$this->view_data['prev_page_class'] = '';
-	}
-
-
-	if(\$this->view_data['current_page'] == \$this->view_data['last_page']){
-		\$this->view_data['next_page_class'] = 'disabled';
-		\$this->view_data['last_page_class'] = 'disabled';
-	}else{
-		\$this->view_data['next_page_class'] = '';
-		\$this->view_data['last_page_class'] = '';
-	}
-
+	\$this->view_data = \$this->_get_index_list(\$request);
 
 	if(\$request->has('debug')){
 		var_export(\$this->view_data);

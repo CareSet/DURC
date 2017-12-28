@@ -104,7 +104,7 @@ class $parent_class_name extends DURCModel{
 	$created_at_code
 
 	//for many functions to work, we need to be able to do a lookup on the field_type and get back the MariaDB/MySQL column type.
-	protected \$field_type_map = [
+	static \$field_type_map = [
 ";
 	
 		
@@ -148,7 +148,7 @@ class $parent_class_name extends DURCModel{
 	
 		}
 	}else{
-		$parent_class_text .= "//DURC did not detect any has_many relationships";
+		$parent_class_text .= "\n//DURC did not detect any has_many relationships";
 	}
 
 
