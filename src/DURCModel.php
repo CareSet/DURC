@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 */
 class DURCModel extends Model{
 
-	//get the value of the field that should be the name of this object..
-	public function _getBestName(){
 
+	public static function getNameField(){
+		
 		$hell_no = [
 			'id',
 			'password',
@@ -29,33 +29,44 @@ class DURCModel extends Model{
 			'created_date',
 		];
 
+		$my_class = get_called_class();
 
-		$is_a_possible = false;
-		$fields = $this->toArray();
-		foreach($fields as $key => $value){
-			if(strpos(strtolower($key),'name') !== false){
-				return($value);
-			}
-			if(!$is_a_possible){
-				if(!in_array($key,$hell_no)){
-					//if we do not return a name... we need something...
-					$is_a_possible = $value;
-				}
+		foreach($my_class::$field_type_map as $field => $field_type){
+			
+			if(strpos(strtolower($field),'name') !== false && $field_type == 'varchar'){
+				//then this is the first 'name' field with a varchar type. This is the winner.
+				return($field);
 			}
 		}
 
-		//this could be still false...
-		if($is_a_possible){
-			return($is_a_possible);
+		//if we get here there are no fields called 'name'
+		//so lets do any varchar field type...
+		foreach($my_class::$field_type_map as $field => $field_type){
+			
+			if($field_type == 'varchar'){
+				//then this is the first text field on the 
+				return($field);
+			}
+
+		}
+		
+		//if we get here we are pretty much screwed.
+
+		return(false);
+
+	}
+
+
+	//get the value of the field that should be the name of this object..
+	public function _getBestName(){
+
+		$result = self::getNameField();
+
+		if($result){
+			return($result);
 		}else{
-			//well shit.
-			if(isset($fields['id'])){
-				$this_class_name = get_class($this);
-				$db_table = $this->$table;
-				die("DURC Model for $this_class_name could not get any reasonable field for a name.. check your $db_table table..");
-			}
+			die("DURC Model for $this_class_name could not get any reasonable field for a name.. check your $db_table table..");
 		}
-
 	}
 
 
