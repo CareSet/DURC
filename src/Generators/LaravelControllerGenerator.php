@@ -215,6 +215,7 @@ class DURC_$class_name"."Controller extends DURCController
     public function jsonout(Request \$request, \$$class_name"."_id){
 //    public function jsonout(Request \$request,$class_name  \$$class_name){
 		\$$class_name = \App\\$class_name::find(\$$class_name"."_id);
+		\$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
 		return response()->json(\$$class_name"."->toArray());
  	}
 
@@ -239,28 +240,12 @@ class DURC_$class_name"."Controller extends DURCController
 
 	if(!\$is_new){	//we will not have old data if this is a new object
 
+		//well lets properly eager load this object with a refresh to load all of the related things
+		\$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
+
 		//put the contents into the view...
 		foreach(\$$class_name"."->toArray() as \$key => \$value){
-/*			if(is_array(\$value)){
-                		//this eager loaded data... and it needs to be converted into something mustache friendly..
-				\$this->view_data[\$key.'_header'] = array_keys(\$value[0]); //set the header to be the header of the first item in the array.
-				foreach(\$value as \$i => \$inner_array){
-					\$tmp= [];
-					foreach(\$inner_array as \$sub_key => \$sub_value){
-						\$tmp[] = [
-							'label' => \$sub_key,
-							'data' => \$sub_value,
-						];
-					}
-					\$this->view_data[\$key][] = \$tmp;
-				}
-			}else{
-				//straight data from the table.
-				\$this->view_data[\$key] = \$value;
-			}
-*/
-			\$this->view_data[\$key] = \$value;
-			
+			\$this->view_data[\$key] = \$value;	
 		}
 
 		//what is this object called?

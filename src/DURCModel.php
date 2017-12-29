@@ -13,6 +13,15 @@ use Illuminate\Database\Eloquent\Model;
 */
 class DURCModel extends Model{
 
+	/**
+	*	This function allows us to avoid the recursive eager loading problem by allowing a controller (etc) to specify
+ 	*	That only one level of eager loading will occur, starting from the object-in-focus...
+	* 	But to typically avoid eager loading for index lists and such...
+	*/
+	public function fresh_with_relations(){
+		return($this->fresh($this->DURC_selfish_with));
+	}
+
 
 	public static function getNameField(){
 		

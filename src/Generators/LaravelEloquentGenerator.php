@@ -75,7 +75,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 	//before we start the durc parent class code, we need to calculate several things, based on "has_many" and belongs_to relationships
 
-	$has_many_with_code = "	protected \$with = [ \n"; //this will end up using both has_many and belongs_to relationships...
+	$with_code = "	protected \$DURC_selfish_with = [ \n"; //this will end up using both has_many and belongs_to relationships...
 
 	$has_many_code = "//DURC HAS_MANY SECTION";
 	if(!is_null($has_many)){
@@ -100,16 +100,13 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 ";
 	
 			//now lets sort out what should go in $with
-			$has_many_with_code .= "\t\t\t'$type',\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
+			$with_code .= "\t\t\t'$type', //from has_many\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
 
 		}
 	}else{
 		$has_many_code .= "\n\t\t\t//DURC did not detect any has_many relationships";
 	}
 
-	$has_many_with_code .= "\n];"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
-
-	$belongs_to_with_code = "	protected \$with = [ \n"; //this will end up using both has_many and belongs_to relationships...
 	
 	$belongs_to_code = "//DURC BELONGS_TO SECTION";
 	if(!is_null($belongs_to)){
@@ -132,9 +129,8 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	}
 
 ";
-	
 			//now lets sort out what should go in $with
-			$belongs_to_with_code .= "\t\t\t'$type',\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
+			$with_code .= "\t\t\t'$type', //from belongs_to\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
 
 		}
 	}else{
@@ -144,7 +140,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 
-	$belongs_to_with_code .= "\n];"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
+	$with_code .= "\n];"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
 
 
 
@@ -173,6 +169,8 @@ class $parent_class_name extends DURCModel{
         // the datbase for this model
         protected \$table = '$database.$table';
 
+	//DURC will dymanically copy these into the \$with variable... which prevents recursion problem: https://laracasts.com/discuss/channels/eloquent/eager-load-deep-recursion-problem?page=1
+	$with_code
 
 	$timestamp_code
 	$updated_at_code
@@ -222,16 +220,10 @@ $gen_string
 class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 {
 
-	// DURC \$with section. This will force the eager loading of all has_many relationships.
-	//be careful to not comment out both sides of the eager loading to prevent recursive autoloading..
+	//You may need to change these for 'one to very very many' relationships.
 /*
-	$has_many_with_code
+	$with_code
 */
-
-/*
-	$belongs_to_with_code
-*/
-
 	//you can uncomment fields to prevent them from being serialized into the API!
 	protected  \$hidden = [
 ";
