@@ -40,9 +40,10 @@ class DURCModel extends Model{
 
 		$my_class = get_called_class();
 
+		//first use a field with 'name' in the string somewhere...
 		foreach($my_class::$field_type_map as $field => $field_type){
-			
-			if(strpos(strtolower($field),'name') !== false && $field_type == 'varchar'){
+			$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];	
+			if(strpos(strtolower($field),'name') !== false && $field_type == 'text'){
 				//then this is the first 'name' field with a varchar type. This is the winner.
 				return($field);
 			}
