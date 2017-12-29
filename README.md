@@ -72,7 +72,7 @@ Read about the power of HTML5 forms as a starting point: https://www.html5rocks.
 - [ ] Traditional CRUD: support validity considerations (i.e. should a field only be accepted when valid?)
 - [ ] Traditional CRUD: allow autocomplete configuration
 - [ ] Traditional CRUD: allow placeholder definition
-- [ ] Traditional CRUD: 
+- [ ] Traditional CRUD: use attribute casting on variables named is_something or has_something  https://laravel.com/docs/5.5/eloquent-mutators#attribute-casting 
 - [ ] Traditional CRUD: 
 - [ ] Traditional CRUD: 
 - [ ] API CRUD: Generate Vue.js front end forms for editing
