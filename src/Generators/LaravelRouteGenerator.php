@@ -56,6 +56,7 @@ $gen_string
 		$snippet = " 
 //DURC->	$database.$table
 Route::resource('/DURC/$class_name', '$class_name"."Controller');
+Route::get('/DURCjson/$class_name/{"."$class_name"."_id}', '$class_name"."Controller@jsonout');
 ";
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);

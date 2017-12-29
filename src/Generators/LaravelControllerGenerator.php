@@ -202,6 +202,17 @@ class DURC_$class_name"."Controller extends DURCController
     }
 
     /**
+     * Get a json version of the given object 
+     * @param  \App\\$class_name  \$$class_name
+     * @return JSON of the object
+     */
+    public function jsonout(Request \$request, \$$class_name"."_id){
+//    public function jsonout(Request \$request,$class_name  \$$class_name){
+		\$$class_name = \App\\$class_name::find(\$$class_name"."_id);
+		return response()->json(\$$class_name"."->toArray());
+ 	}
+
+    /**
      * Show the form for editing the specified resource.
      * @param  \App\\$class_name  \$$class_name
      * @return \Illuminate\Http\Response

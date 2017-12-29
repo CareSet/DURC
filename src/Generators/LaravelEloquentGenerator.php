@@ -73,9 +73,48 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 		$child_file_name = "$class_name.php";	
 
 
-		//STARTING DURC CLASS
+	//before we start the durc parent class code, we need to calculate several things, based on "has_many" and belongs_to relationships
 
-		$parent_class_text = "<?php
+	$with_code = "	protected \$with = [ \n";
+
+
+	$has_many_code = "//DURC HAS_MANY SECTION";
+	if(!is_null($has_many)){
+		foreach($has_many as $other_table_name => $relate_details){
+		
+			$prefix = $relate_details['prefix'];	
+			$type = $relate_details['type'];	
+			$from_table = $relate_details['from_table'];	
+			$from_db = $relate_details['from_db'];	
+			$from_column = $relate_details['from_column']; 
+
+			$local_key = 'id';
+
+			$has_many_code .= "
+/**
+*	get all the $type for this $parent_class_name
+*/
+	public function $type(){
+		return \$this->hasMany('$model_namespace\\$type','$from_column','$local_key');
+	}
+
+";
+	
+			//now lets sort out what should go in $with
+			$with_code .= "\t\t\t'$type',\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
+
+		}
+	}else{
+		$has_many_code .= "\n//DURC did not detect any has_many relationships";
+	}
+
+	$with_code .= "\n];"; //not that unless there is a has_many, this is going to end up being 
+
+
+
+		//STARTING DURC Parent CLASS
+
+		$parent_class_code = "<?php
 
 namespace $model_namespace\DURC\Models;
 
@@ -98,6 +137,8 @@ class $parent_class_name extends DURCModel{
         // the datbase for this model
         protected \$table = '$database.$table';
 
+	// DURC \$with section. This will force the eager loading of all has_many relationships.
+	$with_code
 
 	$timestamp_code
 	$updated_at_code
@@ -112,54 +153,17 @@ class $parent_class_name extends DURCModel{
 		foreach($fields as $field_data){
 			$this_field = $field_data['column_name'];
 			$data_type = $field_data['data_type'];
-			$parent_class_text .= "		'$this_field' => '$data_type',\n";
+			$parent_class_code .= "		'$this_field' => '$data_type',\n";
 		}
 
 
-		$parent_class_text .= "			]; //end field_type_map
+		$parent_class_code .= "			]; //end field_type_map
 
 		//everything is fillable by default
 		protected \$guarded = [];
 
-	";
 
-	
-	$parent_class_text .= "//DURC HAS_MANY SECTION";
-	if(!is_null($has_many)){
-		foreach($has_many as $other_table_name => $relate_details){
-		
-			$prefix = $relate_details['prefix'];	
-			$type = $relate_details['type'];	
-			$from_table = $relate_details['from_table'];	
-			$from_db = $relate_details['from_db'];	
-			$from_column = $relate_details['from_column']; 
-
-			$local_key = 'id';
-
-			$parent_class_text .= "
-/**
-*	get all the $type for this $parent_class_name
-*/
-	public function $type(){
-		return \$this->hasMany('$model_namespace\\$type','$from_column','$local_key');
-	}
-
-";
-	
-		}
-	}else{
-		$parent_class_text .= "\n//DURC did not detect any has_many relationships";
-	}
-
-
-	//TODO
-	//make sure the has_many relationship is actually working..
-	//then add the belongs_to logic
-
-
-
-//finish the file
-$parent_class_text .= "
+		$has_many_code
 
 }//end of $parent_class_name";
 
@@ -167,7 +171,7 @@ $parent_class_text .= "
 
 		//STARTING CHILD CLASS
 
-		$child_class_text = "<?php
+		$child_class_code = "<?php
 
 namespace $model_namespace;
 /*
@@ -190,16 +194,16 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 		foreach($fields as $field_data){
 			$this_field = $field_data['column_name'];
 			$data_type = $field_data['data_type'];
-			$child_class_text .= "			//'$this_field', //$data_type\n";
+			$child_class_code .= "			//'$this_field', //$data_type\n";
 		}
 
 
-		$child_class_text .= "		]; //end hidden array
+		$child_class_code .= "		]; //end hidden array
 
 ";
 
 
-	$child_class_text .= "//DURC HAS_MANY SECTION";
+	$child_class_code .= "//DURC HAS_MANY SECTION";
 	if(!is_null($has_many)){
 		foreach($has_many as $other_table_name => $relate_details){
 		
@@ -211,7 +215,7 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 
 			$local_key = 'id';
 
-			$child_class_text .= "
+			$child_class_code .= "
 /**
 *	DURC is handling the $type for this $class_name in $parent_class_name
 *       but you can extend or override the defaults by editing this function...
@@ -224,11 +228,11 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 	
 		}
 	}else{
-		$child_class_text .= "//DURC did not detect any has_many relationships";
+		$child_class_code .= "//DURC did not detect any has_many relationships";
 	}
 
 
-$child_class_text .= "
+$child_class_code .= "
 	//your stuff goes here..
 	
 
@@ -250,11 +254,11 @@ $child_class_text .= "
 		if(!file_exists($child_file) || $squash){ //overwrite if it does not exist or if we are squashing
 			//we will only create this file the first time...
 			//so getting here means that it does not exist, this is the first creation pass.
-			file_put_contents($child_file,$child_class_text);
+			file_put_contents($child_file,$child_class_code);
 		}
 
 		//but we always overwrite the parent class with the auto-generated stuff..
-		file_put_contents($parent_file,$parent_class_text);
+		file_put_contents($parent_file,$parent_class_code);
 
 		return(true);
 

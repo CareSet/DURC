@@ -77,6 +77,16 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
 </fieldset></form>\n";
 
+
+       if(!is_null($has_many)){
+                foreach($has_many as $other_table_name => $relate_details){
+
+		}
+	}
+	
+
+
+
 		$my_path = base_path() . "/resources/views/DURC/$class_name/";
 
 
