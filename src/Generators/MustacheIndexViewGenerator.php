@@ -23,6 +23,14 @@ class MustacheIndexViewGenerator extends \CareSet\DURC\DURCGenerator {
         public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
 
 
+		$field_lookup = [];
+		if(!is_null($belongs_to)){
+			foreach($belongs_to as $this_belongs_to){
+				$field_lookup[$this_belongs_to['local_key']] = $this_belongs_to['type'];
+			}
+		}
+
+
                 $gen_string = DURC::get_gen_string();
 		
 		$parent_file_names = [
@@ -98,7 +106,17 @@ $header_row
 			if($column_name == 'id'){ //we want to scope this field as the row id...
 				$template_text .= "<th scope='row'><a href='/DURC/$class_name/{{id}}/'> {{id}} </a></th>";
 			}else{	
-				$template_text .= "<td>{{"."$column_name"."}}</td>\n"; 
+				$last_three = substr($column_name,-3);
+                                        if($last_three == '_id'){
+						if(isset($field_lookup[$column_name])){
+							$data_type = $field_lookup[$column_name];
+							//then this is linkable and should have a _DURClabel	
+                                                	$template_text .= "\t\t\t<td>{{"."$column_name"."_DURClabel}} <a href='/DURC/$data_type/{{"."$column_name"."}}/'> ({{"."$column_name"."}})</a> </td>";
+						}
+                                        }else{
+                                                //normal data no link
+                                                $template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
+                                        }
 			}
 		}
 		$template_text .= "

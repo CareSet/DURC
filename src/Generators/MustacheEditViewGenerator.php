@@ -118,8 +118,14 @@ $template_text .= "
 					//this is the link back to the edit view for this data item..
 					$template_text .= "\t\t\t<td><a href='/DURC/$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
 				}else{
-					//normal data no link
-					$template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
+					$last_three = substr($column_name,-3);
+					if($last_three == '_id'){
+						//then this is an ID and perhaps there is a _DURClabel that goes with it!!
+						$template_text .= "\t\t\t<td>{{"."$column_name"."_DURClabel}} ({{"."$column_name"."}}) </td>";
+					}else{
+						//normal data no link
+						$template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
+					}
 				}
 			}		
 
@@ -175,8 +181,15 @@ $template_text .= "
 					//this is the link back to the edit view for this data item..
 					$template_text .= "\t\t\t<td><a href='/DURC/$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
 				}else{
+					$last_three = substr($column_name,-3);
+					if($last_three == '_id'){
+						//then this is an ID and perhaps there is a _DURClabel that goes with it!!
+						$template_text .= "\t\t\t<td>{{"."$column_name"."_DURClabel}} ({{"."$column_name"."}}) </td>";
+					}else{
+						//normal data no link
+						$template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
+					}
 					//normal data no link
-					$template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
 				}
 			}		
 

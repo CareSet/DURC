@@ -18,6 +18,22 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
                 $gen_string = DURC::get_gen_string();
 
+		$others = [];
+		if(!is_null($belongs_to)){
+			foreach($belongs_to as $rel => $belongs_to_data){
+				$others[$rel] = $rel;
+			}
+		}
+
+		$with_summary_array_code = "\t\t\$with_summary_array = [];\n";;
+		foreach($others as $rel){
+			//why does this fail?
+			$with_summary_array_code .= "\t\t\$with_summary_array[] = \"$rel:id,\".\App\\$rel::getNameField();\n";
+			//$with_summary_array_code .= "\t\t\$with_summary_array[] = '$rel';\n";
+		}
+		
+
+
 
 		//possible created_at field names... 
 		//in reverse order of priority. we pick the last one.
@@ -98,15 +114,40 @@ class DURC_$class_name"."Controller extends DURCController
 	public \$view_data = [];
 
 
+	public function getWithArgumentArray(){
+		
+$with_summary_array_code
+		return(\$with_summary_array);
+		
+	}
+
+
 	private function _get_index_list(Request \$request){
 
 		\$return_me = [];
 
-		\$these = $class_name::paginate(100);
+		\$with_argument = \$this->getWithArgumentArray();
+
+		\$these = $class_name::with(\$with_argument)->paginate(100);
 
         	foreach(\$these->toArray() as \$key => \$value){ //add the contents of the obj to the the view 
 			\$return_me[\$key] = \$value;
         	}
+
+		//collapse joined data..
+                foreach(\$return_me['data'] as \$data_i => \$data_row){
+                        foreach(\$data_row as \$key => \$value){
+                                if(is_array(\$value)){
+                                        foreach(\$value as \$lowest_key => \$lowest_data){
+                                                //then this is a loaded attribute..
+                                                //lets move it one level higher...
+                                                \$return_me['data'][\$data_i][\$key .'_id_DURClabel'] = \$lowest_data;
+                                        }
+                                        unset(\$return_me['data'][\$data_i][\$key]);
+                                }
+                        }
+                }
+
 
 		//helps with logic-less templating...
 		if(\$return_me['first_page_url'] == \$return_me['last_page_url']){
