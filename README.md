@@ -54,38 +54,42 @@ Read about the power of HTML5 forms as a starting point: https://www.html5rocks.
 
 
 - [x] Traditional CRUD: Generate mostache templates
-- [ ] Traditional CRUD: Generate blade templates
 - [X] Traditional CRUD: Generate controllers that work with server-side form templates 
-- [ ] Traditional CRUD: Generate menu listing all DURC contents in a overwrite/not overwrite side-by-side style
 - [X] Traditional CRUD: Generate menu listing just overwrite style
-- [ ] Traditional CRUD: Have a object viewer that shows the edit form for an object. 
+- [X] Traditional CRUD: Have a object viewer that shows the edit form for an object. 
 - [ ] Traditional CRUD: Get select2 working to link different object types.
-- [ ] Traditional CRUD: Get html5 date widget to datetime/timestamp mysql working
-- [ ] Traditional CRUD: get url widget working 
-- [ ] Traditional CRUD: get email widget working
-- [ ] Traditional CRUD: get telephone widget working
-- [ ] Traditional CRUD: get color widget working
-- [ ] Traditional CRUD: get range widget working 
-- [ ] Traditional CRUD: get week widget working
-- [ ] Traditional CRUD: get month widget working
-- [ ] Traditional CRUD: support input patterns (http://html5pattern.com/Miscs)
-- [ ] Traditional CRUD: support validity considerations (i.e. should a field only be accepted when valid?)
-- [ ] Traditional CRUD: allow autocomplete configuration
-- [ ] Traditional CRUD: allow placeholder definition
-- [ ] Traditional CRUD: use attribute casting on variables named is_something or has_something  https://laravel.com/docs/5.5/eloquent-mutators#attribute-casting 
-- [ ] Traditional CRUD: 
+- [ ] Traditional CRUD: Support self referencing tables 
+- [ ] Traditional CRUD: Support multiple types of relations to the same underlying table, like parent_person_id and sibling_person_id
 - [ ] Traditional CRUD: 
 - [ ] API CRUD: Generate Vue.js front end forms for editing
 - [ ] API CRUD: Generate API Resource elements in parallel with controller under /DURCAPI/whatever/ https://laravel.com/docs/5.5/eloquent-resources
 - [ ] API CRUD: Port mustache form smartness to Vue.js 
 - [ ] API CRUD:
-- [ ] API CRUD:
-- [ ] API CRUD:
-- [ ] API CRUD:
+- [ ] Traditional CRUD v.2: Get html5 date widget to datetime/timestamp mysql working
+- [ ] Traditional CRUD v.2: get url widget working 
+- [ ] Traditional CRUD v.2: get email widget working
+- [ ] Traditional CRUD v.2: get telephone widget working
+- [ ] Traditional CRUD v.2: get color widget working
+- [ ] Traditional CRUD v.2: get range widget working 
+- [ ] Traditional CRUD v.2: get week widget working
+- [ ] Traditional CRUD v.2: get month widget working
+- [ ] Traditional CRUD v.2: support input patterns (http://html5pattern.com/Miscs)
+- [ ] Traditional CRUD v.2: support validity considerations (i.e. should a field only be accepted when valid?)
+- [ ] Traditional CRUD v.2: allow autocomplete configuration
+- [ ] Traditional CRUD v.3: Generate menu listing all DURC contents in a overwrite/not overwrite side-by-side style
+- [ ] Traditional CRUD v.3: Generate blade templates
+- [ ] Traditional CRUD v.3: allow placeholder definition
+- [ ] Traditional CRUD v.3: use attribute casting on variables named is_something or has_something  https://laravel.com/docs/5.5/eloquent-mutators#attribute-casting 
+- [ ] Traditional CRUD v.3: Respect existing foreign keys and treat them as 'name compliant'
 
 
 
 
 
 
+
+# Todo next
+Sort out the sibling table. it has four identical $DURC_selfish_with array contents. Obviously that is wrong. It is happening because it loops back on itself. 
+But it does that with two different types of relationships
+There is also something funky going on with the northwind tables. http://homestead.test/DURC/product/86/ fails to find a table.
 
