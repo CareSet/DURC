@@ -64,6 +64,23 @@ class DURCWriteCommand extends Command{
 				$many_many = $this->_get_or_null($table_data,'many_many');
 				$many_through = $this->_get_or_null($table_data,'many_through');
 
+				//we need to have access to all of the information from the other table as we consider many to many relations...
+				if(is_array($has_many)){
+					foreach($has_many as $table_type => $has_many_data){
+						$from_db = $has_many_data['from_db'];
+						$from_table = $has_many_data['from_table'];
+						$has_many[$table_type]['other_columns'] = $config[$from_db][strtolower($from_table)]['column_data'];
+					}
+				}
+
+				//we need to have access to all of the information from the other table as we consider many to many relations...
+				if(is_array($belongs_to)){
+					foreach($belongs_to as $table_type => $belongs_to_data){
+						$to_db = $belongs_to_data['to_db'];
+						$to_table = $belongs_to_data['to_table'];
+						$belongs_to[$table_type]['other_columns'] = $config[$to_db][strtolower($to_table)]['column_data'];
+					}
+				}
 
 				$generated_results = $this_generator::run_generator(
 						$this_class_name,

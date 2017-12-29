@@ -90,8 +90,8 @@ class DURCMineCommand extends Command{
                     				$has_many_tmp = [
                             				'prefix' => $relationship,
                             				'type'   => $my_object_name,
-							'from_table'   => $other_table,
-							'from_db' => $other_db, 
+							'from_table'   => $this_table_name,
+							'from_db' => $this_db, 
 							'from_column' => $column_name,
                             			];
 						if(is_null($relationship)){
@@ -107,8 +107,9 @@ class DURCMineCommand extends Command{
                     				$belongs_to_tmp = [
                             				'prefix' => $relationship,
                             				'type'   => $other_table_tag,
-							'to_table' => $this_table_name,
-							'to_db' => $this_db,
+							'to_table' => $other_table,
+							'to_db' => $other_db,
+							'local_key' => $column_name,
                             			];
 						if(is_null($relationship)){
 							$belongs_to_key = $other_table_tag;

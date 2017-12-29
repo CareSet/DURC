@@ -75,8 +75,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 	//before we start the durc parent class code, we need to calculate several things, based on "has_many" and belongs_to relationships
 
-	$with_code = "	protected \$with = [ \n";
-
+	$has_many_with_code = "	protected \$with = [ \n"; //this will end up using both has_many and belongs_to relationships...
 
 	$has_many_code = "//DURC HAS_MANY SECTION";
 	if(!is_null($has_many)){
@@ -101,14 +100,51 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 ";
 	
 			//now lets sort out what should go in $with
-			$with_code .= "\t\t\t'$type',\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
+			$has_many_with_code .= "\t\t\t'$type',\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
 
 		}
 	}else{
-		$has_many_code .= "\n//DURC did not detect any has_many relationships";
+		$has_many_code .= "\n\t\t\t//DURC did not detect any has_many relationships";
 	}
 
-	$with_code .= "\n];"; //not that unless there is a has_many, this is going to end up being 
+	$has_many_with_code .= "\n];"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
+
+	$belongs_to_with_code = "	protected \$with = [ \n"; //this will end up using both has_many and belongs_to relationships...
+	
+	$belongs_to_code = "//DURC BELONGS_TO SECTION";
+	if(!is_null($belongs_to)){
+		foreach($belongs_to as $other_table_name => $relate_details){
+		
+			$prefix = $relate_details['prefix'];	
+			$type = $relate_details['type'];	
+			$to_table = $relate_details['to_table'];	
+			$to_db = $relate_details['to_db'];	
+			$to_column = 'id'; //our central assumption 
+
+			$local_key = $relate_details['local_key'];
+
+			$belongs_to_code .= "
+/**
+*	get all the $type for this $parent_class_name
+*/
+	public function $type(){
+		return \$this->belongsTo('$model_namespace\\$type','$local_key','$to_column');
+	}
+
+";
+	
+			//now lets sort out what should go in $with
+			$belongs_to_with_code .= "\t\t\t'$type',\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
+
+		}
+	}else{
+		$belongs_to_code .= "\n\t\t\t//DURC did not detect any belongs_to relationships";
+	}
+
+
+
+
+	$belongs_to_with_code .= "\n];"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
 
 
 
@@ -137,8 +173,6 @@ class $parent_class_name extends DURCModel{
         // the datbase for this model
         protected \$table = '$database.$table';
 
-	// DURC \$with section. This will force the eager loading of all has_many relationships.
-	$with_code
 
 	$timestamp_code
 	$updated_at_code
@@ -165,6 +199,8 @@ class $parent_class_name extends DURCModel{
 
 		$has_many_code
 
+		$belongs_to_code
+
 }//end of $parent_class_name";
 
 
@@ -185,6 +221,16 @@ $gen_string
 */
 class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 {
+
+	// DURC \$with section. This will force the eager loading of all has_many relationships.
+	//be careful to not comment out both sides of the eager loading to prevent recursive autoloading..
+/*
+	$has_many_with_code
+*/
+
+/*
+	$belongs_to_with_code
+*/
 
 	//you can uncomment fields to prevent them from being serialized into the API!
 	protected  \$hidden = [
@@ -228,7 +274,7 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 	
 		}
 	}else{
-		$child_class_code .= "//DURC did not detect any has_many relationships";
+		$child_class_code .= "\t\t\t//DURC did not detect any has_many relationships";
 	}
 
 

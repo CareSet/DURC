@@ -79,6 +79,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
 
        if(!is_null($has_many)){
+		//this section will add the tables of other-side data to the edit view for a given object.
                 foreach($has_many as $other_table_name => $relate_details){
 
                         $prefix = $relate_details['prefix'];
@@ -89,11 +90,13 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 			$other_columns = $relate_details['other_columns'];
 
 			$template_text .= "
-<h2> Associated $other_table_name values </h2>
-<table id='table_$class_name' class='table table-bordered table-hover table-responsive table-sm'>
+<h2> Has Many $other_table_name ($type) values </h2>
+<table id='table_$other_table_name' class='table table-bordered table-hover table-responsive table-sm'>
 <thead>
 <tr>
 ";
+		
+			//generates the headers to the table
 			foreach($other_columns as $this_item){
 				$column_name = $this_item['column_name'];
 				$template_text .= "\t\t\t<th> $column_name </th>\n";
@@ -108,9 +111,16 @@ $template_text .= "
 		{{#.}}
 ";
 
+			//generates the looping rows of data using mostache tags...
 			foreach($other_columns as $this_item){
 				$column_name = $this_item['column_name'];
-				$template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
+				if($column_name == 'id'){	
+					//this is the link back to the edit view for this data item..
+					$template_text .= "\t\t\t<td><a href='/DURC/$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
+				}else{
+					//normal data no link
+					$template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
+				}
 			}		
 
 			$template_text .= "		
@@ -123,6 +133,64 @@ $template_text .= "
 
 		}//end foreach has_many
 	}//end if null has_many
+
+       if(!is_null($belongs_to)){
+		//this section will add the tables of other-side data to the edit view for a given object.
+                foreach($belongs_to as $other_table_name => $relate_details){
+
+                        $prefix = $relate_details['prefix'];
+                        $type = $relate_details['type'];
+                        $to_table = $relate_details['to_table'];
+                        $to_db = $relate_details['to_db'];
+                        $to_column = 'id'; // the simple rule that powers the whole system
+			$other_columns = $relate_details['other_columns'];
+
+
+			$template_text .= "
+<h2> Belongs To $other_table_name ($type) values </h2>
+<table id='table_$other_table_name' class='table table-bordered table-hover table-responsive table-sm'>
+<thead>
+<tr>
+";
+		
+			//generates the headers to the table
+			foreach($other_columns as $this_item){
+				$column_name = $this_item['column_name'];
+				$template_text .= "\t\t\t<th> $column_name </th>\n";
+			}
+
+$template_text .= "
+</tr>
+</thead>
+<tbody>
+{{#$type}}
+	<tr>
+		{{#.}}
+";
+
+			//generates the looping rows of data using mostache tags...
+			foreach($other_columns as $this_item){
+				$column_name = $this_item['column_name'];
+				if($column_name == 'id'){	
+					//this is the link back to the edit view for this data item..
+					$template_text .= "\t\t\t<td><a href='/DURC/$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
+				}else{
+					//normal data no link
+					$template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
+				}
+			}		
+
+			$template_text .= "		
+		{{/.}}
+	</tr>
+{{/$type}}
+</tbody>
+</table>
+";
+
+
+		}//end foreach belongs_to
+	}//end if null belongs_to
 	
 
 
