@@ -81,8 +81,48 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
        if(!is_null($has_many)){
                 foreach($has_many as $other_table_name => $relate_details){
 
-		}
-	}
+                        $prefix = $relate_details['prefix'];
+                        $type = $relate_details['type'];
+                        $from_table = $relate_details['from_table'];
+                        $from_db = $relate_details['from_db'];
+                        $from_column = $relate_details['from_column'];
+			$other_columns = $relate_details['other_columns'];
+
+			$template_text .= "
+<h2> Associated $other_table_name values </h2>
+<table id='table_$class_name' class='table table-bordered table-hover table-responsive table-sm'>
+<thead>
+<tr>
+";
+			foreach($other_columns as $this_item){
+				$column_name = $this_item['column_name'];
+				$template_text .= "\t\t\t<th> $column_name </th>\n";
+			}
+
+$template_text .= "
+</tr>
+</thead>
+<tbody>
+{{#$type}}
+	<tr>
+		{{#.}}
+";
+
+			foreach($other_columns as $this_item){
+				$column_name = $this_item['column_name'];
+				$template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
+			}		
+
+			$template_text .= "		
+		{{/.}}
+	</tr>
+{{/$type}}
+</tbody>
+</table>
+";
+
+		}//end foreach has_many
+	}//end if null has_many
 	
 
 

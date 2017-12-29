@@ -105,7 +105,13 @@ class DURC_$class_name"."Controller extends DURCController
 		\$these = $class_name::paginate(100);
 
         	foreach(\$these->toArray() as \$key => \$value){ //add the contents of the obj to the the view 
-                	\$return_me[\$key] = \$value;
+			if(is_array(\$value)){
+                		//this eager loaded data... and it needs to be converted into something mustache friendly..
+				//do nothing since this is the index...
+			}else{
+				//this is straight up data element
+				\$return_me[\$key] = \$value;
+			}
         	}
 
 		//helps with logic-less templating...
@@ -235,7 +241,26 @@ class DURC_$class_name"."Controller extends DURCController
 
 		//put the contents into the view...
 		foreach(\$$class_name"."->toArray() as \$key => \$value){
+/*			if(is_array(\$value)){
+                		//this eager loaded data... and it needs to be converted into something mustache friendly..
+				\$this->view_data[\$key.'_header'] = array_keys(\$value[0]); //set the header to be the header of the first item in the array.
+				foreach(\$value as \$i => \$inner_array){
+					\$tmp= [];
+					foreach(\$inner_array as \$sub_key => \$sub_value){
+						\$tmp[] = [
+							'label' => \$sub_key,
+							'data' => \$sub_value,
+						];
+					}
+					\$this->view_data[\$key][] = \$tmp;
+				}
+			}else{
+				//straight data from the table.
+				\$this->view_data[\$key] = \$value;
+			}
+*/
 			\$this->view_data[\$key] = \$value;
+			
 		}
 
 		//what is this object called?
@@ -243,6 +268,13 @@ class DURC_$class_name"."Controller extends DURCController
 		\$this->view_data['is_new'] = false;
 	}else{
 		\$this->view_data['is_new'] = true;
+	}
+
+	\$debug = false;
+	if(\$debug){
+		echo '<pre>';
+		var_export(\$this->view_data);
+		exit();
 	}
 	
 
