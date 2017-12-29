@@ -105,13 +105,7 @@ class DURC_$class_name"."Controller extends DURCController
 		\$these = $class_name::paginate(100);
 
         	foreach(\$these->toArray() as \$key => \$value){ //add the contents of the obj to the the view 
-			if(is_array(\$value)){
-                		//this eager loaded data... and it needs to be converted into something mustache friendly..
-				//do nothing since this is the index...
-			}else{
-				//this is straight up data element
-				\$return_me[\$key] = \$value;
-			}
+			\$return_me[\$key] = \$value;
         	}
 
 		//helps with logic-less templating...
@@ -149,6 +143,14 @@ class DURC_$class_name"."Controller extends DURCController
 
 	}
 
+    /**
+     * Get a json version of all the objects.. 
+     * @param  \App\\$class_name  \$$class_name
+     * @return JSON of the object
+     */
+    public function jsonall(Request \$request){
+		return response()->json(\$this->_get_index_list(\$request));
+ 	}
 
     /**
      * Display a listing of the resource.
@@ -157,7 +159,6 @@ class DURC_$class_name"."Controller extends DURCController
     public function index(Request \$request){
 	\$main_template_name = \$this->_getMainTemplateName();
 
-	\$these = $class_name::paginate(100);
 
 	\$this->view_data = \$this->_get_index_list(\$request);
 
@@ -212,12 +213,14 @@ class DURC_$class_name"."Controller extends DURCController
      * @param  \App\\$class_name  \$$class_name
      * @return JSON of the object
      */
-    public function jsonout(Request \$request, \$$class_name"."_id){
-//    public function jsonout(Request \$request,$class_name  \$$class_name){
+    public function jsonone(Request \$request, \$$class_name"."_id){
 		\$$class_name = \App\\$class_name::find(\$$class_name"."_id);
 		\$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
 		return response()->json(\$$class_name"."->toArray());
  	}
+
+
+
 
     /**
      * Show the form for editing the specified resource.
