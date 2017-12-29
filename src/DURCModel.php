@@ -50,19 +50,45 @@ class DURCModel extends Model{
 
 		//if we get here there are no fields called 'name'
 		//so lets do any varchar field type...
-		foreach($my_class::$field_type_map as $field => $field_type){
-			
-			if($field_type == 'varchar'){
+		foreach($my_class::$field_type_map as $field => $field_type){	
+			$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];
+			if($input_type == 'text'){
 				//then this is the first text field on the 
 				return($field);
 			}
-
+		}
+	
+		//lets return an integer field, as long as its not an id...
+		foreach($my_class::$field_type_map as $field => $field_type){	
+			$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];
+			if($input_type == 'number' && !in_array($field,$hell_no){
+				//then this is the first text field on the 
+				return($field);
+			}
 		}
 		
-		//if we get here we are pretty much screwed.
+		$date_type = [
+			'date',
+			'datetime',
+			'time',
+			];
 
-		return(false);
+		//lets return an datetime field, as long as its not an created_at or updated_at...
+		foreach($my_class::$field_type_map as $field => $field_type){	
+			$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];
+			if(in_array($input_type,$date_type)  && !in_array($field,$hell_no){
+				//then this is the first text field on the 
+				return($field);
+			}
+		}
+		//well if nothing else, we just return the id as the right answer...
 
+		if(isset($my_class::$field_type_map['id']){
+			return('id');
+		}else{
+			//if we get here we are pretty much screwed.
+			return(false);
+		}
 	}
 
 

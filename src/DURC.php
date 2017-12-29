@@ -148,8 +148,8 @@ class DURC{
 
 
                         'date' => [ 'input_type' => 'date', ],
-                        'datetime' => [ 'input_type' => 'date', ],
-                        'timestamp' => [ 'input_type' => 'date', ],
+                        'datetime' => [ 'input_type' => 'datetime', ],
+                        'timestamp' => [ 'input_type' => 'time', ],
 
 
                         //text
