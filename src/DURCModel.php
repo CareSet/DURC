@@ -42,7 +42,7 @@ class DURCModel extends Model{
 
 		//first use a field with 'name' in the string somewhere...
 		foreach($my_class::$field_type_map as $field => $field_type){
-			$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];	
+			$input_type = DURC::$column_type_map[strtolower($field_type)]['input_type'];	
 			if(strpos(strtolower($field),'name') !== false && $field_type == 'text'){
 				//then this is the first 'name' field with a varchar type. This is the winner.
 				return($field);
@@ -52,7 +52,7 @@ class DURCModel extends Model{
 		//if we get here there are no fields called 'name'
 		//so lets do any varchar field type...
 		foreach($my_class::$field_type_map as $field => $field_type){	
-			$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];
+			$input_type = DURC::$column_type_map[strtolower($field_type)]['input_type'];
 			if($input_type == 'text'){
 				//then this is the first text field on the 
 				return($field);
@@ -61,8 +61,8 @@ class DURCModel extends Model{
 	
 		//lets return an integer field, as long as its not an id...
 		foreach($my_class::$field_type_map as $field => $field_type){	
-			$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];
-			if($input_type == 'number' && !in_array($field,$hell_no){
+			$input_type = DURC::$column_type_map[strtolower($field_type)]['input_type'];
+			if($input_type == 'number' && !in_array($field,$hell_no)){
 				//then this is the first text field on the 
 				return($field);
 			}
@@ -76,15 +76,15 @@ class DURCModel extends Model{
 
 		//lets return an datetime field, as long as its not an created_at or updated_at...
 		foreach($my_class::$field_type_map as $field => $field_type){	
-			$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];
-			if(in_array($input_type,$date_type)  && !in_array($field,$hell_no){
+			$input_type = DURC::$column_type_map[strtolower($field_type)]['input_type'];
+			if(in_array($input_type,$date_type)  && !in_array($field,$hell_no)){
 				//then this is the first text field on the 
 				return($field);
 			}
 		}
 		//well if nothing else, we just return the id as the right answer...
 
-		if(isset($my_class::$field_type_map['id']){
+		if(isset($my_class::$field_type_map['id'])){
 			return('id');
 		}else{
 			//if we get here we are pretty much screwed.
