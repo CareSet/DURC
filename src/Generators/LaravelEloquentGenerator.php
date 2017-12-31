@@ -75,7 +75,8 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 	//before we start the durc parent class code, we need to calculate several things, based on "has_many" and belongs_to relationships
 
-	$with_code = "	protected \$DURC_selfish_with = [ \n"; //this will end up using both has_many and belongs_to relationships...
+
+	$with_array = [];
 
 	$has_many_code = "//DURC HAS_MANY SECTION";
 	if(!is_null($has_many)){
@@ -100,8 +101,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 ";
 	
 			//now lets sort out what should go in $with
-			$with_code .= "\t\t\t'$type', //from has_many\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
-
+			$with_array[$other_table_name] = $other_table_name;
 		}
 	}else{
 		$has_many_code .= "\n\t\t\t//DURC did not detect any has_many relationships";
@@ -130,7 +130,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 ";
 			//now lets sort out what should go in $with
-			$with_code .= "\t\t\t'$type', //from belongs_to\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
+			$with_array[$other_table_name] = $other_table_name;
 
 		}
 	}else{
@@ -138,9 +138,13 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	}
 
 
+	$with_code = "	protected \$DURC_selfish_with = [ \n"; //this will end up using both has_many and belongs_to relationships...
 
+	foreach($with_array as $this_with_item){
+			$with_code .= "\t\t\t'$this_with_item', //from has_many\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
+	}
 
-	$with_code .= "\n];"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
+	$with_code .= "\t\t];\n"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
 
 
 
