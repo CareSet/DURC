@@ -79,6 +79,13 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
 
        if(!is_null($has_many)){
+		$template_text .= "
+<div class='card'>
+  <div class='card-header'>
+    Has Many Relationships
+  </div>
+<div class='card-body'>
+";
 		//this section will add the tables of other-side data to the edit view for a given object.
                 foreach($has_many as $other_table_name => $relate_details){
 
@@ -90,7 +97,15 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 			$other_columns = $relate_details['other_columns'];
 
 			$template_text .= "
-<h2> Has Many $other_table_name ($type) values </h2>
+<div class='card'>
+  <div class='card-header'>
+    $other_table_name
+{{^$type}}
+(no values)
+{{/$type}}
+  </div>
+<div class='card-body'>
+
 <table id='table_$other_table_name' class='table table-bordered table-hover table-responsive table-sm'>
 <thead>
 <tr>
@@ -135,12 +150,24 @@ $template_text .= "
 {{/$type}}
 </tbody>
 </table>
+</div></div> <!-- end $other_table_name card-->
+<br>
 ";
 
 		}//end foreach has_many
+
+	$template_text .= "</div></div> <!--end has many card-->";
 	}//end if null has_many
 
        if(!is_null($belongs_to)){
+		$template_text .= "
+<br>
+<div class='card'>
+  <div class='card-header'>
+    Belongs To Relationships
+  </div>
+<div class='card-body'>
+";
 		//this section will add the tables of other-side data to the edit view for a given object.
                 foreach($belongs_to as $other_table_name => $relate_details){
 
@@ -153,7 +180,14 @@ $template_text .= "
 
 
 			$template_text .= "
-<h2> Belongs To $other_table_name ($type) values </h2>
+<div class='card'>
+  <div class='card-header'>
+    $other_table_name
+{{^$type}}
+(no values)
+{{/$type}}
+  </div>
+<div class='card-body'>
 <table id='table_$other_table_name' class='table table-bordered table-hover table-responsive table-sm'>
 <thead>
 <tr>
@@ -199,10 +233,12 @@ $template_text .= "
 {{/$type}}
 </tbody>
 </table>
+</div></div> <!-- end $other_table_name card-->
 ";
 
 
 		}//end foreach belongs_to
+		$template_text .= "</div></div> <!--end belongs to card-->";
 	}//end if null belongs_to
 	
 
