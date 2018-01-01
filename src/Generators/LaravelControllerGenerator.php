@@ -326,7 +326,7 @@ $with_summary_array_code
 
 	\$this->view_data['csrf_token'] = csrf_token();
 
-	if(\$$class_name"."->exists()){	//we will not have old data if this is a new object
+	if(\$$class_name"."->exists){	//we will not have old data if this is a new object
 
 		//well lets properly eager load this object with a refresh to load all of the related things
 		\$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
