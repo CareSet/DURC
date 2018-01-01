@@ -43,9 +43,9 @@ DURC:write will take whatever content exists in DURC_config.edit_me.json and gen
 * DURC Models under yourproject/app/DURC/Models/DURC_*.php
 * Laravel Eloquent Models (that inherit from the corresponding DURC models) under yourproject/app/*.php
 * Mustache Templates under yourproject/resources/views/DURC/ 
- * Index templates for each table
- * Edit templates for each table
- * A starting menu template that lists all generated tables and demonstrates how to include durc forms using mustache etc
+  * Index templates for each table
+  * Edit templates for each table
+  * A starting menu template that lists all generated tables and demonstrates how to include durc forms using mustache etc
 * routes to a route file called yourproject/routes/durc.php that can be copied to /yourproject/routes/web.php
 * testing routes to a file called yourproject/routes/durc_test.php 
 
