@@ -133,7 +133,6 @@ h1 {
           </ul>
         </nav>
         <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-        <h1> DURC Generated Menu </h1>
                 {{{content}}}
         </main>
       </div>

@@ -40,12 +40,22 @@ class DURCModel extends Model{
 
 		$my_class = get_called_class();
 
-		//first use a field with 'name' in the string somewhere...
-		foreach($my_class::$field_type_map as $field => $field_type){
-			$input_type = DURC::$column_type_map[strtolower($field_type)]['input_type'];	
-			if(strpos(strtolower($field),'name') !== false && $field_type == 'text'){
-				//then this is the first 'name' field with a varchar type. This is the winner.
-				return($field);
+		
+		$label_field_stubs = [
+			'name',
+			'label',
+			'note',
+			];
+
+		foreach($label_field_stubs as $this_stub){
+
+			//first use a field with 'name' in the string somewhere...
+			foreach($my_class::$field_type_map as $field => $field_type){
+				$input_type = DURC::$column_type_map[strtolower($field_type)]['input_type'];	
+				if(strpos(strtolower($field),$this_stub) !== false && $input_type == 'text'){
+					//then this is the first 'name' field with a varchar type. This is the winner.
+					return($field);
+				}
 			}
 		}
 

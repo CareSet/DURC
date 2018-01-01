@@ -53,11 +53,13 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
     <input type='hidden' name='_method' value='PUT'>
 {{/is_new}}
 
+	<h1>$class_name</h1>
 <div class='card'>
   <div class='card-header'>
-	<h1>$class_name: {{durc_instance_name}}</h1>
-<h4> <a href='/DURC/$class_name/'>Return to $class_name list</a> </h4>
-<h6> $gen_string </h6>
+<h4> {{durc_instance_name}}</h4>
+<ul>
+<li> <a href='/DURC/$class_name/'>Return to $class_name list</a> </li>
+</ul>
   </div>
 <div class='card-body'>
 
@@ -109,7 +111,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 			$template_text .= "
 <div class='card'>
   <div class='card-header'>
-    $full_relation_snake
+    $full_relation_snake ( <a href='/DURC/$type/'>see all</a> )
 {{^$full_relation_snake}}
 (no values)
 {{/$full_relation_snake}}
@@ -194,7 +196,7 @@ $template_text .= "
 			$template_text .= "
 <div class='card'>
   <div class='card-header'>
-    $full_relation_snake
+    $full_relation_snake ( <a href='/DURC/$type/'>see all</a> )
 {{^$full_relation_snake}}
 (no values)
 {{/$full_relation_snake}}
@@ -254,7 +256,13 @@ $template_text .= "
 	}//end if null belongs_to
 	
 
-
+	$template_text .= "
+<br>
+<h5>Form Meta Data </h5>
+<ul>
+<li> $gen_string </li>
+</ul>
+";
 
 		$my_path = base_path() . "/resources/views/DURC/$class_name/";
 

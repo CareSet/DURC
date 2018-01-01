@@ -47,11 +47,11 @@ class DURCWriteCommand extends Command{
 		$this_generator::start();
 
 		foreach($config as $this_db => $db_data){
-			foreach($db_data as $this_table => $table_data){
+			foreach($db_data as $this_class_name => $table_data){
 	
-				$this_class_name = strtolower($this_table);
-				//echo "Processing $this_class_name\n";
 		
+				$this_table = $this->_get_or_null($table_data,'table_name');
+
 
 				$column_data = $this->_get_or_null($table_data,'column_data');
 				if(is_null($column_data)){
