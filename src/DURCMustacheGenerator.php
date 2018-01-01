@@ -71,6 +71,7 @@ class DURCMustacheGenerator{
     <div class='col-sm-10'>
 	Current id value: {{"."$column_name"."}} (see below for lookup value)<br>
 	<select class='select2_$column_name form-control' id='$column_name' name='$column_name' form-control'>
+	<option value='{{"."$column_name"."}}' selected='selected'>{{"."$column_name"."}}</option>
 	</select>
     </div>
   </div>
@@ -109,7 +110,7 @@ $('.select2_$column_name').select2({
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
 	Current Value: {{"."$column_name"."}}<br>
-      <input type='datetime-local' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
     </div>
   </div>
 ";
