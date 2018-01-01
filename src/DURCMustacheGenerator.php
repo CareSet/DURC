@@ -63,9 +63,24 @@ class DURCMustacheGenerator{
   <div class='form-group row'>
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name IS LINK</label>
     <div class='col-sm-10'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+	<select class='select2_$column_name form-control' id='$column_name' name='$column_name' form-control'>
+  		<option value='{{"."$column_name"."}}' selected='selected'>{{"."$column_name"."}}</option>
+	</select>
     </div>
   </div>
+
+<script type='text/javascript'>
+
+$('.select2_$column_name').select2({
+  ajax: {
+    url: '/DURCsearchjson/$foreign_table/',
+    dataType: 'json'
+  }
+});
+
+
+</script>
+
 ";
 
 		return($field_html);
