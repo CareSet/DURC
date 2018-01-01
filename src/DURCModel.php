@@ -24,7 +24,13 @@ class DURCModel extends Model{
 
 
 	public static function getNameField(){
-		
+	
+		$my_class = get_called_class();
+		//the field 'select_name' is the top of the priority list if it exists..
+		if(isset($my_class::$field_type_map['select_name'])){
+			return('select_name');
+		}
+	
 		$hell_no = [
 			'id',
 			'password',
@@ -38,7 +44,6 @@ class DURCModel extends Model{
 			'created_date',
 		];
 
-		$my_class = get_called_class();
 
 		
 		$label_field_stubs = [
