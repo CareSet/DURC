@@ -57,9 +57,15 @@ class DURCMineCommand extends Command{
 	//and start the second pass..
 	foreach($db_struct as $this_db => $table_list){
 		foreach($table_list as $this_table_name => $column_data){
-			foreach($column_data as $column_name => $column_data){
+			foreach($column_data as $column_index => $column_data){
 				$column_name = $column_data['column_name'];
 				$data_type = $column_data['data_type'];
+				$is_foreign_key = $column_data['is_foreign_key'];
+				$is_linked_key = $column_data['is_linked_key'];
+				$foreign_db = $column_data['foreign_db'];
+				$foreign_table = $column_data['foreign_table'];
+
+
 				//we do not care about anything that does not have an '_id' at the end
 				$last_three = substr($column_name,-3);
 				if(strtolower($last_three) == '_id'){
@@ -85,6 +91,11 @@ class DURCMineCommand extends Command{
 						//then this table exists as a target..
 						$other_table = $table_namespace[strtolower($other_table_tag)]['table'];
 						$other_db = $table_namespace[strtolower($other_table_tag)]['db'];
+
+						//lets fix the contents of the main $new_struct.
+						$new_struct[$this_db][strtolower($this_table_name)]['column_data'][$column_index]['is_linked_key'] = true;
+						$new_struct[$this_db][strtolower($this_table_name)]['column_data'][$column_index]['foreign_db'] = $other_db;
+						$new_struct[$this_db][strtolower($this_table_name)]['column_data'][$column_index]['foreign_table'] = $other_table;	
 
 						//Has Many Calculation
                     				$has_many_tmp = [

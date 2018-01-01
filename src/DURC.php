@@ -75,9 +75,13 @@ class DURC{
 	                		if(!isset($tables[$column->TABLE_NAME])){
 						$tables[$column->TABLE_NAME] = [];
 					}
-	                		$tables[$column->TABLE_NAME][] = [
+	                		$tables[$column->TABLE_NAME][$column->COLUMN_NAME] = [
 						'column_name' => $column->COLUMN_NAME,
 						'data_type' => $column->DATA_TYPE,
+						'is_foreign_key' => false,
+						'is_linked_key' => false,
+						'foreign_db' => null,
+						'foreign_table' => null
 						];
 				}
 	            	}
@@ -87,7 +91,35 @@ class DURC{
 			foreach($bad_tables as $table => $problem){
 				echo "Rejected $table because $problem\n";
 			}
-			return($tables);
+
+			//now lets see about the foreign keys...
+			$foreign_key_array = [];
+			$foreign_keys = DB::select('SELECT * FROM information_schema.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = ? AND COLUMN_NAME != "id" ', [$db_name]);
+
+			if(is_array($foreign_keys) && !empty($foreign_keys)){
+
+				foreach($foreign_keys as $this_row){
+					$table_name = $this_row->TABLE_NAME;
+					$column_name = $this_row->COLUMN_NAME;
+					$referenced_db = $this_row->REFERENCED_TABLE_SCHEMA;
+					$referenced_table = $this_row->REFERENCED_TABLE_NAME;			
+
+					$tables[$table_name][$column_name]['is_foreign_key'] = true;
+					$tables[$table_name][$column_name]['is_linked_key'] = true;
+					$tables[$table_name][$column_name]['foreign_db'] = $referenced_db;
+					$tables[$table_name][$column_name]['foreign_table'] = $referenced_table;
+				
+				}
+			}
+
+			//we are working with json, so we want an JS array of columns and not a JS object
+			$new_tables = [];
+			foreach($tables as $table_name => $column_data){
+				foreach($column_data as $dropping_this_column_name => $column_array){
+					$new_tables[$table_name][] = $column_array;
+				}
+			}
+			return($new_tables);
 	        } else {
 	     		return false;
 	     	}

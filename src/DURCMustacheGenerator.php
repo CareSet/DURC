@@ -18,18 +18,29 @@ class DURCMustacheGenerator{
 	//basically a router for the other functions 
 	public static function _get_field_html($field_data){
 
-		extract($field_data);
+		$column_name = $field_data['column_name'];
+		$data_type = $field_data['data_type'];
+		$is_foreign_key = $field_data['is_foreign_key'];
+		$is_linked_key = $field_data['is_linked_key'];
+		$foreign_db = $field_data['foreign_db'];
+		$foreign_table = $field_data['foreign_table'];
 
 		$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];
 
 		switch($input_type){
 			case 'number':
+				if($is_linked_key){
+					return(self::_get_select2_field_html($field_data));
+				}else{
+					return(self::_get_text_field_html($field_data));
+				}
+			break;
+
 			case 'date':
 			case 'text':
 			case 'file':
 				
 				return(self::_get_text_field_html($field_data));
-
 			break;
 
 
@@ -38,10 +49,40 @@ class DURCMustacheGenerator{
 
 	}
 
+
+	public static function _get_select2_field_html($field_data){
+
+		$column_name = $field_data['column_name'];
+		$data_type = $field_data['data_type'];
+		$is_foreign_key = $field_data['is_foreign_key'];
+		$is_linked_key = $field_data['is_linked_key'];
+		$foreign_db = $field_data['foreign_db'];
+		$foreign_table = $field_data['foreign_table'];
+
+		$field_html = "
+  <div class='form-group row'>
+    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name IS LINK</label>
+    <div class='col-sm-10'>
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+    </div>
+  </div>
+";
+
+		return($field_html);
+
+	}
+
+
 	//returns bootstrap 4 decorated mustache template for a text field
 	public static function _get_text_field_html($field_data){
 
-		extract($field_data);
+		$column_name = $field_data['column_name'];
+		$data_type = $field_data['data_type'];
+		$is_foreign_key = $field_data['is_foreign_key'];
+		$is_linked_key = $field_data['is_linked_key'];
+		$foreign_db = $field_data['foreign_db'];
+		$foreign_table = $field_data['foreign_table'];
+
 	
 		$field_html = "
   <div class='form-group row'>

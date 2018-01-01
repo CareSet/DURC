@@ -89,6 +89,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
        if(!is_null($has_many)){
 		$template_text .= "
+<br>
 <div class='card'>
   <div class='card-header'>
     Has Many Relationships

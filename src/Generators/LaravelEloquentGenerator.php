@@ -15,6 +15,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 	public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
 
+
 		$model_namespace = 'App';
 
                 $gen_string = DURC::get_gen_string();
@@ -186,7 +187,11 @@ class $parent_class_name extends DURCModel{
 	
 		
 		//lets add a 'visible' array for access control at this layer''
-		foreach($fields as $field_data){
+		foreach($fields as $field_index => $field_data){
+			if(!isset($field_data['column_name'])){
+				var_export($field_data);
+				exit();
+			}
 			$this_field = $field_data['column_name'];
 			$data_type = $field_data['data_type'];
 			$parent_class_code .= "		'$this_field' => '$data_type',\n";
