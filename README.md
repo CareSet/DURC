@@ -60,11 +60,13 @@ Read about the power of HTML5 forms as a starting point: https://www.html5rocks.
 - [ ] Traditional CRUD: Get select2 working to link different object types.
 - [ ] Traditional CRUD: Support self referencing tables 
 - [ ] Traditional CRUD: Support multiple types of relations to the same underlying table, like parent_person_id and sibling_person_id
+- [ ] Traditional CRUD: make sure deleting through the controller works, and that soft delete works properly
 - [ ] Traditional CRUD: 
 - [ ] API CRUD: Generate Vue.js front end forms for editing
 - [ ] API CRUD: Generate API Resource elements in parallel with controller under /DURCAPI/whatever/ https://laravel.com/docs/5.5/eloquent-resources
 - [ ] API CRUD: Port mustache form smartness to Vue.js 
 - [ ] API CRUD:
+- [ ] Traditional CRUD v.2: if there is a deleted_at column, automatically add use SoftDeletes to the laravel model.
 - [ ] Traditional CRUD v.2: Get html5 date widget to datetime/timestamp mysql working
 - [ ] Traditional CRUD v.2: get url widget working 
 - [ ] Traditional CRUD v.2: get email widget working
