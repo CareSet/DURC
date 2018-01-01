@@ -76,7 +76,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 	//before we start the durc parent class code, we need to calculate several things, based on "has_many" and belongs_to relationships
 
-
+	$used_functions = [];
 	$with_array = [];
 
 	$has_many_code = "//DURC HAS_MANY SECTION";
@@ -90,6 +90,8 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 			$from_column = $relate_details['from_column']; 
 
 			$local_key = 'id';
+
+			$used_functions[$other_table_name] = $other_table_name;
 
 			$has_many_code .= "
 /**
@@ -121,7 +123,8 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 			$local_key = $relate_details['local_key'];
 
-			$belongs_to_code .= "
+			if(!isset($used_functions[$other_table_name])){
+				$belongs_to_code .= "
 /**
 *	get the single $other_table_name for this $parent_class_name
 */
@@ -130,8 +133,14 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	}
 
 ";
-			//now lets sort out what should go in $with
-			$with_array[$other_table_name] = 'belongs to';
+				//now lets sort out what should go in $with
+				$with_array[$other_table_name] = 'belongs to';
+			}else{
+				$belongs_to_code .= "
+\t\t//DURC would have added $other_table_name but it was already used in has_many. 
+\t\t//You will have to resolve these recursive relationships in your code.";
+
+			}
 
 		}
 	}else{
@@ -312,7 +321,8 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 			$to_column = 'id';	
 			$local_key = $relate_details['local_key']; 
 
-			$child_class_code .= "
+			if(!isset($used_functions[$other_table_name])){
+				$child_class_code .= "
 /**
 *	DURC is handling the $other_table_name for this $class_name in $parent_class_name
 *       but you can extend or override the defaults by editing this function...
@@ -323,6 +333,14 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 
 ";
 	
+			}else{
+				$child_class_code .= "
+\t\t//DURC would have added $other_table_name but it was already used in has_many. 
+\t\t//You will have to resolve these recursive relationships in your code.";
+				
+
+			}
+
 		}
 	}else{
 		$child_class_code .= "\t\t\t//DURC did not detect any belongs_to relationships";
