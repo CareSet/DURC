@@ -92,16 +92,16 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 			$has_many_code .= "
 /**
-*	get all the $type for this $parent_class_name
+*	get all the $other_table_name for this $parent_class_name
 */
-	public function $type(){
+	public function $other_table_name(){
 		return \$this->hasMany('$model_namespace\\$type','$from_column','$local_key');
 	}
 
 ";
 	
 			//now lets sort out what should go in $with
-			$with_array[$other_table_name] = $other_table_name;
+			$with_array[$other_table_name] = 'from many';
 		}
 	}else{
 		$has_many_code .= "\n\t\t\t//DURC did not detect any has_many relationships";
@@ -122,15 +122,15 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 			$belongs_to_code .= "
 /**
-*	get all the $type for this $parent_class_name
+*	get the single $other_table_name for this $parent_class_name
 */
-	public function $type(){
+	public function $other_table_name(){
 		return \$this->belongsTo('$model_namespace\\$type','$local_key','$to_column');
 	}
 
 ";
 			//now lets sort out what should go in $with
-			$with_array[$other_table_name] = $other_table_name;
+			$with_array[$other_table_name] = 'belongs to';
 
 		}
 	}else{
@@ -140,8 +140,8 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 	$with_code = "	protected \$DURC_selfish_with = [ \n"; //this will end up using both has_many and belongs_to relationships...
 
-	foreach($with_array as $this_with_item){
-			$with_code .= "\t\t\t'$this_with_item', //from has_many\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
+	foreach($with_array as $this_with_item => $from){
+			$with_code .= "\t\t\t'$this_with_item', //from $from\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
 	}
 
 	$with_code .= "\t\t];\n"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
@@ -259,11 +259,11 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 
 			$child_class_code .= "
 /**
-*	DURC is handling the $type for this $class_name in $parent_class_name
+*	DURC is handling the $other_table_name for this $class_name in $parent_class_name
 *       but you can extend or override the defaults by editing this function...
 */
-	public function $type(){
-		return parent::$type();
+	public function $other_table_name(){
+		return parent::$other_table_name();
 	}
 
 ";
@@ -272,6 +272,37 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 	}else{
 		$child_class_code .= "\t\t\t//DURC did not detect any has_many relationships";
 	}
+
+
+
+	$child_class_code .= "//DURC BELONGS_TO SECTION";
+	if(!is_null($belongs_to)){
+		foreach($belongs_to as $other_table_name => $relate_details){
+		
+			$prefix = $relate_details['prefix'];	
+			$type = $relate_details['type'];	
+			$to_table = $relate_details['to_table'];	
+			$to_db = $relate_details['to_db'];
+			$to_column = 'id';	
+			$local_key = $relate_details['local_key']; 
+
+			$child_class_code .= "
+/**
+*	DURC is handling the $other_table_name for this $class_name in $parent_class_name
+*       but you can extend or override the defaults by editing this function...
+*/
+	public function $other_table_name(){
+		return parent::$other_table_name();
+	}
+
+";
+	
+		}
+	}else{
+		$child_class_code .= "\t\t\t//DURC did not detect any belongs_to relationships";
+	}
+
+
 
 
 $child_class_code .= "

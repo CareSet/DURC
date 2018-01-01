@@ -293,7 +293,8 @@ $with_summary_array_code
 		}
 
 		//what is this object called?
-		\$this->view_data['durc_instance_name'] = \$$class_name"."->_getBestName();
+		\$name_field = \$$class_name"."->_getBestName();
+		\$this->view_data['durc_instance_name'] = \$$class_name"."->\$name_field;
 		\$this->view_data['is_new'] = false;
 	}else{
 		\$this->view_data['is_new'] = true;

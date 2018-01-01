@@ -53,11 +53,16 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
     <input type='hidden' name='_method' value='PUT'>
 {{/is_new}}
 
-<h1> $class_name </h1>
+<div class='card'>
+  <div class='card-header'>
+	<h1>$class_name: {{durc_instance_name}}</h1>
 <h4> <a href='/DURC/$class_name/'>Return to $class_name list</a> </h4>
 <h6> $gen_string </h6>
+  </div>
+<div class='card-body'>
+
   <fieldset>
-    <legend>Edit $class_name {{durc_instance_name}}  </legend>
+    <legend>Edit {{durc_instance_name}}  </legend>
 	<input type='hidden' name='_token' value='{{csrf_token}}'>
 	";
 
@@ -75,7 +80,9 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
     </div>
   </div>
 
-</fieldset></form>\n";
+</fieldset></form>
+</div></div>
+";
 
 
        if(!is_null($has_many)){
@@ -87,7 +94,10 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 <div class='card-body'>
 ";
 		//this section will add the tables of other-side data to the edit view for a given object.
-                foreach($has_many as $other_table_name => $relate_details){
+                foreach($has_many as $full_relation => $relate_details){
+
+			$full_relation_snake = snake_case($full_relation); //because this is how eloquent converts relations with eager loading..
+			
 
                         $prefix = $relate_details['prefix'];
                         $type = $relate_details['type'];
@@ -99,14 +109,14 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 			$template_text .= "
 <div class='card'>
   <div class='card-header'>
-    $other_table_name
-{{^$type}}
+    $full_relation_snake
+{{^$full_relation_snake}}
 (no values)
-{{/$type}}
+{{/$full_relation_snake}}
   </div>
 <div class='card-body'>
 
-<table id='table_$other_table_name' class='table table-bordered table-hover table-responsive table-sm'>
+<table id='table_$full_relation_snake' class='table table-bordered table-hover table-responsive table-sm'>
 <thead>
 <tr>
 ";
@@ -121,7 +131,7 @@ $template_text .= "
 </tr>
 </thead>
 <tbody>
-{{#$type}}
+{{#$full_relation_snake}}
 	<tr>
 		{{#.}}
 ";
@@ -147,10 +157,10 @@ $template_text .= "
 			$template_text .= "		
 		{{/.}}
 	</tr>
-{{/$type}}
+{{/$full_relation_snake}}
 </tbody>
 </table>
-</div></div> <!-- end $other_table_name card-->
+</div></div> <!-- end $full_relation_snake card-->
 <br>
 ";
 
@@ -169,7 +179,9 @@ $template_text .= "
 <div class='card-body'>
 ";
 		//this section will add the tables of other-side data to the edit view for a given object.
-                foreach($belongs_to as $other_table_name => $relate_details){
+                foreach($belongs_to as $full_relation => $relate_details){
+
+			$full_relation_snake = snake_case($full_relation);
 
                         $prefix = $relate_details['prefix'];
                         $type = $relate_details['type'];
@@ -182,13 +194,13 @@ $template_text .= "
 			$template_text .= "
 <div class='card'>
   <div class='card-header'>
-    $other_table_name
-{{^$type}}
+    $full_relation_snake
+{{^$full_relation_snake}}
 (no values)
-{{/$type}}
+{{/$full_relation_snake}}
   </div>
 <div class='card-body'>
-<table id='table_$other_table_name' class='table table-bordered table-hover table-responsive table-sm'>
+<table id='table_$full_relation_snake' class='table table-bordered table-hover table-responsive table-sm'>
 <thead>
 <tr>
 ";
@@ -203,7 +215,7 @@ $template_text .= "
 </tr>
 </thead>
 <tbody>
-{{#$type}}
+{{#$full_relation_snake}}
 	<tr>
 		{{#.}}
 ";
@@ -230,10 +242,10 @@ $template_text .= "
 			$template_text .= "		
 		{{/.}}
 	</tr>
-{{/$type}}
+{{/$full_relation_snake}}
 </tbody>
 </table>
-</div></div> <!-- end $other_table_name card-->
+</div></div> <!-- end $full_relation_snake card-->
 ";
 
 
