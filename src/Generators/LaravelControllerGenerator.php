@@ -83,7 +83,7 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 		}
 
 
-		$parent_class_name = "DURC_$class_name";
+		$parent_class_name = "$class_name";
 
 		$parent_file_name = "$parent_class_name"."Controller.php";	
 		$child_file_name = "$class_name"."Controller.php";	
@@ -107,7 +107,7 @@ use CareSet\DURC\DURCController;
 use Illuminate\Support\Facades\View;
 
 //$gen_string
-class DURC_$class_name"."Controller extends DURCController
+class $class_name"."Controller extends DURCController
 {
 
 
@@ -393,11 +393,11 @@ $with_summary_array_code
 namespace App\Http\Controllers;
 
 use App\\$class_name;
-use App\DURC\Controllers\DURC_$class_name"."Controller;
+use App\DURC\Controllers\\$class_name"."Controller as DURCParentController;
 use Illuminate\Http\Request;
 
 //$gen_string
-class $class_name"."Controller extends DURC_$class_name"."Controller
+class $class_name"."Controller extends DURCParentController
 {
     /**
      * Display a listing of the resource.

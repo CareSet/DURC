@@ -68,7 +68,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 		}
 
 
-		$parent_class_name = "DURC_$class_name";
+		$parent_class_name = "$class_name";
 
 		$parent_file_name = "$parent_class_name.php";	
 		$child_file_name = "$class_name.php";	
