@@ -21,14 +21,14 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 		$others = [];
 		if(!is_null($belongs_to)){
 			foreach($belongs_to as $rel => $belongs_to_data){
-				$others[$rel] = $rel;
+				$others[$rel] = $belongs_to_data['type'];
 			}
 		}
 
 		$with_summary_array_code = "\t\t\$with_summary_array = [];\n";;
-		foreach($others as $rel){
+		foreach($others as $rel => $table_type){
 			//why does this fail?
-			$with_summary_array_code .= "\t\t\$with_summary_array[] = \"$rel:id,\".\App\\$rel::getNameField();\n";
+			$with_summary_array_code .= "\t\t\$with_summary_array[] = \"$rel:id,\".\App\\$table_type::getNameField();\n";
 			//$with_summary_array_code .= "\t\t\$with_summary_array[] = '$rel';\n";
 		}
 		
@@ -176,11 +176,56 @@ $with_summary_array_code
 		return(\$return_me);
 	}
 
-
+	/**
+	*	A simple function that allows fo rthe searching of this object type in the db, 
+	*	And returns the results in a select2-json compatible way.
+	*	This powers the select2 widgets across the forms...
+	*/
    	public function search(Request \$request){
 
+		\$q = \$request->input('q');
+
+		//TODO we need to escape this query string to avoid SQL injection.
+
+		//what is the field I should be searching
+                \$search_fields = $class_name"."::getSearchFields();
+
+		\$where_sql = '';
+		\$or = '';
+		foreach(\$search_fields as \$this_field){
+			\$where_sql .= \" \$or \$this_field LIKE '%\$q%'  \";
+			\$or = ' OR ';
+		}
+
+		\$these = $class_name::whereRaw(\$where_sql)
+					->take(20)
+					->get();
 
 
+		\$return_me['pagination'] = ['more' => false];
+		\$raw_array = \$these->toArray();
+
+		\$real_array = [];
+		foreach(\$raw_array as \$this_row){
+			\$tmp = [ 'id' => \$this_row['id']];
+			\$tmp_text = '';
+			foreach(\$this_row as \$field => \$data){
+				if(in_array(\$field,\$search_fields)){
+					//then we need to show this text!!
+					\$tmp_text .=  \"\$data \";
+				}
+			}
+			\$tmp['text'] = \$tmp_text;
+			\$real_array[] = \$tmp;
+		}
+
+
+		\$return_me['results'] = \$real_array;
+
+		// you might this helpful for debugging..
+		//\$return_me['where'] = \$where_sql;
+
+		return response()->json(\$return_me);
 
 	}
 
