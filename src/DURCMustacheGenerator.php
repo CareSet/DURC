@@ -37,6 +37,12 @@ class DURCMustacheGenerator{
 			break;
 
 			case 'date':
+				return(self::_get_date_field_html($field_data));
+			break;
+			case 'datetime':
+				return(self::_get_datetime_field_html($field_data));
+			break;
+			case 'time':
 			case 'text':
 			case 'file':
 				
@@ -49,7 +55,7 @@ class DURCMustacheGenerator{
 
 	}
 
-
+	//this returns both the html and the javascript required to kick start an AJAX powered select2 instance.
 	public static function _get_select2_field_html($field_data){
 
 		$column_name = $field_data['column_name'];
@@ -61,10 +67,10 @@ class DURCMustacheGenerator{
 
 		$field_html = "
   <div class='form-group row'>
-    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name IS LINK</label>
+    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
+	Current id value: {{"."$column_name"."}} (see below for lookup value)<br>
 	<select class='select2_$column_name form-control' id='$column_name' name='$column_name' form-control'>
-  		<option value='{{"."$column_name"."}}' selected='selected'>{{"."$column_name"."}}</option>
 	</select>
     </div>
   </div>
@@ -73,8 +79,8 @@ class DURCMustacheGenerator{
 
 $('.select2_$column_name').select2({
   ajax: {
-    url: '/DURCsearchjson/$foreign_table/',
-    dataType: 'json'
+    	url: '/DURCsearchjson/$foreign_table/',
+    	dataType: 'json'
   }
 });
 
@@ -87,6 +93,52 @@ $('.select2_$column_name').select2({
 
 	}
 
+	//returns bootstrap 4 decorated mustache template for a text field
+	public static function _get_datetime_field_html($field_data){
+
+		$column_name = $field_data['column_name'];
+		$data_type = $field_data['data_type'];
+		$is_foreign_key = $field_data['is_foreign_key'];
+		$is_linked_key = $field_data['is_linked_key'];
+		$foreign_db = $field_data['foreign_db'];
+		$foreign_table = $field_data['foreign_table'];
+
+	
+		$field_html = "
+  <div class='form-group row'>
+    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
+    <div class='col-sm-10'>
+	Current Value: {{"."$column_name"."}}<br>
+      <input type='datetime-local' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+    </div>
+  </div>
+";
+
+		return($field_html);
+	}
+	//returns bootstrap 4 decorated mustache template for a text field
+	public static function _get_date_field_html($field_data){
+
+		$column_name = $field_data['column_name'];
+		$data_type = $field_data['data_type'];
+		$is_foreign_key = $field_data['is_foreign_key'];
+		$is_linked_key = $field_data['is_linked_key'];
+		$foreign_db = $field_data['foreign_db'];
+		$foreign_table = $field_data['foreign_table'];
+
+	
+		$field_html = "
+  <div class='form-group row'>
+    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
+    <div class='col-sm-10'>
+	Current Value: {{"."$column_name"."}}
+      <input type='date' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+    </div>
+  </div>
+";
+
+		return($field_html);
+	}
 
 	//returns bootstrap 4 decorated mustache template for a text field
 	public static function _get_text_field_html($field_data){

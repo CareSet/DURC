@@ -147,7 +147,26 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 	$with_code .= "\t\t];\n"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
 
+	$date_fields = [];
+	//lets get the list of date fields..
+	foreach($fields as $field_index => $field_data){
+		$input_type = DURC::$column_type_map[strtolower($field_data['data_type'])]['input_type'];
+		if($input_type == 'datetime' || $input_type == 'date'){
+			$date_field[] = $field_data['column_name'];
+		}
+	}
 
+	if(count($date_fields) > 0){
+		$date_code = "//DURC detected the following date fields\n\t\tprotected \$dates = [\n";
+	
+		foreach($date_fields as $this_date_field){	
+			$date_code .= "\t\t\t$this_date_field,";
+		}
+
+		$date_code .= "\t\t];";
+	}else{
+		$date_code = "//DURC did not detect any date fields";
+	}
 
 		//STARTING DURC Parent CLASS
 
@@ -176,6 +195,8 @@ class $parent_class_name extends DURCModel{
 
 	//DURC will dymanically copy these into the \$with variable... which prevents recursion problem: https://laracasts.com/discuss/channels/eloquent/eager-load-deep-recursion-problem?page=1
 	$with_code
+
+	$date_code
 
 	$timestamp_code
 	$updated_at_code

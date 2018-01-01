@@ -87,7 +87,8 @@ $paging_widget = "
 
 		$template_text = "
 <h1>$class_name list </h1>
-<h6>$gen_string</h6>
+Create <a href='/DURC/$class_name/create/'>new $class_name</a><br>
+
 $paging_widget
 
 <table id='table_$class_name' class='table table-bordered table-hover table-responsive table-sm'>
@@ -129,6 +130,7 @@ $header_row
 
 $paging_widget
 
+<h6>$gen_string</h6>
 
 <script type='text/javascript'>
 //we need a way to check to see if the page is loaded before we call DataTable()

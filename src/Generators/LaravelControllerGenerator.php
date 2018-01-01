@@ -256,16 +256,6 @@ $with_summary_array_code
 	return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return \Illuminate\Http\Response
-     */
-    public function create(){
-	// but really, we are just going to edit a new object..
-	\$new_instance = new $class_name();
-	\$is_new = true;
-	return \$this->edit(\$new_instance,\$is_new);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -306,6 +296,15 @@ $with_summary_array_code
  	}
 
 
+    /**
+     * Show the form for creating a new resource.
+     * @return \Illuminate\Http\Response
+     */
+    public function create(){
+	// but really, we are just going to edit a new object..
+	\$new_instance = new $class_name();
+	return \$this->edit(\$new_instance);
+    }
 
 
     /**
@@ -313,7 +312,7 @@ $with_summary_array_code
      * @param  \App\\$class_name  \$$class_name
      * @return \Illuminate\Http\Response
      */
-    public function edit($class_name \$$class_name, \$is_new = false){
+    public function edit($class_name \$$class_name){
 
 	\$main_template_name = \$this->_getMainTemplateName();
 
@@ -327,7 +326,7 @@ $with_summary_array_code
 
 	\$this->view_data['csrf_token'] = csrf_token();
 
-	if(!\$is_new){	//we will not have old data if this is a new object
+	if(\$$class_name"."->exists()){	//we will not have old data if this is a new object
 
 		//well lets properly eager load this object with a refresh to load all of the related things
 		\$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
@@ -339,8 +338,8 @@ $with_summary_array_code
 
 		//what is this object called?
 		\$name_field = \$$class_name"."->_getBestName();
-		\$this->view_data['durc_instance_name'] = \$$class_name"."->\$name_field;
 		\$this->view_data['is_new'] = false;
+		\$this->view_data['durc_instance_name'] = \$$class_name"."->\$name_field;
 	}else{
 		\$this->view_data['is_new'] = true;
 	}
