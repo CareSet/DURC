@@ -22,7 +22,7 @@ class LaravelRouteGenerator extends \CareSet\DURC\DURCGenerator {
 
 	//so that we target the same file the whole time..
 	public static function getFile(){
-		$file_name = base_path()."/routes/durc.php";
+		$file_name = base_path()."/routes/web.durc.php";
 		return($file_name);
 	}
 
