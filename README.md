@@ -1,7 +1,10 @@
 # DURC
 DURC is reverse CRUD
 
-Builds Laravel Eloquent models and views by reading from the database assuming the DB follows some rules.
+DURC is an artisan console command that builds Laravel Eloquent models and views by reading from the database assuming the DB follows some rules.
+
+DURC:mine will mine your databases using the structural rules listed below, and generate a configuration file.
+DURC:write will use the configuration file to generate basic CRUD components for a Laravel system.
 
 ## Installation
 
@@ -11,7 +14,7 @@ Via Composer
 $ composer require careset/durc
 ```
 
-This project only works on Laravel 5.5 and above.
+This project only works on Laravel 5.5
 
 [package auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518) should work..
 
@@ -28,6 +31,16 @@ $ php artisan vendor:publish --provider="CareSet\DURC\DURCServiceProvider"
 $ php artisan DURC:mine --DB=thefirst_db_name --DB=the_second_db --DB=the_third (etc...)
 $ php artisan DURC:write
 ```
+
+
+If you want to run a fresh install and demo DURC stuff, load the mysql tables from /test_mywind_database/ and then run
+```bash
+$ php artisan DURC:mine --DB=northwind_model --DB=northwind_data --DB=aaaDurctest --DB=irs
+$ php artisan DURC:write
+```
+
+There is a demo web interface which you can see by copying the contents of yourproject/routes/durc.php 
+to yourproject/routes/web.php
 
 DURC:mine will generate two files in the /config directory
 
