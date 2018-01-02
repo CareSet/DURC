@@ -18,11 +18,16 @@ This project only works on Laravel 5.5
 
 [package auto-discovery](https://medium.com/@taylorotwell/package-auto-discovery-in-laravel-5-5-ea9e3ab20518) should work..
 
-Optional you can publish the configuration to provide an own service provider stub.
+Publish the configuration of DURC and laravel-handlebars
 
 ```bash
 $ php artisan vendor:publish --provider="CareSet\DURC\DURCServiceProvider"
+$ php artisan vendor:publish --tag=laravel-handlebars
 ```
+
+DURC mustache templates use the .mustache extension. 
+Now add the '.mustache' to the 'filext' parameter array in yourproject/config/handlebars.php
+This will ensure that you can see the views that are generated.
 
 ## Available commands
 
