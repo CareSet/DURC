@@ -24,6 +24,15 @@ Publish the configuration of DURC and laravel-handlebars
 $ php artisan vendor:publish --provider="CareSet\DURC\DURCServiceProvider"
 $ php artisan vendor:publish --tag=laravel-handlebars
 ```
+### Add stuff to your config files
+
+Add the following lines to yourproject/config/app.php
+under service providers:
+
+```
+        ProAI\Handlebars\HandlebarsServiceProvider::class,
+        CareSet\DURC\DURCServiceProvider::class,
+```
 
 DURC mustache templates use the .mustache extension. 
 Now add the '.mustache' to the 'filext' parameter array in yourproject/config/handlebars.php
