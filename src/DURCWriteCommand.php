@@ -13,7 +13,7 @@ use Symfony\Component\Process\Process;
 
 class DURCWriteCommand extends Command{
 
-    protected $signature = 'DURC:write {--squash} {--config_file}';
+    protected $signature = 'DURC:write {--squash} {--config_file} {--URLroot}';
     protected $description = 'DURC:write generates Templates and Eloquent Classe, inferred from your DB structure';
 
     public function handle(){
@@ -38,6 +38,9 @@ class DURCWriteCommand extends Command{
 	}
 
 	$squash = $this->option('squash');
+
+	$URLroot = $this->option('URLroot','/DURC/');
+
 
 	$config = DURC::readDURCDesignConfigJSON($config_file);
 
@@ -91,7 +94,8 @@ class DURCWriteCommand extends Command{
 						$belongs_to,
 						$many_many,
 						$many_through,
-						$squash
+						$squash,
+						$URLroot
 					);
 
 

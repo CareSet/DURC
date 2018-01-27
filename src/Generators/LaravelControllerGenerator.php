@@ -13,7 +13,7 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/'){
 
 
                 $gen_string = DURC::get_gen_string();
@@ -272,7 +272,7 @@ $with_summary_array_code
 
 	\$new_id = \$myNew$class_name"."->id;
 
-	return redirect(\"/DURC/$class_name/\$new_id\")->with('status', 'Data Saved!');
+	return redirect(\"$URLroot$class_name/\$new_id\")->with('status', 'Data Saved!');
     }//end store function
 
     /**
@@ -369,7 +369,7 @@ $with_summary_array_code
 
 	\$id = \$$class_name"."->id;
 
-	return redirect(\"/DURC/$class_name/\$id\")->with('status', 'Data Saved!');
+	return redirect(\"$URLroot$class_name/\$id\")->with('status', 'Data Saved!');
         
     }
 

@@ -22,7 +22,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 	}
 
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
 
 		$debug = false;
 		if($debug){
@@ -265,7 +265,7 @@ $template_text .= "
 </ul>
 ";
 
-		$my_path = base_path() . "/resources/views/DURC/$class_name/";
+		$my_path = base_path() . "/resources/views$URLroot$class_name/";
 
 
                 if(!is_dir($my_path)){

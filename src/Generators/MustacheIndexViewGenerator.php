@@ -20,7 +20,7 @@ class MustacheIndexViewGenerator extends \CareSet\DURC\DURCGenerator {
 	}
 
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
 
 
 		$field_lookup = [];
@@ -87,7 +87,7 @@ $paging_widget = "
 
 		$template_text = "
 <h1>$class_name list </h1>
-Create <a href='DURC/$class_name/create/'>new $class_name</a><br>
+Create <a href='$URLroot$class_name/create/'>new $class_name</a><br>
 
 $paging_widget
 
@@ -105,14 +105,14 @@ $header_row
 
 		foreach($col_list as $column_name){
 			if($column_name == 'id'){ //we want to scope this field as the row id...
-				$template_text .= "<th scope='row'><a href='/DURC/$class_name/{{id}}/'> {{id}} </a></th>";
+				$template_text .= "<th scope='row'><a href='$URLroot$class_name/{{id}}/'> {{id}} </a></th>";
 			}else{	
 				$last_three = substr($column_name,-3);
                                         if($last_three == '_id'){
 						if(isset($field_lookup[$column_name])){
 							$data_type = $field_lookup[$column_name];
 							//then this is linkable and should have a _DURClabel	
-                                                	$template_text .= "\t\t\t<td>{{"."$column_name"."_DURClabel}} <a href='/DURC/$data_type/{{"."$column_name"."}}/'> ({{"."$column_name"."}})</a> </td>";
+                                                	$template_text .= "\t\t\t<td>{{"."$column_name"."_DURClabel}} <a href='$URLroot$data_type/{{"."$column_name"."}}/'> ({{"."$column_name"."}})</a> </td>";
 						}
                                         }else{
                                                 //normal data no link

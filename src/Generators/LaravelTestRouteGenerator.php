@@ -85,17 +85,17 @@ Route::get('/',function () {
 	} 
 
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
 
 
 		//we just need to add a little snippet to the route file..
 		$file = LaravelTestRouteGenerator::getFile();
 
 
-		$snippet = "\n 			'/DURC/$class_name', //from: $database.$table ";
-		$snippet .= "\n 			'/DURC/$class_name/create', //from: $database.$table ";
-		$snippet .= "\n 			'/DURC/$class_name/1', //from: $database.$table ";
-		$snippet .= "\n 			'/DURC/$class_name/1/edit', //from: $database.$table ";
+		$snippet = "\n 			'$URLroot$class_name', //from: $database.$table ";
+		$snippet .= "\n 			'$URLroot$class_name/create', //from: $database.$table ";
+		$snippet .= "\n 			'$URLroot$class_name/1', //from: $database.$table ";
+		$snippet .= "\n 			'$URLroot$class_name/1/edit', //from: $database.$table ";
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);
 

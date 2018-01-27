@@ -147,7 +147,7 @@ h1 {
 	} 
 
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
 
 
 		//we just need to add a little snippet to the route file..
@@ -156,7 +156,7 @@ h1 {
 
 		$snippet = "
             <li class='nav-item'>
-              <a class='nav-link' href='DURC/$class_name/'>$class_name</a>
+              <a class='nav-link' href='$URLroot$class_name/'>$class_name</a>
             </li>
 ";
 
