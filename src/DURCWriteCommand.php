@@ -18,17 +18,17 @@ class DURCWriteCommand extends Command{
 
     public function handle(){
 	//what does this do?
-	echo "You are running inside handle: You rule the world!\n";
+	echo "Beginning code generation!\n";
 
 	//only one code generator for now...
 	$generatorClasses = [
-			'CareSet\DURC\Generators\LaravelEloquentGenerator',
-			'CareSet\DURC\Generators\LaravelControllerGenerator',
-			'CareSet\DURC\Generators\MustacheEditViewGenerator',
-			'CareSet\DURC\Generators\MustacheIndexViewGenerator',
-			'CareSet\DURC\Generators\LaravelRouteGenerator',	
-			'CareSet\DURC\Generators\LaravelTestRouteGenerator',	
-			'CareSet\DURC\Generators\MustacheMenuGenerator',	
+			'Eloquent Models' => 		'CareSet\DURC\Generators\LaravelEloquentGenerator',
+			'Web Controllers' => 		'CareSet\DURC\Generators\LaravelControllerGenerator',
+			'Mustache Edit Views' =>	'CareSet\DURC\Generators\MustacheEditViewGenerator',
+			'Mustache Index Page' => 	'CareSet\DURC\Generators\MustacheIndexViewGenerator',
+			'Laravel Routes' => 		'CareSet\DURC\Generators\LaravelRouteGenerator',	
+			'Test Routes' =>		'CareSet\DURC\Generators\LaravelTestRouteGenerator',	
+			'Mustache Menu' => 		'CareSet\DURC\Generators\MustacheMenuGenerator',	
 		];
 
 	$config_file = $this->option('config_file');
@@ -42,8 +42,8 @@ class DURCWriteCommand extends Command{
 	$config = DURC::readDURCDesignConfigJSON($config_file);
 
 	//each generator handles the creation of different type of file...
-	foreach($generatorClasses as $this_generator){
-
+	foreach($generatorClasses as $generator_label => $this_generator){
+		echo "Generating $generator_label...\t\t\t";
 		$this_generator::start();
 
 		foreach($config as $this_db => $db_data){
@@ -99,8 +99,12 @@ class DURCWriteCommand extends Command{
 		}
 
 		$this_generator::finish();
-
+		echo "done\n";
 	}
+
+	echo "all done.\n";
+
+
 
 //	$has_many_struct = DURC::getHasMany($db_struct);
 //	$belongs_to_struct = DURC::getHasMany($db_struct);
