@@ -45,11 +45,11 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 {{/has_session_status}}
 
 {{#is_new}}
-<form action='DURC/$class_name/' method='POST'>
+<form action='$URLroot$class_name/' method='POST'>
 {{/is_new}}
 
 {{^is_new}}
-<form action='DURC/$class_name/{{id}}' method='POST'>
+<form action='$URLroot$class_name/{{id}}' method='POST'>
     <input type='hidden' name='_method' value='PUT'>
 {{/is_new}}
 
@@ -58,7 +58,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
   <div class='card-header'>
 <h4> {{durc_instance_name}}</h4>
 <ul>
-<li> <a href='DURC/$class_name/'>Return to $class_name list</a> </li>
+<li> <a href='$URLroot$class_name/'>Return to $class_name list</a> </li>
 </ul>
   </div>
 <div class='card-body'>
@@ -112,7 +112,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 			$template_text .= "
 <div class='card'>
   <div class='card-header'>
-    $full_relation_snake ( <a href='DURC/$type/'>see all</a> )
+    $full_relation_snake ( <a href='$URLroot$type/'>see all</a> )
 {{^$full_relation_snake}}
 (no values)
 {{/$full_relation_snake}}
@@ -144,7 +144,7 @@ $template_text .= "
 				$column_name = $this_item['column_name'];
 				if($column_name == 'id'){	
 					//this is the link back to the edit view for this data item..
-					$template_text .= "\t\t\t<td><a href='DURC/$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
+					$template_text .= "\t\t\t<td><a href='$URLroot$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
 				}else{
 					$last_three = substr($column_name,-3);
 					if($last_three == '_id'){
@@ -197,7 +197,7 @@ $template_text .= "
 			$template_text .= "
 <div class='card'>
   <div class='card-header'>
-    $full_relation_snake ( <a href='DURC/$type/'>see all</a> )
+    $full_relation_snake ( <a href='$URLroot$type/'>see all</a> )
 {{^$full_relation_snake}}
 (no values)
 {{/$full_relation_snake}}
@@ -228,7 +228,7 @@ $template_text .= "
 				$column_name = $this_item['column_name'];
 				if($column_name == 'id'){	
 					//this is the link back to the edit view for this data item..
-					$template_text .= "\t\t\t<td><a href='DURC/$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
+					$template_text .= "\t\t\t<td><a href='$URLroot$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
 				}else{
 					$last_three = substr($column_name,-3);
 					if($last_three == '_id'){
