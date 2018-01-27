@@ -13,7 +13,7 @@ use Symfony\Component\Process\Process;
 
 class DURCWriteCommand extends Command{
 
-    protected $signature = 'DURC:write {--squash} {--config_file} {--URLroot}';
+    protected $signature = 'DURC:write {--squash} {--config_file=} {--URLroot=}';
     protected $description = 'DURC:write generates Templates and Eloquent Classe, inferred from your DB structure';
 
     public function handle(){
