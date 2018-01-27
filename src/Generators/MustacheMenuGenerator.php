@@ -105,7 +105,7 @@ h1 {
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="/DURC/">DURC <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="DURC/">DURC <span class="sr-only">(current)</span></a>
             </li>
           </ul>
         </div>
@@ -156,7 +156,7 @@ h1 {
 
 		$snippet = "
             <li class='nav-item'>
-              <a class='nav-link' href='/DURC/$class_name/'>$class_name</a>
+              <a class='nav-link' href='DURC/$class_name/'>$class_name</a>
             </li>
 ";
 

@@ -87,7 +87,7 @@ $paging_widget = "
 
 		$template_text = "
 <h1>$class_name list </h1>
-Create <a href='/DURC/$class_name/create/'>new $class_name</a><br>
+Create <a href='DURC/$class_name/create/'>new $class_name</a><br>
 
 $paging_widget
 
