@@ -265,7 +265,7 @@ $template_text .= "
 </ul>
 ";
 
-		$my_path = base_path() . "/resources/views$URLroot$class_name/";
+		$my_path = base_path() . "/resources/views/DURC/$class_name/";
 
 
                 if(!is_dir($my_path)){
