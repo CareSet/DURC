@@ -130,8 +130,6 @@ $header_row
 
 $paging_widget
 
-<h6>$gen_string</h6>
-
 <script type='text/javascript'>
 //we need a way to check to see if the page is loaded before we call DataTable()
 //but we frequently do not have JQuery yet... it could be loaded at the bottom of the page...

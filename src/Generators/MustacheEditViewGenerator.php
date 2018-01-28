@@ -259,10 +259,6 @@ $template_text .= "
 
 	$template_text .= "
 <br>
-<h5>Form Meta Data </h5>
-<ul>
-<li> $gen_string </li>
-</ul>
 ";
 
 		$my_path = base_path() . "/resources/views/DURC/$class_name/";

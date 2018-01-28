@@ -15,7 +15,7 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
         public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/'){
 
-
+		//terrible idea. Forces contstant git changes for no actual code change.
                 $gen_string = DURC::get_gen_string();
 
 		$others = [];
@@ -106,7 +106,6 @@ use Illuminate\Http\Request;
 use CareSet\DURC\DURCController;
 use Illuminate\Support\Facades\View;
 
-//$gen_string
 class $class_name"."Controller extends DURCController
 {
 
@@ -272,7 +271,9 @@ $with_summary_array_code
 
 	\$new_id = \$myNew$class_name"."->id;
 
-	return redirect(\"$URLroot$class_name/\$new_id\")->with('status', 'Data Saved!');
+	echo 'data saved';
+	exit();
+	//return redirect(\"$URLroot$class_name/\$new_id\")->with('status', 'Data Saved!');
     }//end store function
 
     /**
@@ -396,7 +397,6 @@ use App\\$class_name;
 use App\DURC\Controllers\\$class_name"."Controller as DURCParentController;
 use Illuminate\Http\Request;
 
-//$gen_string
 class $class_name"."Controller extends DURCParentController
 {
     /**

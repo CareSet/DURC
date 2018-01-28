@@ -36,7 +36,6 @@ class LaravelRouteGenerator extends \CareSet\DURC\DURCGenerator {
 This is an auto generated route file from DURC
 this will be automatically overwritten by future DURC runs.
 
-$gen_string
 
 \$url_guess = '/DURC/';'
 

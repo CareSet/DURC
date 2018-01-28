@@ -36,7 +36,6 @@ class LaravelTestRouteGenerator extends \CareSet\DURC\DURCGenerator {
 
 	cat routes/durc_test.routes >> routes/web.php
 
-	$gen_string
 */
 
 //This closure lists all of the index routes that DURC knows about...
