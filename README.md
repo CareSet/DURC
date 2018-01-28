@@ -153,6 +153,7 @@ Read about the power of HTML5 forms as a starting point: https://www.html5rocks.
 - [ ] Traditional CRUD v.2: support input patterns (http://html5pattern.com/Miscs)
 - [ ] Traditional CRUD v.2: support validity considerations (i.e. should a field only be accepted when valid?)
 - [ ] Traditional CRUD v.2: allow autocomplete configuration
+- [ ] Traditional CRUD v.2: Frequently the "primary key" of a table is just a foreign key to another table. Make sure this one-to-one relationship type resolves correctly. 
 - [ ] Traditional CRUD v.3: Generate menu listing all DURC contents in a overwrite/not overwrite side-by-side style
 - [ ] Traditional CRUD v.3: Generate blade templates
 - [ ] Traditional CRUD v.3: allow placeholder definition
