@@ -9,17 +9,33 @@ use Illuminate\Support\Facades\DB;
 /*
         This is where all of the work is done...
 */
-class DURCGenerator{
+abstract class DURCGenerator{
 
 
-	public static function start(){
-		//nothing here.. override me if you like..
-	}
+	//Run only once at the beginning of generation
+	abstract public static function start(
+							$db_config,
+							$squash,
+							$URLroot);
 
+	//Run only once at the end of generation
+	abstract public static function finish(
+							$db_config,
+							$squash,
+							$URLroot);
 
-	public static function finish(){
-		//nothing here.. override me if you like..
-	}
+	//Run for every database and table combination
+	abstract public static function run_generator(	
+							$class_name,
+							$database,
+							$table,
+							$fields,
+							$has_many,
+							$belongs_to,
+							$many_many, 
+							$many_through, 
+							$squash,
+							$URLroot);
 
 
 

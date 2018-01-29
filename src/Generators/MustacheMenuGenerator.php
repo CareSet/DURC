@@ -23,7 +23,11 @@ class MustacheMenuGenerator extends \CareSet\DURC\DURCGenerator {
 		return($file_name);
 	}
 
-	public static function start(){
+	public static function start(
+						$db_config,
+						$squash,
+						$URLroot
+		){
 
 		$file = MustacheMenuGenerator::getFile();
 	
@@ -124,7 +128,11 @@ h1 {
 
 	}
 
-	public static function finish(){
+	public static function finish(
+						$db_config,
+						$squash,
+						$URLroot
+		){
 	
 		$file = MustacheMenuGenerator::getFile();
 

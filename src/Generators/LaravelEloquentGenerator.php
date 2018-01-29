@@ -12,8 +12,24 @@ use CareSet\DURC\DURC;
 class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 
+        public static function start(
+							$db_config,
+                                                        $squash,
+                                                        $URLroot){
+		//does nothing need to comply with abstract class
+	}
 
-	public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
+        //Run only once at the end of generation
+        public static function finish(
+							$db_config,
+                                                        $squash,
+                                                        $URLroot){
+		//does nothing need to comply with abstract class
+	}
+
+
+
+	public static function run_generator($class_name,$database,$table,$fields,$has_many,$belongs_to, $many_many, $many_through, $squash, $URLroot){
 
 
 		$model_namespace = 'App';

@@ -39,7 +39,10 @@ class DURCWriteCommand extends Command{
 
 	$squash = $this->option('squash');
 
-	$URLroot = $this->option('URLroot','/DURC/');
+	$URLroot = $this->option('URLroot');
+	if(is_null($URLroot)){
+		$URLroot = '/DURC/';
+	}
 
 
 	$config = DURC::readDURCDesignConfigJSON($config_file);
@@ -47,7 +50,7 @@ class DURCWriteCommand extends Command{
 	//each generator handles the creation of different type of file...
 	foreach($generatorClasses as $generator_label => $this_generator){
 		echo "Generating $generator_label...\t\t\t";
-		$this_generator::start();
+		$this_generator::start($config,$squash,$URLroot);
 
 		foreach($config as $this_db => $db_data){
 			foreach($db_data as $this_class_name => $table_data){
@@ -102,7 +105,7 @@ class DURCWriteCommand extends Command{
 			}
 		}
 
-		$this_generator::finish();
+		$this_generator::finish($config,$squash,$URLroot);
 		echo "done\n";
 	}
 

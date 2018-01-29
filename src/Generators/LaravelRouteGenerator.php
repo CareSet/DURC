@@ -15,9 +15,15 @@ use Illuminate\Support\Facades\DB;
 use CareSet\DURC\DURC;
 class LaravelRouteGenerator extends \CareSet\DURC\DURCGenerator {
 
-        public static function finish(){
 
-        }
+        //Run only once at the end of generation
+        public static function finish(
+							$db_config,
+                                                        $squash,
+                                                        $URLroot){
+                //does nothing need to comply with abstract class
+        }        
+
 
 
 	//so that we target the same file the whole time..
@@ -27,7 +33,10 @@ class LaravelRouteGenerator extends \CareSet\DURC\DURCGenerator {
 	}
 
 
-	public static function start(){
+        public static function start(
+							$db_config,
+                                                        $squash,
+                                                        $URLroot){
 		$file = LaravelRouteGenerator::getFile();
 
 		$gen_string = DURC::get_gen_string();
@@ -37,17 +46,15 @@ This is an auto generated route file from DURC
 this will be automatically overwritten by future DURC runs.
 
 
-\$url_guess = '/DURC/';'
-
 */
 
 ";
 		//note that this function ignores the squash for now...
 		file_put_contents($file,$header); //empty the current file..
 
-	}
+	}//end start
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/'){
 
 
 		//we just need to add a little snippet to the route file..
@@ -56,10 +63,10 @@ this will be automatically overwritten by future DURC runs.
 
 		$snippet = " 
 //DURC->	$database.$table
-Route::resource(\"/\$url_guess/$class_name\", '$class_name"."Controller');
-Route::get(\"/\$url_guess"."json/$class_name/{"."$class_name"."_id}', '$class_name"."Controller@jsonone');
-Route::get(\"/\$url_guess"."json/$class_name/', '$class_name"."Controller@jsonall');
-Route::get(\"/\$url_guess"."searchjson/$class_name/', '$class_name"."Controller@search');
+Route::resource(\"$URLroot/$class_name\", '$class_name"."Controller');
+Route::get(\"$URLroot"."json/$class_name/{"."$class_name"."_id}', '$class_name"."Controller@jsonone');
+Route::get(\"$URLroot"."json/$class_name/', '$class_name"."Controller@jsonall');
+Route::get(\"$URLroot"."searchjson/$class_name/', '$class_name"."Controller@search');
 ";
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);

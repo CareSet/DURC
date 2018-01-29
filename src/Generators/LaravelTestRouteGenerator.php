@@ -17,13 +17,21 @@ use CareSet\DURC\DURC;
 class LaravelTestRouteGenerator extends \CareSet\DURC\DURCGenerator {
 
 
+
+
+
+
 	//so that we target the same file the whole time..
 	public static function getFile(){
 		$file_name = base_path()."/routes/durc_test.php";
 		return($file_name);
 	}
 
-	public static function start(){
+        public static function start(
+                                                        $db_config,
+                                                        $squash,
+                                                        $URLroot){
+
 		$file = LaravelTestRouteGenerator::getFile();
 
                 $gen_string = DURC::get_gen_string();
@@ -50,7 +58,11 @@ Route::get('durctest', function () {
 
 	}
 
-	public static function finish(){
+        public static function finish(
+							$db_config,
+                                                        $squash,
+                                                        $URLroot){
+
 	
 		$file = LaravelTestRouteGenerator::getFile();
 

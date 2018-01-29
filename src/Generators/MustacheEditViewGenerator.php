@@ -12,14 +12,20 @@ use CareSet\DURC\DURC;
 class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
 
-	public static function start(){
+        public static function start(
+							$db_config,
+                                                        $squash,
+                                                        $URLroot){
+                //does nothing need to comply with abstract class
+        }
 
+        public static function finish(
+							$db_config,
+                                                        $squash,
+                                                        $URLroot){
+                //does nothing need to comply with abstract class
+        }
 
-	}
-
-	public static function finish(){
-
-	}
 
 
         public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
