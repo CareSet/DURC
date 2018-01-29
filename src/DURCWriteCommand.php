@@ -18,7 +18,6 @@ class DURCWriteCommand extends Command{
 
     public function handle(){
 	//what does this do?
-	echo "Beginning code generation!\n";
 
 	//only one code generator for now...
 	$generatorClasses = [
@@ -44,7 +43,11 @@ class DURCWriteCommand extends Command{
 		$URLroot = '/DURC/';
 	}
 
-
+	if($squash){
+		echo "DURC:write Beginning code generation! Squashing all previous code generation \n";	
+	}else{
+		echo "DURC:write Beginning code generation!\n";
+	}
 	$config = DURC::readDURCDesignConfigJSON($config_file);
 
 	//each generator handles the creation of different type of file...
@@ -109,7 +112,7 @@ class DURCWriteCommand extends Command{
 		echo "done\n";
 	}
 
-	echo "all done.\n";
+	echo "DURC:write all done.\n";
 
 
 

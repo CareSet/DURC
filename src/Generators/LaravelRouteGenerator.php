@@ -63,10 +63,10 @@ this will be automatically overwritten by future DURC runs.
 
 		$snippet = " 
 //DURC->	$database.$table
-Route::resource(\"$URLroot/$class_name\", '$class_name"."Controller');
-Route::get(\"$URLroot"."json/$class_name/{"."$class_name"."_id}', '$class_name"."Controller@jsonone');
-Route::get(\"$URLroot"."json/$class_name/', '$class_name"."Controller@jsonall');
-Route::get(\"$URLroot"."searchjson/$class_name/', '$class_name"."Controller@search');
+Route::resource(\"$URLroot$class_name\", '$class_name"."Controller');
+Route::get(\"$URLroot"."json/$class_name/{"."$class_name"."_id}\", '$class_name"."Controller@jsonone');
+Route::get(\"$URLroot"."json/$class_name/\", '$class_name"."Controller@jsonall');
+Route::get(\"$URLroot"."searchjson/$class_name/\", '$class_name"."Controller@search');
 ";
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);

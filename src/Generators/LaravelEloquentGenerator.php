@@ -294,7 +294,7 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 ";
 
 
-	$child_class_code .= "//DURC HAS_MANY SECTION";
+	$child_class_code .= "\n//DURC HAS_MANY SECTION\n";
 	if(!is_null($has_many)){
 		foreach($has_many as $other_table_name => $relate_details){
 		
@@ -324,7 +324,7 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 
 
 
-	$child_class_code .= "//DURC BELONGS_TO SECTION";
+	$child_class_code .= "\n//DURC BELONGS_TO SECTION\n";
 	if(!is_null($belongs_to)){
 		foreach($belongs_to as $other_table_name => $relate_details){
 		
