@@ -95,7 +95,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	$used_functions = [];
 	$with_array = [];
 
-	$has_many_code = "//DURC HAS_MANY SECTION";
+	$has_many_code = "\n//DURC HAS_MANY SECTION\n";
 	if(!is_null($has_many)){
 		foreach($has_many as $other_table_name => $relate_details){
 		
@@ -127,7 +127,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	}
 
 	
-	$belongs_to_code = "//DURC BELONGS_TO SECTION";
+	$belongs_to_code = "\n//DURC BELONGS_TO SECTION\n";
 	if(!is_null($belongs_to)){
 		foreach($belongs_to as $other_table_name => $relate_details){
 		
