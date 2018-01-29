@@ -16,7 +16,7 @@ use CareSet\DURC\DURC;
 class DURCMustacheGenerator{
 
 	//basically a router for the other functions 
-	public static function _get_field_html($field_data){
+	public static function _get_field_html($URLroot,$field_data){
 
 		$column_name = $field_data['column_name'];
 		$data_type = $field_data['data_type'];
@@ -30,7 +30,7 @@ class DURCMustacheGenerator{
 		switch($input_type){
 			case 'number':
 				if($is_linked_key){
-					return(self::_get_select2_field_html($field_data));
+					return(self::_get_select2_field_html($URLroot,$field_data));
 				}else{
 					return(self::_get_text_field_html($field_data));
 				}
@@ -56,7 +56,7 @@ class DURCMustacheGenerator{
 	}
 
 	//this returns both the html and the javascript required to kick start an AJAX powered select2 instance.
-	public static function _get_select2_field_html($field_data){
+	public static function _get_select2_field_html($URLroot, $field_data){
 
 		$column_name = $field_data['column_name'];
 		$data_type = $field_data['data_type'];
@@ -80,7 +80,7 @@ class DURCMustacheGenerator{
 
 $('.select2_$column_name').select2({
   ajax: {
-    	url: '/DURCsearchjson/$foreign_table/',
+    	url: '$URLroot"."searchjson/$foreign_table/',
     	dataType: 'json'
   }
 });

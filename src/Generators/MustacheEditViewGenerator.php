@@ -76,7 +76,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
 		foreach($fields as $i => $field_data){
 
-			$field_html = parent::_get_field_html($field_data); //this is defined in ../DURCMustacheGenerator.php
+			$field_html = parent::_get_field_html($URLroot,$field_data); //this is defined in ../DURCMustacheGenerator.php
 			//echo $field_html;
 			$template_text .= $field_html;
 		}
