@@ -88,8 +88,9 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
     </div>
   </div>
 
-</fieldset></form>
+</fieldset>
 </div></div>
+</form>
 ";
 
 
