@@ -285,9 +285,7 @@ $with_summary_array_code
 
 	\$new_id = \$myNew$class_name"."->id;
 
-	echo 'data saved';
-	exit();
-	//return redirect(\"$URLroot$class_name/\$new_id\")->with('status', 'Data Saved!');
+	return redirect(\"$URLroot$class_name/\$new_id\")->with('status', 'Data Saved!');
     }//end store function
 
     /**
