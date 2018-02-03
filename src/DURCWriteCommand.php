@@ -28,6 +28,7 @@ class DURCWriteCommand extends Command{
 			'Laravel Routes' => 		'CareSet\DURC\Generators\LaravelRouteGenerator',	
 			'Test Routes' =>		'CareSet\DURC\Generators\LaravelTestRouteGenerator',	
 			'Mustache Menu' => 		'CareSet\DURC\Generators\MustacheMenuGenerator',	
+			'MySQLDump' => 			'CareSet\DURC\Generators\MySQLDumpGenerator',	
 		];
 
 	$config_file = $this->option('config_file');
