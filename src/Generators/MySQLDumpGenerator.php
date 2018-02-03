@@ -37,7 +37,7 @@ class MySQLDumpGenerator extends \CareSet\DURC\DURCGenerator {
 
 		if($user && $password){
 
-			$path = base_path("app/DURC/sql");	
+			$path = base_path("app/DURC/SQL_schemas");	
 			if(!is_dir($path)){	//if the directory does not exist..
 				$old = umask(0);
 				mkdir($path,0744); //make it...
