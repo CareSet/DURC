@@ -105,12 +105,38 @@ $('.select2_$column_name').select2({
 		$foreign_table = $field_data['foreign_table'];
 
 	
+		$icon_id = $column_name . "_FontPicker";
+		$today_id = $column_name . "_TodayNow";
+		$colConv = $column_name ."Conv";
+
 		$field_html = "
   <div class='form-group row'>
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
-	Current Value: {{"."$column_name"."}}<br>
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+
+<button type='button' class='btn btn-primary' id='$icon_id'>
+<img src='/images/DURC/ic_today_black_24dp_1x.png'> 
+</button>
+<button type='button' class='btn btn-primary' id='$today_id'> Today and Now</button>
+
+<script>
+	var $colConv = new AnyTime.Converter({format: '%Y-%m-%d %T'});
+  	$('#$today_id').click( function(e) {
+      		$('#$column_name').val($colConv.format(new Date())).change(); } );
+
+    	$('#$icon_id').click(
+      		function(e) {
+        		$('#$column_name').AnyTime_noPicker().AnyTime_picker(
+				{
+    					format: '%Y-%m-%d %T',
+    					formatUtcOffset: '%: (%@)'
+				} 
+			).focus();
+        	e.preventDefault();
+        	} );
+</script>
+
     </div>
   </div>
 ";
@@ -127,18 +153,44 @@ $('.select2_$column_name').select2({
 		$foreign_db = $field_data['foreign_db'];
 		$foreign_table = $field_data['foreign_table'];
 
-	
+		$icon_id = $column_name . "_FontPicker";
+		$today_id = $column_name . "_TodayNow";
+		$colConv = $column_name ."Conv";
+
 		$field_html = "
   <div class='form-group row'>
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
-	Current Value: {{"."$column_name"."}}
-      <input type='date' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+
+<button type='button' class='btn btn-primary' id='$icon_id'>
+<img src='/images/DURC/ic_today_black_24dp_1x.png'> 
+</button>
+<button type='button' class='btn btn-primary' id='$today_id'> Today and Now</button>
+
+<script>
+	var $colConv = new AnyTime.Converter({format: '%Y-%m-%d'});
+  	$('#$today_id').click( function(e) {
+      		$('#$column_name').val($colConv.format(new Date())).change(); } );
+
+    	$('#$icon_id').click(
+      		function(e) {
+        		$('#$column_name').AnyTime_noPicker().AnyTime_picker(
+				{
+    					format: '%Y-%m-%d',
+    					formatUtcOffset: '%: (%@)'
+				} 
+			).focus();
+        	e.preventDefault();
+        	} );
+</script>
+
     </div>
   </div>
 ";
-
+	
 		return($field_html);
+
 	}
 
 	//returns bootstrap 4 decorated mustache template for a text field
