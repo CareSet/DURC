@@ -51,7 +51,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 {{/has_session_status}}
 
 {{#is_new}}
-<form action='$URLroot$class_name/' method='POST'>
+<form action='$URLroot$class_name' method='POST'>
 {{/is_new}}
 
 {{^is_new}}
