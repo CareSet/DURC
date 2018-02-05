@@ -133,6 +133,7 @@ Read about the power of HTML5 forms as a starting point: https://www.html5rocks.
 - [X] Traditional CRUD: Have a object viewer that shows the edit form for an object. 
 - [X] Traditional CRUD: Get select2 working to link different object types.
 - [X] Traditional CRUD: support select_name
+- [ ] Traditional CRUD: support is_ and has_ with TINYINT turning into checkboxes automagically
 - [ ] Traditional CRUD: Support self referencing tables 
 - [ ] Traditional CRUD: Support multiple types of relations to the same underlying table, like parent_person_id and sibling_person_id
 - [ ] Traditional CRUD: make sure deleting through the controller works, and that soft delete works properly
