@@ -143,7 +143,7 @@ Read about the power of HTML5 forms as a starting point: https://www.html5rocks.
 - [ ] API CRUD: Port mustache form smartness to Vue.js 
 - [ ] API CRUD:
 - [ ] Traditional CRUD v.2: if there is a deleted_at column, automatically add use SoftDeletes to the laravel model.
-- [ ] Traditional CRUD v.2: Get html5 date widget to datetime/timestamp mysql working
+- [X] Traditional CRUD v.2: Get html5 date widget to datetime/timestamp mysql working
 - [ ] Traditional CRUD v.2: get url widget working 
 - [ ] Traditional CRUD v.2: get email widget working
 - [ ] Traditional CRUD v.2: get telephone widget working
