@@ -122,53 +122,5 @@ Because we build function names from the field names in the table, we have to ha
 You can start a field with a digit '1', or '0' but you cannot start a function that way.. so beware...
 
 
-## ToDo
 
-Read about the power of HTML5 forms as a starting point: https://www.html5rocks.com/en/tutorials/forms/html5forms/
-
-
-- [x] Traditional CRUD: Generate mostache templates
-- [X] Traditional CRUD: Generate controllers that work with server-side form templates 
-- [X] Traditional CRUD: Generate menu listing just overwrite style
-- [X] Traditional CRUD: Have a object viewer that shows the edit form for an object. 
-- [X] Traditional CRUD: Get select2 working to link different object types.
-- [X] Traditional CRUD: support select_name
-- [ ] Traditional CRUD: support is_ and has_ with TINYINT turning into checkboxes automagically
-- [ ] Traditional CRUD: Support self referencing tables 
-- [ ] Traditional CRUD: Support multiple types of relations to the same underlying table, like parent_person_id and sibling_person_id
-- [ ] Traditional CRUD: make sure deleting through the controller works, and that soft delete works properly
-- [ ] Traditional CRUD: 
-- [ ] API CRUD: Generate Vue.js front end forms for editing
-- [ ] API CRUD: Generate API Resource elements in parallel with controller under /DURCAPI/whatever/ https://laravel.com/docs/5.5/eloquent-resources
-- [ ] API CRUD: Port mustache form smartness to Vue.js 
-- [ ] API CRUD:
-- [ ] Traditional CRUD v.2: if there is a deleted_at column, automatically add use SoftDeletes to the laravel model.
-- [X] Traditional CRUD v.2: Get html5 date widget to datetime/timestamp mysql working
-- [ ] Traditional CRUD v.2: get url widget working 
-- [ ] Traditional CRUD v.2: get email widget working
-- [ ] Traditional CRUD v.2: get telephone widget working
-- [ ] Traditional CRUD v.2: get color widget working
-- [ ] Traditional CRUD v.2: get range widget working 
-- [ ] Traditional CRUD v.2: get week widget working
-- [ ] Traditional CRUD v.2: get month widget working
-- [ ] Traditional CRUD v.2: support input patterns (http://html5pattern.com/Miscs)
-- [ ] Traditional CRUD v.2: support validity considerations (i.e. should a field only be accepted when valid?)
-- [ ] Traditional CRUD v.2: allow autocomplete configuration
-- [ ] Traditional CRUD v.2: Frequently the "primary key" of a table is just a foreign key to another table. Make sure this one-to-one relationship type resolves correctly. 
-- [ ] Traditional CRUD v.3: Generate menu listing all DURC contents in a overwrite/not overwrite side-by-side style
-- [ ] Traditional CRUD v.3: Generate blade templates
-- [ ] Traditional CRUD v.3: allow placeholder definition
-- [ ] Traditional CRUD v.3: use attribute casting on variables named is_something or has_something  https://laravel.com/docs/5.5/eloquent-mutators#attribute-casting 
-- [ ] Traditional CRUD v.3: Respect existing foreign keys and treat them as 'name compliant'
-
-
-
-
-
-
-
-# Todo next
-Sort out the sibling table. it has four identical $DURC_selfish_with array contents. Obviously that is wrong. It is happening because it loops back on itself. 
-But it does that with two different types of relationships
-There is also something funky going on with the northwind tables. http://homestead.test/DURC/product/86/ fails to find a table.
 
