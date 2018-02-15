@@ -188,13 +188,13 @@ INSERT INTO `inventoryTransactionType` VALUES (1,'Purchased'),(2,'Sold'),(3,'On 
 UNLOCK TABLES;
 
 --
--- Table structure for table `orderDetailStatus`
+-- Table structure for table `orderDetailStat`
 --
 
-DROP TABLE IF EXISTS `orderDetailStatus`;
+DROP TABLE IF EXISTS `orderDetailStat`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `orderDetailStatus` (
+CREATE TABLE `orderDetailStat` (
   `id` int(11) NOT NULL,
   `statusName` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
@@ -202,23 +202,23 @@ CREATE TABLE `orderDetailStatus` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `orderDetailStatus`
+-- Dumping data for table `orderDetailStat`
 --
 
-LOCK TABLES `orderDetailStatus` WRITE;
-/*!40000 ALTER TABLE `orderDetailStatus` DISABLE KEYS */;
-INSERT INTO `orderDetailStatus` VALUES (0,'None'),(1,'Allocated'),(2,'Invoiced'),(3,'Shipped'),(4,'On Order'),(5,'No Stock');
-/*!40000 ALTER TABLE `orderDetailStatus` ENABLE KEYS */;
+LOCK TABLES `orderDetailStat` WRITE;
+/*!40000 ALTER TABLE `orderDetailStat` DISABLE KEYS */;
+INSERT INTO `orderDetailStat` VALUES (0,'None'),(1,'Allocated'),(2,'Invoiced'),(3,'Shipped'),(4,'On Order'),(5,'No Stock');
+/*!40000 ALTER TABLE `orderDetailStat` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `orderStatus`
+-- Table structure for table `orderStat`
 --
 
-DROP TABLE IF EXISTS `orderStatus`;
+DROP TABLE IF EXISTS `orderStat`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `orderStatus` (
+CREATE TABLE `orderStat` (
   `id` tinyint(4) NOT NULL,
   `statusName` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
@@ -226,37 +226,37 @@ CREATE TABLE `orderStatus` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `orderStatus`
+-- Dumping data for table `orderStat`
 --
 
-LOCK TABLES `orderStatus` WRITE;
-/*!40000 ALTER TABLE `orderStatus` DISABLE KEYS */;
-INSERT INTO `orderStatus` VALUES (0,'New'),(1,'Invoiced'),(2,'Shipped'),(3,'Closed');
-/*!40000 ALTER TABLE `orderStatus` ENABLE KEYS */;
+LOCK TABLES `orderStat` WRITE;
+/*!40000 ALTER TABLE `orderStat` DISABLE KEYS */;
+INSERT INTO `orderStat` VALUES (0,'New'),(1,'Invoiced'),(2,'Shipped'),(3,'Closed');
+/*!40000 ALTER TABLE `orderStat` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `orderTaxStatus`
+-- Table structure for table `orderTaxStat`
 --
 
-DROP TABLE IF EXISTS `orderTaxStatus`;
+DROP TABLE IF EXISTS `orderTaxStat`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `orderTaxStatus` (
+CREATE TABLE `orderTaxStat` (
   `id` tinyint(4) NOT NULL,
-  `taxStatusName` varchar(50) NOT NULL,
+  `taxStatName` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `orderTaxStatus`
+-- Dumping data for table `orderTaxStat`
 --
 
-LOCK TABLES `orderTaxStatus` WRITE;
-/*!40000 ALTER TABLE `orderTaxStatus` DISABLE KEYS */;
-INSERT INTO `orderTaxStatus` VALUES (0,'Tax Exempt'),(1,'Taxable');
-/*!40000 ALTER TABLE `orderTaxStatus` ENABLE KEYS */;
+LOCK TABLES `orderTaxStat` WRITE;
+/*!40000 ALTER TABLE `orderTaxStat` DISABLE KEYS */;
+INSERT INTO `orderTaxStat` VALUES (0,'Tax Exempt'),(1,'Taxable');
+/*!40000 ALTER TABLE `orderTaxStat` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -321,13 +321,13 @@ INSERT INTO `product` VALUES ('4',1,'NWTB-1','Northwind Traders Chai',NULL,13.50
 UNLOCK TABLES;
 
 --
--- Table structure for table `purchaseOrderStatus`
+-- Table structure for table `purchaseOrderStat`
 --
 
-DROP TABLE IF EXISTS `purchaseOrderStatus`;
+DROP TABLE IF EXISTS `purchaseOrderStat`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `purchaseOrderStatus` (
+CREATE TABLE `purchaseOrderStat` (
   `id` int(11) NOT NULL,
   `status` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -335,13 +335,13 @@ CREATE TABLE `purchaseOrderStatus` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `purchaseOrderStatus`
+-- Dumping data for table `purchaseOrderStat`
 --
 
-LOCK TABLES `purchaseOrderStatus` WRITE;
-/*!40000 ALTER TABLE `purchaseOrderStatus` DISABLE KEYS */;
-INSERT INTO `purchaseOrderStatus` VALUES (0,'New'),(1,'Submitted'),(2,'Approved'),(3,'Closed');
-/*!40000 ALTER TABLE `purchaseOrderStatus` ENABLE KEYS */;
+LOCK TABLES `purchaseOrderStat` WRITE;
+/*!40000 ALTER TABLE `purchaseOrderStat` DISABLE KEYS */;
+INSERT INTO `purchaseOrderStat` VALUES (0,'New'),(1,'Submitted'),(2,'Approved'),(3,'Closed');
+/*!40000 ALTER TABLE `purchaseOrderStat` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
