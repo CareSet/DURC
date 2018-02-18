@@ -65,6 +65,9 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 <h4> {{durc_instance_name}}</h4>
 <ul>
 <li> <a href='$URLroot$class_name/'>Return to $class_name list</a> </li>
+{{^is_new}}
+<li> <a href='$URLroot$class_name/create'>Create new $class_name </a> </li>
+{{/is_new}}
 </ul>
   </div>
 <div class='card-body'>
