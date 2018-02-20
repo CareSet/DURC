@@ -25,9 +25,12 @@ class DURCMustacheGenerator{
 		$foreign_db = $field_data['foreign_db'];
 		$foreign_table = $field_data['foreign_table'];
 
-		$input_type = DURC::$column_type_map[strtolower($data_type)]['input_type'];
+		$input_type = DURC::mapColumnDataTypeToInputType( $data_type, $column_name );
 
 		switch($input_type){
+            case 'boolean':
+                return self::_get_checkbox_field_html( $field_data );
+                break;
 			case 'number':
 				if($is_linked_key){
 					return(self::_get_select2_field_html($URLroot,$field_data));
@@ -215,6 +218,30 @@ $('.select2_$column_name').select2({
 
 		return($field_html);
 	}
+
+    //returns bootstrap 4 decorated mustache template for a text field
+    public static function _get_checkbox_field_html($field_data){
+
+        $column_name = $field_data['column_name'];
+        $data_type = $field_data['data_type'];
+        $is_foreign_key = $field_data['is_foreign_key'];
+        $is_linked_key = $field_data['is_linked_key'];
+        $foreign_db = $field_data['foreign_db'];
+        $foreign_table = $field_data['foreign_table'];
+
+        $field_html = "
+  <div class='form-group row'>
+    <div class='col-sm-2'><label>$column_name</label></div>
+    <div class='col-sm-10'>
+        <div class='checkbox'>
+            <input type='checkbox' id='$column_name' name='$column_name' {{"."$column_name"."_checkbox}} >
+       </div> 
+    </div>
+  </div>
+";
+
+        return($field_html);
+    }
 
 	public static function _get_number_field_html($field_data){
 

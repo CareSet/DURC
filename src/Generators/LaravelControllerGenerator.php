@@ -106,7 +106,7 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 	foreach($fields as $field_data){
 			$this_field = $field_data['column_name'];
 			$data_type = $field_data['data_type'];
-			$field_update_from_request .= "		\$tmp_$class_name"."->$this_field = \$request->$this_field; \n";
+			$field_update_from_request .= "		\$tmp_$class_name"."->$this_field = DURC::formatForStorage( '$this_field', '$data_type', \$request->$this_field ); \n";
 	}	
 	$field_update_from_request .= "		\$tmp_$class_name"."->save();\n";
 
@@ -117,6 +117,7 @@ namespace App\DURC\Controllers;
 
 use App\\$class_name;
 use Illuminate\Http\Request;
+use CareSet\DURC\DURC;
 use CareSet\DURC\DURCController;
 use Illuminate\Support\Facades\View;
 
@@ -346,7 +347,14 @@ $with_summary_array_code
 
 		//put the contents into the view...
 		foreach(\$$class_name"."->toArray() as \$key => \$value){
-			\$this->view_data[\$key] = \$value;	
+			if ( DURC::mapColumnDataTypeToInputType( \$$class_name::\$field_type_map[\$key], \$key, \$value ) == 'boolean' ) {
+                if ( \$value > 0 ) {
+                    \$this->view_data[ \$key . '_checkbox' ] = 'checked';
+                }
+            } else {
+
+                \$this->view_data[ \$key ] = \$value;
+            }
 		}
 
 		//what is this object called?

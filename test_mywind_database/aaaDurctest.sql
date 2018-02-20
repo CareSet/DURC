@@ -145,6 +145,30 @@ INSERT INTO `book` VALUES (1,'Hacking Healthcare - A guide to Meaningful Use','2
 UNLOCK TABLES;
 
 --
+-- Table structure for table `booleantest`
+--
+LOCK TABLES `booleantest` WRITE;
+CREATE TABLE `booleantest` (
+  `id` int(11) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `is_something` varchar(255) NOT NULL,
+  `has_something` varchar(255) NOT NULL,
+  `is_something2` tinyint(4) DEFAULT NULL,
+  `has_something2` tinyint(4) DEFAULT NULL,
+  `has_something3` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `booleantest`
+--
+
+INSERT INTO `booleantest` (`id`, `label`, `is_something`, `has_something`, `is_something2`, `has_something2`, `has_something3`) VALUES
+(1, 'Test checkbox', 'yes', '1', 1, 0, 1),
+(2, 'Test checkbox', '2', 'no', 0, 2, 0);
+
+
+--
 -- Table structure for table `comment`
 --
 

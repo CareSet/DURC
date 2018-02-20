@@ -164,6 +164,52 @@ class DURC{
 		return "DURC Generated At: ".date('l jS \of F Y h:i:s A');
 	}
 
+    /***
+     * @param $data_type
+     * @param string $column_name
+     * @return string
+     *
+     * Map an SQL data type to a HTML input type and use column name for hinting if provided
+     */
+	public static function mapColumnDataTypeToInputType( $data_type, $column_name = '' )
+    {
+        $input_type = '';
+        if ( ( strtolower( $data_type ) == 'tinyint' ||
+                strtolower( $data_type ) == 'boolean' ) &&
+            ( strpos( $column_name, 'has_', 0 ) === 0 ||
+            strpos( $column_name, 'is_', 0 ) === 0 ) ) {
+            // It's a boolean type if is starts with has_ or is_ and is a
+            // tinyint or boolean type
+            $input_type = 'boolean';
+        } else {
+            $input_type = self::$column_type_map[strtolower($data_type)]['input_type'];
+        }
+
+        return $input_type;
+    }
+
+    /**
+     * @param $field_name
+     * @param $value
+     * @return mixed
+     *
+     * Use rules to format a form input value for storage into the database
+     */
+    public static function formatForStorage( $field_name, $field_type, $value )
+    {
+        $formattedValue = $value;
+        if ( self::mapColumnDataTypeToInputType( $field_type, $field_name ) == 'boolean' ) {
+            if ( $value == 'on' ||
+                $value > 0 ) {
+                $formattedValue = 1;
+            } else {
+                $formattedValue = 0;
+            }
+        }
+
+        return $formattedValue;
+    }
+
         public static   $column_type_map = [
                         //integer types
                         'int' => [ 'input_type' => 'number', ],
