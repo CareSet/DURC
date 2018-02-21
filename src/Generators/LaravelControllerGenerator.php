@@ -347,7 +347,8 @@ $with_summary_array_code
 
 		//put the contents into the view...
 		foreach(\$$class_name"."->toArray() as \$key => \$value){
-			if ( DURC::mapColumnDataTypeToInputType( \$$class_name::\$field_type_map[\$key], \$key, \$value ) == 'boolean' ) {
+			if ( isset(\$$class_name::\$field_type_map[\$key]) &&
+			    DURC::mapColumnDataTypeToInputType( \$$class_name::\$field_type_map[\$key], \$key, \$value ) == 'boolean' ) {
                 if ( \$value > 0 ) {
                     \$this->view_data[ \$key . '_checkbox' ] = 'checked';
                 }
