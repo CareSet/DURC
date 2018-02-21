@@ -23,6 +23,7 @@ class DURCModel extends Model{
 	}
 
 
+
 	public static function getNameField(){
 	
 		$my_class = get_called_class();

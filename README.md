@@ -40,6 +40,11 @@ DURC mustache templates use the .mustache extension.
 Now add the '.mustache' to the 'filext' parameter array in yourproject/config/handlebars.php
 This will ensure that you can see the views that are generated.
 
+### Add database parameters
+If you are using .env file, fill out the mysql database parameters with a user that has at least read
+access to all of the mined tables. You need to copy your .env.example into a new .env file if there is no
+.env file in the root of your project
+
 ## Available commands
 
 **Command:**
@@ -75,8 +80,8 @@ DURC:write will take whatever content exists in DURC_config.edit_me.json and gen
   * Index templates for each table
   * Edit templates for each table
   * A starting menu template that lists all generated tables and demonstrates how to include durc forms using mustache etc
-* routes to a route file called yourproject/routes/durc.php that can be copied to /yourproject/routes/web.php
-* testing routes to a file called yourproject/routes/durc_test.php 
+* routes to a route file called yourproject/routes/web.durc.php and is automatically loaded by DURCServiceProvider
+* testing routes to a file called yourproject/routes/durc_test.php and is automatically loaded by DURCServiceProvider
 
 We use a webpack requirement for this, but you JS system might be different.
 
@@ -121,6 +126,12 @@ The 'deleted_at' field has to have the capacity to exist as null, and if you hav
 Because we build function names from the field names in the table, we have to have some limitations.
 You can start a field with a digit '1', or '0' but you cannot start a function that way.. so beware...
 
+#TROUBLESHOOTING
 
+If you get the error "No application encryption key has been specified"
+You have to copy the default .env.example into .env and run 
+```bash
+$ php artisan key:generate
+```
 
 
