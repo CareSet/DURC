@@ -56,7 +56,7 @@ $ php artisan DURC:write
 
 If you want to run a fresh install and demo DURC stuff, load the mysql tables from /test_mywind_database/ and then run
 ```bash
-$ php artisan DURC:mine --DB=northwind_model --DB=northwind_data --DB=aaaDurctest --DB=irs
+$ php artisan DURC:mine --DB=DURC_northwind_model --DB=DURC_northwind_data --DB=DURC_aaaDurctest --DB=DURC_irs
 $ php artisan DURC:write
 ```
 
