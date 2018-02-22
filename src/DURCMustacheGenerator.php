@@ -69,7 +69,7 @@ class DURCMustacheGenerator{
 		$foreign_table = $field_data['foreign_table'];
 
 		$field_html = "
-  <div class='form-group row'>
+  <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
 	Current id value: {{"."$column_name"."}} (see below for lookup value)<br>
@@ -113,7 +113,7 @@ $('.select2_$column_name').select2({
 		$colConv = $column_name ."Conv";
 
 		$field_html = "
-  <div class='form-group row'>
+  <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
@@ -161,7 +161,7 @@ $('.select2_$column_name').select2({
 		$colConv = $column_name ."Conv";
 
 		$field_html = "
-  <div class='form-group row'>
+  <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
@@ -208,7 +208,7 @@ $('.select2_$column_name').select2({
 
 	
 		$field_html = "
-  <div class='form-group row'>
+  <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
@@ -230,11 +230,11 @@ $('.select2_$column_name').select2({
         $foreign_table = $field_data['foreign_table'];
 
         $field_html = "
-  <div class='form-group row'>
+  <div class='form-group row {{"."$column_name"."_row_class}}'>
     <div class='col-sm-2'><label>$column_name</label></div>
     <div class='col-sm-10'>
         <div class='checkbox'>
-            <input type='checkbox' id='$column_name' name='$column_name' {{"."$column_name"."_checkbox}} >
+            <input type='checkbox' id='$column_name' name='$column_name' {{"."$column_name"."}} >
        </div> 
     </div>
   </div>

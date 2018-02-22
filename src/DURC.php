@@ -205,9 +205,34 @@ class DURC{
             } else {
                 $formattedValue = 0;
             }
+        } else if ( $field_type == 'datetime' ) {
+            // Convert to SQL format for storage
+            $formattedValue = date( 'Y-m-d h:i:s', strtotime( $value ) );
         }
 
         return $formattedValue;
+    }
+
+    public static function formatForDisplay( $field_type, $field_name, $field_value, $is_list = false )
+    {
+        $formatted_value = '';
+
+        if ( DURC::mapColumnDataTypeToInputType( $field_type, $field_name, $field_value ) == 'boolean' ) {
+            if ( $field_value > 0 ) {
+                if ( $is_list ) {
+                    $formatted_value = '✔'; // If we are in the list view, display a checkmark
+                } else {
+                    $formatted_value = 'checked';
+                }
+            }
+        } else if ( $field_type == 'datetime' ) {
+            $formatted_value = date( config( 'durc.date_format' ).' '.config( 'durc.time_format' ), strtotime( $field_value ) );
+        } else {
+            $formatted_value = $field_value;
+        }
+
+        return $formatted_value;
+
     }
 
         public static   $column_type_map = [

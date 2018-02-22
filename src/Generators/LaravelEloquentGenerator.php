@@ -36,48 +36,33 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
                 $gen_string = DURC::get_gen_string();
 
-		//possible created_at field names... 
-		//in reverse order of priority. we pick the last one.
-		$valid_created_at_fields = [
-			'creation_date',
-			'created_at_date',
-			'createdAt', //Sequlize style
-			'created_at',
-			];
-
-		//possible updated_at field names... 
-		//in reverse order of priority. we pick the last one.
-                $valid_updated_at_fields = [
-                        'update_date',
-                        'update_at_date',
-                        'updated_date',
-                        'updated_at_date',
-			'updated_at',
-			'updatedAt', //Sequlize style
-                        'update_at',
-                        ];
 
 
 		$updated_at_code = null;	
-		$created_at_code = null;	
-		
-		foreach($valid_created_at_fields as $this_possible_created_at){
-			if(isset($fields[$this_possible_created_at])){
-				//we found our created_at variable..
-				$created_at_code = "const CREATED_AT = '$this_possible_created_at'"; 	
-			}
-		}	
-		foreach($valid_updated_at_fields as $this_possible_updated_at){
-			if(isset($fields[$this_possible_updated_at])){
-				//we found our created_at variable..
-				$updated_at_code = "const UPDATED_AT = '$this_possible_updated_at'"; 	
-			}
-		}	
+		$created_at_code = null;
+
+        $this_possible_created_at = self::get_possible_created_at( $fields );
+        if ( $this_possible_created_at !== false ) {
+            //we found our created_at variable..
+            $created_at_code = "const CREATED_AT = '$this_possible_created_at';";
+        } else {
+            $created_at_code = "const CREATED_AT = null;";
+        }
+
+        $this_possible_updated_at = self::get_possible_updated_at( $fields );
+		if ( $this_possible_updated_at !== false ) {
+            //we found our created_at variable..
+            $updated_at_code = "const UPDATED_AT = '$this_possible_updated_at';";
+		} else {
+            $updated_at_code = "const UPDATED_AT = null;";
+        }
 
 		//we should do more logic to support dateformat laravel here...
 
-
-		if(is_null($updated_at_code) || is_null($created_at_code)){ //we must have both...
+        $timestamp_code = "public \$timestamps = true;";
+		if($this_possible_updated_at === false &&
+            $this_possible_created_at === false ){
+		    // We don't have either timestamp
 			$timestamp_code = "public \$timestamps = false;";
 			$updated_at_code = '//DURC NOTE: did not find updated_at and created_at fields for this model' ."\n";
 			$created_at_code = '';

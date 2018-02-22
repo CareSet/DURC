@@ -22,8 +22,6 @@ class DURCModel extends Model{
 		return($this->fresh($this->DURC_selfish_with));
 	}
 
-
-
 	public static function getNameField(){
 	
 		$my_class = get_called_class();

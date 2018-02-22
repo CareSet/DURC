@@ -34,7 +34,6 @@ composer.lock
 
 #DG specific
 */config/*
-config/*
 */cache/*
 cache/*
 */log/*
