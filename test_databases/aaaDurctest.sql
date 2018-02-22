@@ -147,26 +147,50 @@ UNLOCK TABLES;
 --
 -- Table structure for table `booleantest`
 --
-LOCK TABLES `booleantest` WRITE;
-CREATE TABLE `booleantest` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `test_boolean`;
+
+CREATE TABLE `test_boolean` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `label` varchar(255) NOT NULL,
   `is_something` varchar(255) NOT NULL,
   `has_something` varchar(255) NOT NULL,
   `is_something2` tinyint(4) DEFAULT NULL,
   `has_something2` tinyint(4) DEFAULT NULL,
-  `has_something3` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-UNLOCK TABLES;
+  `has_something3` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `booleantest`
 --
 
-INSERT INTO `booleantest` (`id`, `label`, `is_something`, `has_something`, `is_something2`, `has_something2`, `has_something3`) VALUES
+LOCK TABLES `test_boolean` WRITE;
+INSERT INTO `test_boolean` (`id`, `label`, `is_something`, `has_something`, `is_something2`, `has_something2`, `has_something3`) VALUES
 (1, 'Test checkbox', 'yes', '1', 1, 0, 1),
 (2, 'Test checkbox', '2', 'no', 0, 2, 0);
+UNLOCK TABLES;
 
+--
+-- Table structure for table `test_created_only`
+--
+DROP TABLE IF EXISTS `test_created_only`;
+
+CREATE TABLE `test_created_only` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `test_created_only`
+--
+
+LOCK TABLES `test_created_only` WRITE;
+INSERT INTO `test_created_only` (`id`, `name`, `created_at`) VALUES
+(1, 'Test 1', '2018-02-22 00:00:00'),
+(2, 'Test 2', '2018-02-21 00:00:00');
+UNLOCK TABLES;
 
 --
 -- Table structure for table `comment`

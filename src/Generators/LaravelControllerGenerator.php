@@ -32,6 +32,16 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 		//terrible idea. Forces contstant git changes for no actual code change.
                 $gen_string = DURC::get_gen_string();
 
+        // Write the hidden fields
+        $hidden_fields_array_code = "\tprotected static \$hidden_fields_array = [\n";
+        $hiddenFields = config( 'durc.hidden_fields' );
+        foreach ( $hiddenFields as $hiddenField ) {
+            if ( self::has_field( $fields, $hiddenField ) ) {
+                $hidden_fields_array_code .= "\t\t'$hiddenField',\n";
+            }
+        }
+        $hidden_fields_array_code .= "\n\t];\n";
+
 		$others = [];
 		if(!is_null($belongs_to)){
 			foreach($belongs_to as $rel => $belongs_to_data){
@@ -39,76 +49,34 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 			}
 		}
 
-		$with_summary_array_code = "\t\t\$with_summary_array = [];\n";;
+		$with_summary_array_code = "\t\t\$with_summary_array = [];\n";
 		foreach($others as $rel => $table_type){
 			//why does this fail?
 			$with_summary_array_code .= "\t\t\$with_summary_array[] = \"$rel:id,\".\App\\$table_type::getNameField();\n";
 			//$with_summary_array_code .= "\t\t\$with_summary_array[] = '$rel';\n";
 		}
-		
-
-
-
-		//possible created_at field names... 
-		//in reverse order of priority. we pick the last one.
-		$valid_created_at_fields = [
-			'creation_date',
-			'created_at_date',
-			'createdAt', //Sequlize style
-			'created_at',
-			];
-
-		//possible updated_at field names... 
-		//in reverse order of priority. we pick the last one.
-                $valid_updated_at_fields = [
-                        'update_date',
-                        'update_at_date',
-                        'updated_date',
-                        'updated_at_date',
-			'updated_at',
-			'updatedAt', //Sequlize style
-                        'update_at',
-                        ];
-
-
-		$updated_at_code = null;	
-		$created_at_code = null;	
-		
-		foreach($valid_created_at_fields as $this_possible_created_at){
-			if(isset($fields[$this_possible_created_at])){
-				//we found our created_at variable..
-				$created_at_code = "const CREATED_AT = '$this_possible_created_at'"; 	
-			}
-		}	
-		foreach($valid_updated_at_fields as $this_possible_updated_at){
-			if(isset($fields[$this_possible_updated_at])){
-				//we found our created_at variable..
-				$updated_at_code = "const UPDATED_AT = '$this_possible_updated_at'"; 	
-			}
-		}	
-
-		//we should do more logic to support dateformat laravel here...
-
-
-		if(is_null($updated_at_code) || is_null($created_at_code)){ //we must have both...
-			$timestamp_code = "public \$timestamps = false;";
-			$updated_at_code = '//DURC NOTE: did not find updated_at and created_at fields for this model' ."\n";
-			$created_at_code = '';
-		}
-
 
 		$parent_class_name = "$class_name";
 
 		$parent_file_name = "$parent_class_name"."Controller.php";	
 		$child_file_name = "$class_name"."Controller.php";	
 
-	$field_update_from_request = '';
-	foreach($fields as $field_data){
-			$this_field = $field_data['column_name'];
-			$data_type = $field_data['data_type'];
-			$field_update_from_request .= "		\$tmp_$class_name"."->$this_field = DURC::formatForStorage( '$this_field', '$data_type', \$request->$this_field ); \n";
-	}	
-	$field_update_from_request .= "		\$tmp_$class_name"."->save();\n";
+		$possible_updated_at_field = self::get_possible_updated_at( $fields );
+		$possible_created_at_field = self::get_possible_created_at( $fields );
+        $field_update_from_request = '';
+        foreach($fields as $field_data){
+            $this_field = $field_data['column_name'];
+
+            // Don't write explicit variable assignments for timestamps
+            if ( $possible_updated_at_field == $this_field ||
+                $possible_created_at_field == $this_field ) {
+                continue;
+            }
+
+            $data_type = $field_data['data_type'];
+            $field_update_from_request .= "		\$tmp_$class_name"."->$this_field = DURC::formatForStorage( '$this_field', '$data_type', \$request->$this_field ); \n";
+        }
+        $field_update_from_request .= "		\$tmp_$class_name"."->save();\n";
 
 
 		$parent_class_text = "<?php
@@ -127,6 +95,7 @@ class $class_name"."Controller extends DURCController
 
 	public \$view_data = [];
 
+$hidden_fields_array_code
 
 	public function getWithArgumentArray(){
 		
@@ -148,7 +117,35 @@ $with_summary_array_code
 			\$return_me[\$key] = \$value;
         	}
 
-		//collapse joined data..
+		//collapse and format joined data..
+		\$return_me_data = [];
+        foreach(\$return_me['data'] as \$data_i => \$data_row){
+                foreach(\$data_row as \$key => \$value){
+                        if(is_array(\$value)){
+                                foreach(\$value as \$lowest_key => \$lowest_data){
+                                        //then this is a loaded attribute..
+                                        //lets move it one level higher...
+
+                                        if ( isset( $class_name::\$field_type_map[\$lowest_key] ) ) {
+                                            \$field_type = $class_name::\$field_type_map[ \$lowest_key ];
+                                            \$return_me_data[\$data_i][\$key .'_id_DURClabel'] = DURC::formatForDisplay( \$field_type, \$lowest_key, \$lowest_data, true );
+                                        } else {
+                                            \$return_me_data[\$data_i][\$key .'_id_DURClabel'] = \$lowest_data;
+                                        }
+                                }
+                        }
+
+                        if ( isset( $class_name::\$field_type_map[\$key] ) ) {
+                            \$field_type = $class_name::\$field_type_map[ \$key ];
+                            \$return_me_data[\$data_i][\$key] = DURC::formatForDisplay( \$field_type, \$key, \$value, true );
+                        } else {
+                            \$return_me_data[\$data_i][\$key] = \$value;
+                        }
+                }
+        }
+        \$return_me['data'] = \$return_me_data;
+		
+		
                 foreach(\$return_me['data'] as \$data_i => \$data_row){
                         foreach(\$data_row as \$key => \$value){
                                 if(is_array(\$value)){
@@ -339,6 +336,15 @@ $with_summary_array_code
 	}
 
 	\$this->view_data['csrf_token'] = csrf_token();
+	
+	
+	foreach ( $class_name::\$field_type_map as \$column_name => \$field_type ) {
+        // If this field name is in the configured list of hidden fields, do not display the row.
+        \$this->view_data[\"{\$column_name}_row_class\"] = '';
+        if ( in_array( \$column_name, self::\$hidden_fields_array ) ) {
+            \$this->view_data[\"{\$column_name}_row_class\"] = 'd-none';
+        }
+    }
 
 	if(\$$class_name"."->exists){	//we will not have old data if this is a new object
 
@@ -347,13 +353,11 @@ $with_summary_array_code
 
 		//put the contents into the view...
 		foreach(\$$class_name"."->toArray() as \$key => \$value){
-			if ( DURC::mapColumnDataTypeToInputType( \$$class_name::\$field_type_map[\$key], \$key, \$value ) == 'boolean' ) {
-                if ( \$value > 0 ) {
-                    \$this->view_data[ \$key . '_checkbox' ] = 'checked';
-                }
+			if ( isset( $class_name::\$field_type_map[\$key] ) ) {
+                \$field_type = $class_name::\$field_type_map[ \$key ];
+                \$this->view_data[\$key] = DURC::formatForDisplay( \$field_type, \$key, \$value );
             } else {
-
-                \$this->view_data[ \$key ] = \$value;
+                \$this->view_data[\$key] = \$value;
             }
 		}
 

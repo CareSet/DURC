@@ -18,6 +18,9 @@ class DURCServiceProvider extends ServiceProvider
 
     public function register()
     {
+        // Load the durc config file and merge it with the user's
+        $this->mergeConfigFrom( base_path( 'vendor/careset/durc/config/durc.php' ), 'durc' );
+
             $this->commands([
                 DURCCommand::class,
                 DURCMineCommand::class,
@@ -31,7 +34,8 @@ class DURCServiceProvider extends ServiceProvider
                 require base_path( 'routes/web.durc.php' );
             }
 
-            if ( file_exists( base_path( 'routes/durc_test.php' ) ) ) {
+            if ( config( 'durc.use_durctest_route' ) == true  &&
+                file_exists( base_path( 'routes/durc_test.php' ) ) ) {
                 require base_path( 'routes/durc_test.php' );
             }
         });
