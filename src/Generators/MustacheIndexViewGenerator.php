@@ -76,7 +76,7 @@ $paging_widget = "
 			<a href='{{first_page_url}}' aria-controls='table_$class_name' data-dt-idx='0' tabindex='0' class='page-link'>First</a>
 		</li>
 		<li class='paginate_button page-item {{prev_page_class}}'>
-			<a href={{prev_page_url}}' aria-controls='table_$class_name' data-dt-idx='1' tabindex='0' class='page-link'>Previous</a>
+			<a href='{{prev_page_url}}' aria-controls='table_$class_name' data-dt-idx='1' tabindex='0' class='page-link'>Previous</a>
 		</li>
 		<li class='paginate_button page-item active'>
 			<a href='#' aria-controls='table_$class_name' data-dt-idx='2' tabindex='0' class='page-link'>{{current_page}}</a>
