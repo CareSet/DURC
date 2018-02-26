@@ -14,6 +14,10 @@ class DURCServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        $this->publishes([
+            __DIR__.'/../assets/js' => public_path('js'),
+            __DIR__.'/../assets/css' => public_path('css'),
+        ], 'public');
     }
 
     public function register()

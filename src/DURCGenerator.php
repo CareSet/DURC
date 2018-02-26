@@ -32,6 +32,16 @@ abstract class DURCGenerator{
         'update_at',
     ];
 
+    protected static $valid_deleted_at_fields = [
+        'deleted_date',
+        'delete_at_date',
+        'deleted_date',
+        'deleted_at_date',
+        'deleted_at',
+        'deletedAt', //Sequlize style
+        'deleted_at',
+    ];
+
 
     //Run only once at the beginning of generation
 	abstract public static function start(
@@ -71,30 +81,29 @@ abstract class DURCGenerator{
         return $found;
     }
 
-    protected static function get_possible_created_at( $fields ) {
-        $created_at_field = false;
-        foreach(self::$valid_created_at_fields as $this_possible_created_at) {
-            if ( self::has_field( $fields, $this_possible_created_at ) === true ) {
-                //we found our created_at variable..
-                $created_at_field = $this_possible_created_at;
+    private static function get_possible_field( $valid_fields, $possible_fields )
+    {
+        $found_field = false;
+        foreach($valid_fields as $this_possible) {
+            if ( self::has_field( $possible_fields, $this_possible ) === true ) {
+                //we found our field.
+                $found_field = $this_possible;
                 break;
             }
         }
 
-        return $created_at_field;
+        return $found_field;
+    }
+
+    protected static function get_possible_created_at( $fields ) {
+        return self::get_possible_field( self::$valid_created_at_fields, $fields );
     }
 
     protected static function get_possible_updated_at( $fields ) {
-        $updated_at_field = false;
-        foreach(self::$valid_updated_at_fields as $this_possible_updated_at){
-            if ( self::has_field( $fields, $this_possible_updated_at ) === true){
-                //we found our updated_at variable..
-                $updated_at_field = $this_possible_updated_at;
-                break;
-            }
-        }
-
-        return $updated_at_field;
+        return self::get_possible_field( self::$valid_updated_at_fields, $fields );
     }
 
+    protected static function get_possible_deleted_at( $fields ) {
+        return self::get_possible_field( self::$valid_deleted_at_fields, $fields );
+    }
 }

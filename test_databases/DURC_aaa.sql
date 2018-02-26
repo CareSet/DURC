@@ -192,6 +192,9 @@ INSERT INTO `test_created_only` (`id`, `name`, `created_at`) VALUES
 (2, 'Test 2', '2018-02-21 00:00:00');
 UNLOCK TABLES;
 
+
+
+
 --
 -- Table structure for table `comment`
 --

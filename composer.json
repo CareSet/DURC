@@ -33,6 +33,9 @@
 		"CareSet\\DURC\\": "src/"
 	}
     },
+    "post-update-cmd": [
+      "php artisan vendor:publish --tag=public"
+    ],
 	"extra": {
 		"laravel": {
 			"providers": [

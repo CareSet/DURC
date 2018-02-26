@@ -57,8 +57,6 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
             $updated_at_code = "const UPDATED_AT = null;";
         }
 
-		//we should do more logic to support dateformat laravel here...
-
         $timestamp_code = "public \$timestamps = true;";
 		if($this_possible_updated_at === false &&
             $this_possible_created_at === false ){
@@ -67,6 +65,16 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 			$updated_at_code = '//DURC NOTE: did not find updated_at and created_at fields for this model' ."\n";
 			$created_at_code = '';
 		}
+
+		$soft_delete_code = null;
+        $soft_delete_code_use_statememt = null;
+        $soft_delete_code_use_trait = null;
+        $this_possible_deleted_at = self::get_possible_deleted_at( $fields );
+		if ( $this_possible_deleted_at !== false ) {
+            $soft_delete_code_use_statememt = "use Illuminate\Database\Eloquent\SoftDeletes;";
+            $soft_delete_code_use_trait = "use SoftDeletes;\n";
+            $soft_delete_code = "protected \$dates = ['$this_possible_deleted_at'];\n";
+        }
 
 
 		$parent_class_name = "$class_name";
@@ -183,7 +191,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 		$parent_class_code = "<?php
 
 namespace $model_namespace\DURC\Models;
-
+$soft_delete_code_use_statememt
 use CareSet\DURC\DURCModel;
 /*
 	Note this class was auto-generated from 
@@ -199,6 +207,7 @@ $database.$table by DURC.
 
 class $parent_class_name extends DURCModel{
 
+    $soft_delete_code_use_trait
         // the datbase for this model
         protected \$table = '$database.$table';
 
@@ -210,6 +219,8 @@ class $parent_class_name extends DURCModel{
 	$timestamp_code
 	$updated_at_code
 	$created_at_code
+	
+	$soft_delete_code
 
 	//for many functions to work, we need to be able to do a lookup on the field_type and get back the MariaDB/MySQL column type.
 	static \$field_type_map = [

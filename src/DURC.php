@@ -207,7 +207,9 @@ class DURC{
             }
         } else if ( $field_type == 'datetime' ) {
             // Convert to SQL format for storage
-            $formattedValue = date( 'Y-m-d h:i:s', strtotime( $value ) );
+            if ( !empty($value) ) {
+                $formattedValue = date( 'Y-m-d h:i:s', strtotime( $value ) );
+            }
         }
 
         return $formattedValue;
@@ -226,7 +228,11 @@ class DURC{
                 }
             }
         } else if ( $field_type == 'datetime' ) {
-            $formatted_value = date( config( 'durc.date_format' ).' '.config( 'durc.time_format' ), strtotime( $field_value ) );
+            if ( !empty($field_value) ) {
+                $formatted_value = date( config( 'durc.date_format' ) . ' ' . config( 'durc.time_format' ), strtotime( $field_value ) );
+            } else {
+                $formatted_value= '';
+            }
         } else {
             $formatted_value = $field_value;
         }
