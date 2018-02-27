@@ -13,7 +13,27 @@ use CareSet\DURC\DURC;
 	This class hosts those shared functions... 
 
 */
-class DURCMustacheGenerator{
+class DURCMustacheGenerator extends DURCGenerator {
+
+    public static function start(
+        $db_config,
+        $squash,
+        $URLroot){
+        //does nothing need to comply with abstract class
+    }
+
+    public static function finish(
+        $db_config,
+        $squash,
+        $URLroot){
+        //does nothing need to comply with abstract class
+    }
+
+
+
+    public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
+        //does nothing need to comply with abstract class
+    }
 
 	//basically a router for the other functions 
 	public static function _get_field_html($URLroot,$field_data){

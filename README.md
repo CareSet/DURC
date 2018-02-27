@@ -45,6 +45,14 @@ If you are using .env file, fill out the mysql database parameters with a user t
 access to all of the mined tables. You need to copy your .env.example into a new .env file if there is no
 .env file in the root of your project
 
+#### Publish DURC Public assets
+Since composer doesn't run package scripts, you need to publish DURC's public assets manually, or add this script to 
+your root level composer.json file.
+
+```
+php artisan vendor:publish --tag=public
+```
+
 ## Available commands
 
 **Command:**

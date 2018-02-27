@@ -98,8 +98,8 @@ h1 {
 <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-<script src="/js/DURC/anytime.5.2.0.js"></script>
-<script src="/js/DURC/anytimez.5.2.0.js"></script>
+<script src="/js/anytime.5.2.0.js"></script>
+<script src="/js/form.js"></script>
   </head>
   <body>
     <header>

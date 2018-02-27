@@ -404,9 +404,18 @@ $with_summary_array_code
      * @return \Illuminate\Http\Response
      */
     public function destroy($class_name \$$class_name){
-	\$main_template_name = \$this->_getMainTemplateName();
-	\$durc_template_results = view('DURC.$class_name.destroy');        
-	return view(\$main_template_name,['content' => \$durc_template_results]);
+	    return $class_name::destroy( \${$class_name}->id );  
+    }
+    
+    /**
+     * Restore the specified resource from storage.
+     * @param  \$id ID of resource
+     * @return \Illuminate\Http\Response
+     */
+    public function restore( \$id )
+    {
+        \$$class_name = $class_name::withTrashed()->find(\$id)->restore();
+        return redirect(\"/DURC/test_soft_delete/\$id\")->with('status', 'Data Restored!');
     }
 }
 ";

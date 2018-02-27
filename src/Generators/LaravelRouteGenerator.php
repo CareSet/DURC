@@ -56,6 +56,10 @@ this will be automatically overwritten by future DURC runs.
 
         public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/'){
 
+            $soft_delete_route = null;
+            if ( self::get_possible_deleted_at( $fields ) !== false ) {
+                $soft_delete_route = "Route::get(\"$URLroot"."$class_name/restore/{id}\", '$class_name"."Controller@restore');";
+            }
 
 		//we just need to add a little snippet to the route file..
 		$file = LaravelRouteGenerator::getFile();
@@ -67,6 +71,7 @@ Route::resource(\"$URLroot$class_name\", '$class_name"."Controller');
 Route::get(\"$URLroot"."json/$class_name/{"."$class_name"."_id}\", '$class_name"."Controller@jsonone');
 Route::get(\"$URLroot"."json/$class_name/\", '$class_name"."Controller@jsonall');
 Route::get(\"$URLroot"."searchjson/$class_name/\", '$class_name"."Controller@search');
+$soft_delete_route
 ";
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);
