@@ -158,7 +158,7 @@ h1 {
 	} 
 
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
 
 
 		//we just need to add a little snippet to the route file..

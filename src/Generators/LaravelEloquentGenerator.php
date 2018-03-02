@@ -29,14 +29,21 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 
-	public static function run_generator($class_name,$database,$table,$fields,$has_many,$belongs_to, $many_many, $many_through, $squash, $URLroot){
+	public static function run_generator($class_name,$database,$table,$fields,$has_many,$has_one = null, $belongs_to, $many_many, $many_through, $squash, $URLroot){
 
 
 		$model_namespace = 'App';
 
                 $gen_string = DURC::get_gen_string();
 
-
+        // If the primary key is named other than id, then we need to tell Eloquent
+        $primary_key_code = null;
+        foreach ( $fields as $field ) {
+            if ( $field['is_primary_key'] === true &&
+                $field['column_name'] !== 'id' ) {
+                $primary_key_code = "protected \$primaryKey = '{$field['column_name']}';";
+            }
+        }
 
 		$updated_at_code = null;	
 		$created_at_code = null;
@@ -118,6 +125,37 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	}else{
 		$has_many_code .= "\n\t\t\t//DURC did not detect any has_many relationships";
 	}
+
+        $has_one_code = "\n//DURC HAS_ONE SECTION\n";
+        if(!is_null($has_one)){
+            foreach($has_one as $other_table_name => $relate_details){
+
+                $prefix = $relate_details['prefix'];
+                $type = $relate_details['type'];
+                $from_table = $relate_details['from_table'];
+                $from_db = $relate_details['from_db'];
+                $from_column = $relate_details['from_column'];
+
+                $local_key = 'id';
+
+                $used_functions[$other_table_name] = $other_table_name;
+
+                $has_one_code .= "
+/**
+*	get all the $other_table_name for this $parent_class_name
+*/
+	public function $other_table_name(){
+		return \$this->hasOne('$model_namespace\\$type','$from_column','$local_key');
+	}
+
+";
+
+                //now lets sort out what should go in $with
+                $with_array[$other_table_name] = 'from one';
+            }
+        }else{
+            $has_one_code .= "\n\t\t\t//DURC did not detect any has_one relationships";
+        }
 
 	
 	$belongs_to_code = "\n//DURC BELONGS_TO SECTION\n";
@@ -207,6 +245,8 @@ $database.$table by DURC.
 
 class $parent_class_name extends DURCModel{
 
+    $primary_key_code
+
     $soft_delete_code_use_trait
         // the datbase for this model
         protected \$table = '$database.$table';
@@ -246,6 +286,8 @@ class $parent_class_name extends DURCModel{
 
 
 		$has_many_code
+		
+		$has_one_code
 
 		$belongs_to_code
 

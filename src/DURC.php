@@ -78,6 +78,7 @@ class DURC{
 	                		$tables[$column->TABLE_NAME][$column->COLUMN_NAME] = [
 						'column_name' => $column->COLUMN_NAME,
 						'data_type' => $column->DATA_TYPE,
+                        'is_primary_key' => ( $column->COLUMN_KEY === 'PRI' ) ? true : false,
 						'is_foreign_key' => false,
 						'is_linked_key' => false,
 						'foreign_db' => null,

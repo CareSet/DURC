@@ -54,7 +54,7 @@ this will be automatically overwritten by future DURC runs.
 
 	}//end start
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/'){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/'){
 
             $soft_delete_route = null;
             if ( self::get_possible_deleted_at( $fields ) !== false ) {

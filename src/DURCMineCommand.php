@@ -76,7 +76,7 @@ class DURCMineCommand extends Command{
 				$is_linked_key = $column_data['is_linked_key'];
 				$foreign_db = $column_data['foreign_db'];
 				$foreign_table = $column_data['foreign_table'];
-
+                $is_primary_key = $column_data['is_primary_key'];
 
 				//we do not care about anything that does not have an '_id' at the end
 				$last_three = substr($column_name,-3);
@@ -109,6 +109,7 @@ class DURCMineCommand extends Command{
 						$new_struct[$this_db][strtolower($this_table_name)]['column_data'][$column_index]['foreign_db'] = $other_db;
 						$new_struct[$this_db][strtolower($this_table_name)]['column_data'][$column_index]['foreign_table'] = $other_table;	
 
+
 						//Has Many Calculation
                     				$has_many_tmp = [
                             				'prefix' => $relationship,
@@ -122,7 +123,13 @@ class DURCMineCommand extends Command{
 						}else{
                     					$has_many_key = $relationship.'_'.$my_object_name;
 						}
-                    				$new_struct[$other_db][strtolower($other_table_tag)]['has_many'][$has_many_key] = $has_many_tmp;
+
+						// If our foreign key is a primary key, we only have ONE
+						$has_relationship_type = 'has_many';
+                    	if ( $is_primary_key === true ) {
+                            $has_relationship_type = 'has_one';
+                        }
+						$new_struct[$other_db][strtolower($other_table_tag)][$has_relationship_type][$has_many_key] = $has_many_tmp;
 
 
 

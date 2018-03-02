@@ -28,7 +28,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
 
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/'){
 
 		$debug = false;
 		if($debug){
@@ -119,32 +119,40 @@ $soft_delete_alert_code
 ";
 
 
-       if(!is_null($has_many)){
-		$template_text .= "
+       if(!is_null($has_many) || !is_null($has_one)) {
+           $template_text .= "
 <br>
 <div class='card'>
   <div class='card-header'>
-    Has Many Relationships
+    Relationships
   </div>
 <div class='card-body'>
 ";
-		//this section will add the tables of other-side data to the edit view for a given object.
-                foreach($has_many as $full_relation => $relate_details){
+           //this section will add the tables of other-side data to the edit view for a given object.
+           $has_relationships = [];
+           if (!is_null($has_many)) {
+               $has_relationships['Has many']= $has_many;
+           }
+           if ( !is_null( $has_one ) ) {
+               $has_relationships['Has one'] = $has_one;
+           }
+           foreach ( $has_relationships as $label =>  $has_this ) {
+           foreach ( $has_this as $full_relation => $relate_details ) {
 
-			$full_relation_snake = snake_case($full_relation); //because this is how eloquent converts relations with eager loading..
-			
+               $full_relation_snake = snake_case( $full_relation ); //because this is how eloquent converts relations with eager loading..
 
-                        $prefix = $relate_details['prefix'];
-                        $type = $relate_details['type'];
-                        $from_table = $relate_details['from_table'];
-                        $from_db = $relate_details['from_db'];
-                        $from_column = $relate_details['from_column'];
-			$other_columns = $relate_details['other_columns'];
 
-			$template_text .= "
+               $prefix = $relate_details[ 'prefix' ];
+               $type = $relate_details[ 'type' ];
+               $from_table = $relate_details[ 'from_table' ];
+               $from_db = $relate_details[ 'from_db' ];
+               $from_column = $relate_details[ 'from_column' ];
+               $other_columns = $relate_details[ 'other_columns' ];
+
+               $template_text .= "
 <div class='card'>
   <div class='card-header'>
-    $full_relation_snake ( <a href='$URLroot$type/'>see all</a> )
+    $label $full_relation_snake ( <a href='$URLroot$type/'>see all</a> )
 {{^$full_relation_snake}}
 (no values)
 {{/$full_relation_snake}}
@@ -155,14 +163,14 @@ $soft_delete_alert_code
 <thead>
 <tr>
 ";
-		
-			//generates the headers to the table
-			foreach($other_columns as $this_item){
-				$column_name = $this_item['column_name'];
-				$template_text .= "\t\t\t<th> $column_name </th>\n";
-			}
 
-$template_text .= "
+               //generates the headers to the table
+               foreach ( $other_columns as $this_item ) {
+                   $column_name = $this_item[ 'column_name' ];
+                   $template_text .= "\t\t\t<th> $column_name </th>\n";
+               }
+
+               $template_text .= "
 </tr>
 </thead>
 <tbody>
@@ -171,25 +179,25 @@ $template_text .= "
 		{{#.}}
 ";
 
-			//generates the looping rows of data using mostache tags...
-			foreach($other_columns as $this_item){
-				$column_name = $this_item['column_name'];
-				if($column_name == 'id'){	
-					//this is the link back to the edit view for this data item..
-					$template_text .= "\t\t\t<td><a href='$URLroot$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
-				}else{
-					$last_three = substr($column_name,-3);
-					if($last_three == '_id'){
-						//then this is an ID and perhaps there is a _DURClabel that goes with it!!
-						$template_text .= "\t\t\t<td>{{"."$column_name"."_DURClabel}} ({{"."$column_name"."}}) </td>";
-					}else{
-						//normal data no link
-						$template_text .= "\t\t\t<td>{{"."$column_name"."}}</td>\n";
-					}
-				}
-			}		
+               //generates the looping rows of data using mostache tags...
+               foreach ( $other_columns as $this_item ) {
+                   $column_name = $this_item[ 'column_name' ];
+                   if ( $this_item['is_primary_key'] ) {
+                       //this is the link back to the edit view for this data item..
+                       $template_text .= "\t\t\t<td><a href='$URLroot$type/{{" . "$column_name" . "}}'>{{" . "$column_name" . "}}</a></td>\n";
+                   } else {
+                       $last_three = substr( $column_name, -3 );
+                       if ( $last_three == '_id' ) {
+                           //then this is an ID and perhaps there is a _DURClabel that goes with it!!
+                           $template_text .= "\t\t\t<td>{{" . "$column_name" . "_DURClabel}} ({{" . "$column_name" . "}}) </td>";
+                       } else {
+                           //normal data no link
+                           $template_text .= "\t\t\t<td>{{" . "$column_name" . "}}</td>\n";
+                       }
+                   }
+               }
 
-			$template_text .= "		
+               $template_text .= "		
 		{{/.}}
 	</tr>
 {{/$full_relation_snake}}
@@ -199,7 +207,8 @@ $template_text .= "
 <br>
 ";
 
-		}//end foreach has_many
+           }//end foreach has_many
+       }
 
 	$template_text .= "</div></div> <!--end has many card-->";
 	}//end if null has_many

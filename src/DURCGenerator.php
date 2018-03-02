@@ -62,6 +62,7 @@ abstract class DURCGenerator{
 							$table,
 							$fields,
 							$has_many,
+							$has_one,
 							$belongs_to,
 							$many_many, 
 							$many_through, 
