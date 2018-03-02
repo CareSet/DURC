@@ -144,6 +144,28 @@ INSERT INTO `book` VALUES (1,'Hacking Healthcare - A guide to Meaningful Use','2
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+--
+-- Table structure for table `bookextended`
+--
+
+CREATE TABLE `bookextended` (
+  `book_id` int(11) NOT NULL,
+  `ISBN` varchar(255) NOT NULL,
+  `local_isle` varchar(255) NOT NULL,
+  `local_shelf` int(255) NOT NULL,
+  PRIMARY KEY (`book_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `bookextended`
+--
+LOCK TABLES `bookextended` WRITE;
+INSERT INTO `bookextended` (`book_id`, `ISBN`, `local_isle`, `local_shelf`) VALUES
+(1, '12345', 'L', 112),
+(2, '66666', 'R', 32);
+UNLOCK TABLES;
+
 --
 -- Table structure for table `booleantest`
 --

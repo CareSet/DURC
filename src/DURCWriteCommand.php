@@ -70,6 +70,7 @@ class DURCWriteCommand extends Command{
 				}
 
 				$has_many = $this->_get_or_null($table_data,'has_many');
+                $has_one = $this->_get_or_null($table_data,'has_one');
 				$belongs_to = $this->_get_or_null($table_data,'belongs_to');
 				$many_many = $this->_get_or_null($table_data,'many_many');
 				$many_through = $this->_get_or_null($table_data,'many_through');
@@ -82,6 +83,14 @@ class DURCWriteCommand extends Command{
 						$has_many[$table_type]['other_columns'] = $config[$from_db][strtolower($from_table)]['column_data'];
 					}
 				}
+
+                if(is_array($has_one)){
+                    foreach($has_one as $table_type => $has_one_data){
+                        $from_db = $has_one_data['from_db'];
+                        $from_table = $has_one_data['from_table'];
+                        $has_one[$table_type]['other_columns'] = $config[$from_db][strtolower($from_table)]['column_data'];
+                    }
+                }
 
 				//we need to have access to all of the information from the other table as we consider many to many relations...
 				if(is_array($belongs_to)){
@@ -98,6 +107,7 @@ class DURCWriteCommand extends Command{
 						$this_table,
 						$column_data,
 						$has_many,
+						$has_one,
 						$belongs_to,
 						$many_many,
 						$many_through,
