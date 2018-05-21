@@ -241,9 +241,7 @@ $('.select2_$column_name').select2({
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
-	<textarea id='$column_name' name='$column_name'>
-	{{"."$column_name"."}} 
-	</textarea>
+	<textarea id='$column_name' name='$column_name'>{{"."$column_name"."}}</textarea>
     </div>
   </div>
 <script>
