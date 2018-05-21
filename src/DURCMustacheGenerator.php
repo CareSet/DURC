@@ -48,9 +48,10 @@ class DURCMustacheGenerator extends DURCGenerator {
 		$input_type = DURC::mapColumnDataTypeToInputType( $data_type, $column_name );
 
 		switch($input_type){
-            case 'boolean':
-                return self::_get_checkbox_field_html( $field_data );
-                break;
+            		case 'boolean':
+                		return self::_get_checkbox_field_html( $field_data );
+                	break;
+
 			case 'number':
 				if($is_linked_key){
 					return(self::_get_select2_field_html($URLroot,$field_data));
@@ -62,15 +63,22 @@ class DURCMustacheGenerator extends DURCGenerator {
 			case 'date':
 				return(self::_get_date_field_html($field_data));
 			break;
+
 			case 'datetime':
 				return(self::_get_datetime_field_html($field_data));
 			break;
+
 			case 'time':
 			case 'text':
 			case 'file':
-				
 				return(self::_get_text_field_html($field_data));
 			break;
+
+
+			case 'markdown':
+				return(self::_get_markdown_field_html($field_data));
+			break;
+
 
 
 		}
@@ -215,6 +223,39 @@ $('.select2_$column_name').select2({
 		return($field_html);
 
 	}
+
+
+
+	//returns bootstrap 4 decorated mustache template for a markdown field
+	public static function _get_markdown_field_html($field_data){
+
+		$column_name = $field_data['column_name'];
+		$data_type = $field_data['data_type'];
+		$is_foreign_key = $field_data['is_foreign_key'];
+		$is_linked_key = $field_data['is_linked_key'];
+		$foreign_db = $field_data['foreign_db'];
+		$foreign_table = $field_data['foreign_table'];
+
+	
+		$field_html = "
+  <div class='form-group row {{"."$column_name"."_row_class}}'>
+    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
+    <div class='col-sm-10'>
+	<textarea id='$column_name' name='$column_name'>
+	{{"."$column_name"."}} 
+	</textarea>
+    </div>
+  </div>
+<script>
+	new SimpleMDE({
+		element: document.getElementById('$column_name'),
+		spellChecker: true,
+	});
+</script>
+";
+		return($field_html);
+	}
+
 
 	//returns bootstrap 4 decorated mustache template for a text field
 	public static function _get_text_field_html($field_data){

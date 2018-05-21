@@ -49,6 +49,9 @@ class MustacheMenuGenerator extends \CareSet\DURC\DURCGenerator {
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="/css/DURC/anytime.5.2.0.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/DURC/simplemde.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
 
 <style>
 body {
@@ -97,8 +100,8 @@ h1 {
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-<script src="/js/anytime.5.2.0.js"></script>
+<script src="/js/DURC/anytime.5.2.0.js"></script>
+<script src="/js/DURC/simplemde.min.js"></script>
 <script src="/js/form.js"></script>
   </head>
   <body>

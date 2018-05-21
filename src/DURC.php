@@ -174,16 +174,45 @@ class DURC{
      */
 	public static function mapColumnDataTypeToInputType( $data_type, $column_name = '' )
     {
+
+	$l_data_type = strtolower($data_type);
+
+
         $input_type = '';
-        if ( ( strtolower( $data_type ) == 'tinyint' ||
-                strtolower( $data_type ) == 'boolean' ) &&
-            ( strpos( $column_name, 'has_', 0 ) === 0 ||
-            strpos( $column_name, 'is_', 0 ) === 0 ) ) {
+        if ( ( 		$l_data_type == 'tinyint' ||
+                	$l_data_type == 'boolean' ) 
+		&&
+            		( strpos( $column_name, 'has_', 0 ) === 0 ||
+            		strpos( $column_name, 'is_', 0 ) === 0 ) ) {
             // It's a boolean type if is starts with has_ or is_ and is a
             // tinyint or boolean type
             $input_type = 'boolean';
         } else {
-            $input_type = self::$column_type_map[strtolower($data_type)]['input_type'];
+		//lets see if this is markdown.. it is if its a character type,
+		//and if it ends in '_markdown' or some other equviilent string
+		if(	$l_data_type == 'text' ||
+			$l_data_type == 'varchar'){
+		
+			$its_markdown = false;	
+			$markdown_strings = [ '_markdown', '_markdn' ];
+			foreach($markdown_strings as $this_markdown_string){
+				//this "does it end with" logic comes from
+				//https://stackoverflow.com/a/36569425/144364
+				$doesItEndWithMarkdown = substr_compare( $column_name, $this_markdown_string , -strlen( $this_markdown_string ) ) === 0;
+				if($doesItEndWithMarkdown){
+					$its_markdown =  true;
+				}
+			}
+			if($its_markdown){
+				$input_type = 'markdown';
+			}else{
+            			$input_type = self::$column_type_map[strtolower($data_type)]['input_type'];
+			}
+		}else{
+			//if we get here then we are not using a special syntax to mark the field
+			//we are just using the standard mapping at the end of this file
+            		$input_type = self::$column_type_map[strtolower($data_type)]['input_type'];
+		}
         }
 
         return $input_type;
