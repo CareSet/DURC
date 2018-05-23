@@ -27,7 +27,7 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
         }
 
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/'){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/',$create_table_sql){
 
 		//terrible idea. Forces contstant git changes for no actual code change.
                 $gen_string = DURC::get_gen_string();

@@ -29,7 +29,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 
-	public static function run_generator($class_name,$database,$table,$fields,$has_many,$has_one = null, $belongs_to, $many_many, $many_through, $squash, $URLroot){
+	public static function run_generator($class_name,$database,$table,$fields,$has_many,$has_one = null, $belongs_to, $many_many, $many_through, $squash, $URLroot,$create_table_sql){
 
 
 		$model_namespace = 'App';
@@ -291,6 +291,12 @@ class $parent_class_name extends DURCModel{
 
 		$belongs_to_code
 
+//Originating SQL Schema
+/*
+$create_table_sql
+*/
+
+
 }//end of $parent_class_name";
 
 
@@ -402,6 +408,13 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 
 
 $child_class_code .= "
+
+
+// Last generated SQL Schema
+/*
+$create_table_sql
+*/
+
 	//your stuff goes here..
 	
 

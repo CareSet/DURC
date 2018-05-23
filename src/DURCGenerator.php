@@ -67,7 +67,8 @@ abstract class DURCGenerator{
 							$many_many, 
 							$many_through, 
 							$squash,
-							$URLroot);
+							$URLroot,
+							$create_table_sql);
 
 
     protected static function has_field( $fields, $column_name ){

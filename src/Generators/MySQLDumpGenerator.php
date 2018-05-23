@@ -29,7 +29,7 @@ class MySQLDumpGenerator extends \CareSet\DURC\DURCGenerator {
 
 	}//end start
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/'){
+        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/',$create_table_sql){
 
 
 		$user = env('DB_USERNAME',false);

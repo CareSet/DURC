@@ -197,6 +197,11 @@ class DURCMineCommand extends Command{
 				$create_table_sql = str_replace($replace_me,$replace_with,$create_table_sql);
 				//now $create_table_sql references the specific database that this was sourced from...
 
+				//we do not want the code to change, just because there is new data...
+				//which makes the schema AUTOINCREMENT change...
+
+				$create_table_sql = preg_replace("/AUTO_INCREMENT=(\d+)/",'',$create_table_sql);
+				
 				$new_struct[$this_db][$my_object_name]['create_table_sql'] = $create_table_sql;
 			}
 
