@@ -124,6 +124,9 @@ version of DURC, they are all db syntax that we intended to support.
 * if the fields beigns with is_ then it is regarded as being a boolean and will be replaced with a checkbox or a radio button...
 * If there is a table with a field called [entity]_id that is a primary key, DURC will resolve it to a has-one relationship with the [entity] table
 * DURC natively understands markdown fields. if you name a field with an ending of _markdown it will automatically display a markdown editory in the DURC screen
+* Naming a field something_code will turn the DURC html screen into a code editor and will use the [CodeMirror](http://codemirror.net/) to create a code editor. So ending a text or varchar column type with with _sql_code will serve to change that field into a code editor using the sql mode. 
+* The _code postfix strings are usually by the CodeMirror mode name, but with some changes documented in [CodeSyntaxPostFix.md](./CodeSyntaxPostFix.md)
+
 
 Laravel Eloquent expects the 
 
