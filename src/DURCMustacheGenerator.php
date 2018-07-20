@@ -79,7 +79,9 @@ class DURCMustacheGenerator extends DURCGenerator {
 				return(self::_get_markdown_field_html($field_data));
 			break;
 
-
+			case 'code':
+				return(self::_get_code_field_html($field_data));
+			break;
 
 		}
 
@@ -224,6 +226,59 @@ $('.select2_$column_name').select2({
 
 	}
 
+	//returns bootstrap 4 decorated mustache template for a code field powered by codemirror
+	public static function _get_code_field_html($field_data){
+
+		$column_name = $field_data['column_name'];
+		$data_type = $field_data['data_type'];
+		$is_foreign_key = $field_data['is_foreign_key'];
+		$is_linked_key = $field_data['is_linked_key'];
+		$foreign_db = $field_data['foreign_db'];
+		$foreign_table = $field_data['foreign_table'];
+
+		$is_found_code_mode = false;
+		$code_mode_cdn_html = '';
+		$right_code_mode = '';
+		$matching_code_mode = '';
+	        foreach(DURC::$code_language_map as $this_code_stub => $this_code_mode){
+
+              		$this_code_string = "_$this_code_stub"."_code";
+
+             		$doesItEndWithCode = substr_compare( $column_name, $this_code_string , -strlen( $this_code_string ) ) === 0;
+                      	if($doesItEndWithCode){
+				$is_found_code_mode = true;
+				$code_mode_cdn_html = "<script src='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/mode/$this_code_mode/$this_code_mode.js'></script>";
+				$matching_code_mode = $this_code_mode;
+				$right_code_mode = ", mode: '$matching_code_mode'";
+                        }
+
+                }
+	
+		if($matching_code_mode == 'sql'){
+			$right_code_mode = ", mode: 'text/x-sql'"; //do we get better results passing in a specific mime type? yes we do.
+		}
+		
+
+	
+		$field_html = "
+  <div class='form-group row {{"."$column_name"."_row_class}}'>
+    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
+    <div class='col-sm-10'>
+	<textarea id='$column_name' name='$column_name'>{{"."$column_name"."}}</textarea>
+    </div>
+  </div>
+	$code_mode_cdn_html
+<script>
+
+      var editor_$column_name = CodeMirror.fromTextArea(document.getElementById('$column_name'), {
+        lineNumbers: true 
+	$right_code_mode
+      });
+
+</script>
+";
+		return($field_html);
+	}
 
 
 	//returns bootstrap 4 decorated mustache template for a markdown field

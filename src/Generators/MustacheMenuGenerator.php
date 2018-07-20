@@ -36,6 +36,7 @@ class MustacheMenuGenerator extends \CareSet\DURC\DURCGenerator {
 		$header = '<!doctype html>
 <html lang="en">
   <head>
+    <!-- Generated from DURC/src/Generators/MustacheMenuGenerator.php  -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -51,7 +52,7 @@ class MustacheMenuGenerator extends \CareSet\DURC\DURCGenerator {
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 <link rel="stylesheet" href="/css/DURC/simplemde.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/codemirror.css">
 
 <style>
 body {
@@ -103,6 +104,7 @@ h1 {
 <script src="/js/DURC/anytime.5.2.0.js"></script>
 <script src="/js/DURC/simplemde.min.js"></script>
 <script src="/js/form.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/codemirror.js"></script>
   </head>
   <body>
     <header>

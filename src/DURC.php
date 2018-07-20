@@ -200,18 +200,27 @@ class DURC{
 				//https://stackoverflow.com/a/36569425/144364
 				$doesItEndWithMarkdown = substr_compare( $column_name, $this_markdown_string , -strlen( $this_markdown_string ) ) === 0;
 				if($doesItEndWithMarkdown){
-					$its_markdown =  true;
+					return('markdown');
 				}
 			}
-			if($its_markdown){
-				$input_type = 'markdown';
-			}else{
-            			$input_type = self::$column_type_map[strtolower($data_type)]['input_type'];
+
+			//now we do the same thing with all of the code strings
+			foreach(self::$code_language_map as $this_code_stub => $this_code_mode){
+
+				$this_code_string = "_$this_code_stub"."_code";
+
+				$doesItEndWithCode = substr_compare( $column_name, $this_code_string , -strlen( $this_code_string ) ) === 0;
+				if($doesItEndWithCode){
+					return('code');
+				}
+
 			}
+
+            		return(self::$column_type_map[strtolower($data_type)]['input_type']);
 		}else{
 			//if we get here then we are not using a special syntax to mark the field
 			//we are just using the standard mapping at the end of this file
-            		$input_type = self::$column_type_map[strtolower($data_type)]['input_type'];
+            		return(self::$column_type_map[strtolower($data_type)]['input_type']);
 		}
         }
 
