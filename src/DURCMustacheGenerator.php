@@ -271,7 +271,8 @@ $('.select2_$column_name').select2({
 <script>
 
       var editor_$column_name = CodeMirror.fromTextArea(document.getElementById('$column_name'), {
-        lineNumbers: true 
+        lineNumbers: true,
+	theme: 'lesser-dark' 
 	$right_code_mode
       });
 
