@@ -264,7 +264,9 @@ $('.select2_$column_name').select2({
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
     <div class='col-sm-10'>
-	<textarea id='$column_name' name='$column_name'>{{"."$column_name"."}}</textarea>
+	<textarea style='height: auto;'  id='$column_name' name='$column_name'>{{"."$column_name"."}}
+
+</textarea>
     </div>
   </div>
 	$code_mode_cdn_html
@@ -272,6 +274,7 @@ $('.select2_$column_name').select2({
 
       var editor_$column_name = CodeMirror.fromTextArea(document.getElementById('$column_name'), {
         lineNumbers: true,
+	viewportMargin: Infinity,
 	theme: 'lesser-dark' 
 	$right_code_mode
       });
