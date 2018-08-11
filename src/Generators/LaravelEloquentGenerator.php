@@ -302,9 +302,10 @@ $create_table_sql
 
 
 		//STARTING CHILD CLASS
+$php_signature_token = "/*PHPFILE_SIGNATURE_WILL_GO_HERE*/";
 
 		$child_class_code = "<?php
-
+$php_signature_token
 namespace $model_namespace;
 /*
 	$class_name: controls $database.$table
@@ -433,6 +434,12 @@ $create_table_sql
 		$child_file = $app_path.$child_file_name;
 		$parent_file = $durc_app_path.$parent_file_name;
 
+		if(file_exists($child_file)){
+			$current_file_contents = file_get_contents($child_file);
+			$current_file_signature = 
+		}
+
+
 		if(!file_exists($child_file) || $squash){ //overwrite if it does not exist or if we are squashing
 			//we will only create this file the first time...
 			//so getting here means that it does not exist, this is the first creation pass.
@@ -447,9 +454,51 @@ $create_table_sql
 
 	}//end generate function
 
+/*
+	Gets the "signature" of a php file. 
+	Which is just an md5 of everything after the first "namespace" command at the top of the file..
+	This allows us to put comments before the namesspace that will not be considered in the md5 math..
+	Which is where we put the signature... This allows us to add the signature to the file... without changing the signature of the file
+	This allows us to use the files themselves as a database of whether they have changed...
+	Accepts the entire contents of a the php file as a string as an argument
+	returns an md5 signature. 
+*/
+	public static function calculate_signature_from_phpfile_string($phpfile_string){
+		$phpfile_by_line = explode("\n",$phpfile_string);
 
+		$has_seen_namespace = false;
+		while( ! $has_seen_namespace){
+			$this_line = array_shift($phpfile_by_line);
+			if(strpos('namespace ',$this_line) !== false){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
+				$has_seen_namespace = true; //lets not take any more lines from $phpfile_by_line;
+			}
+		}
 
+		$php_file_to_sign = implode("\n",$phpfile_by_line); //we want to ignore the <?php ... up to the namespace part...
 
+		$signature = md5($php_file_to_sign);
+
+		return($signature);
+	}	
+
+	public static function get_signature_from_signed_phpfile_string($phpfile_string){
+	
+		$phpfile_by_line = explode("\n",$phpfile_string);
+
+		$has_seen_namespace = false;
+		while( ! $has_seen_namespace){
+			$this_line = array_shift($phpfile_by_line);
+			if(strpos('namespace ',$this_line) !== false){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
+				$has_seen_namespace = true; //lets not take any more lines from $phpfile_by_line;
+			}
+		}
+
+		$php_file_to_sign = implode("\n",$phpfile_by_line); //we want to ignore the <?php ... up to the namespace part...
+
+		$signature = md5($php_file_to_sign);
+		
+
+	}
 
 
 
