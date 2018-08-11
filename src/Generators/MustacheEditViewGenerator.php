@@ -48,16 +48,49 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
         if ( self::get_possible_deleted_at( $fields ) !== false ) {
 
             // There is a deleted_at field, so add soft delete functionality to view
-            $soft_delete_alert_code = "<div id='delete-success-alert' class='alert alert-success' role='alert' style='display: none;'>
+            $delete_alert_code = "<div id='delete-success-alert' class='alert alert-success' role='alert' style='display: none;'>
                 You have successfully deleted this record. <a href='$URLroot$class_name/restore/{{id}}' data-id='{{id}}' data-controller='$class_name' class='do-recover btn btn-secondary'>Undo</a>
             </div>";
 
-            $soft_delete_code = "<div class='form-group row'>
+            $delete_code = "
+{{#is_new}}
+<form action='$URLroot$class_name' method='POST'>
+{{/is_new}}
+
+{{^is_new}}
+<form action='$URLroot$class_name/{{id}}' method='POST'>
+    <input type='hidden' name='_method' value='PUT'>
+{{/is_new}}
+
+<div class='form-group row'>
               <div class='col-sm-12 text-right'>
               <button type='button' data-id='{{id}}' data-controller='$class_name' class='do-soft-delete btn btn-outline-danger'>Delete</button>
               </div>
+            </div>
+</form>
+";
+        }else{
+		//we are only supporting hard deletes
+            // There is a deleted_at field, so add soft delete functionality to view
+            $delete_alert_code = "<div id='delete-success-alert' class='alert alert-success' role='alert' style='display: none;'>
+                You have successfully deleted this record. This was a hard delete, no going back. But you can save again if you want.. 
             </div>";
-        }
+
+            $delete_code = "<div class='form-group row'>
+              <div class='col-sm-12 text-right'>
+
+<form action='$URLroot$class_name/{{id}}' method='POST'>
+    	<input type='hidden' name='_method' value='DELETE'>
+	<input type='hidden' name='_token' value='{{csrf_token}}'>
+
+              <button type='button' data-id='{{id}}' data-controller='$class_name' class='do-soft-delete btn btn-outline-danger'>Hard Delete $class_name</button>
+</form>
+              </div>
+            </div>";
+
+
+
+	}
 
                 $gen_string = DURC::get_gen_string();
 
@@ -68,7 +101,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 </div>
 {{/has_session_status}}
 
-$soft_delete_alert_code
+$delete_alert_code
 
 {{#is_new}}
 <form action='$URLroot$class_name' method='POST'>
@@ -111,11 +144,12 @@ $soft_delete_alert_code
     </div>
   </div>
   
-  $soft_delete_code
-
 </fieldset>
 </div></div>
 </form>
+<br>
+  $delete_code
+
 ";
 
 
