@@ -5,7 +5,7 @@ namespace CareSet\DURC;
 class Signature{
 
 
-	public static $is_debug = 1;
+	public static $is_debug = 0; //0 turns debugging off, 1 shows md5 comparisions, 2 shows the actual files being compared
 
 /*
 	This function accepts an unsigned php file as a single string
@@ -30,7 +30,8 @@ class Signature{
 
 		$php_file_after_namespace = implode("\n",$phpfile_by_line); //we want to ignore the <?php ... up to the namespace part...
 
-		file_put_contents(__DIR__."/signed_phpfile_string.last",$php_file_after_namespace);
+		//for debugging
+		//file_put_contents(__DIR__."/signed_phpfile_string.last",$php_file_after_namespace);
 
 		$signed_php_file = "<?php
 /*
@@ -70,7 +71,7 @@ $php_file_after_namespace";
 		$php_file_to_sign = "$namespace_line\n" .implode("\n",$phpfile_by_line); //we want to ignore the <?php ... up to the namespace part...
 	
 		//echo "\n\n#####\n$php_file_to_sign\n####\n";
-		file_put_contents(__DIR__."/calculating_signature_one.last",$php_file_to_sign);
+		//file_put_contents(__DIR__."/calculating_signature_one.last",$php_file_to_sign);
 
 		$signature = md5($php_file_to_sign);
 		if(self::$is_debug > 1){
