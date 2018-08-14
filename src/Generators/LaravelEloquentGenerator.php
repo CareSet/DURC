@@ -8,6 +8,7 @@
 namespace CareSet\DURC\Generators;
 
 use CareSet\DURC\DURC;
+use CareSet\DURC\Signature;
 
 class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
@@ -431,6 +432,10 @@ $create_table_sql
 			}
 		}
 
+
+		//get a signed version of the code that we want to save
+		$signed_child_class_code = Signature::sign_phpfile_string($child_class_code); 
+
 		$child_file = $app_path.$child_file_name;
 		$parent_file = $durc_app_path.$parent_file_name;
 
@@ -443,7 +448,7 @@ $create_table_sql
 		if(!file_exists($child_file) || $squash){ //overwrite if it does not exist or if we are squashing
 			//we will only create this file the first time...
 			//so getting here means that it does not exist, this is the first creation pass.
-			file_put_contents($child_file,$child_class_code);
+			file_put_contents($child_file,$signed_child_class_code);
 		}
 
 		//but we always overwrite the parent class with the auto-generated stuff..

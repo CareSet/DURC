@@ -8,6 +8,7 @@
 namespace CareSet\DURC\Generators;
 
 use CareSet\DURC\DURC;
+use CareSet\DURC\Signature;
 
 class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
@@ -522,13 +523,17 @@ class $class_name"."Controller extends DURCParentController
 			}
 		}
 
+		//get a signed version of the child controller...
+		$signed_child_class_text = Signature::sign_phpfile_string($child_class_text);
+
+
 		$child_file = $app_path.$child_file_name;
 		$parent_file = $durc_app_path.$parent_file_name;
 
 		if(!file_exists($child_file) || $squash){
 			//we will only create this file the first time...
 			//so getting here means that it does not exist, this is the first creation pass.
-			file_put_contents($child_file,$child_class_text);
+			file_put_contents($child_file,$signed_child_class_text);
 		}
 
 		//but we always overwrite the parent class with the auto-generated stuff..
@@ -538,6 +543,10 @@ class $class_name"."Controller extends DURCParentController
 
 
 	}//end generate function
+
+
+
+
 
 
 
