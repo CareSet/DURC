@@ -5,7 +5,7 @@ namespace CareSet\DURC;
 class Signature{
 
 
-	public static $is_debug = true;
+	public static $is_debug = 1;
 
 /*
 	This function accepts an unsigned php file as a single string
@@ -22,7 +22,7 @@ class Signature{
 		$has_seen_namespace = false;
 		while( ! $has_seen_namespace){
 			$this_line = array_shift($phpfile_by_line);
-			if(strpos('namespace ',$this_line) !== false){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
+			if(strpos($this_line,'namespace ') === 0){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
 				$has_seen_namespace = true; //lets not take any more lines from $phpfile_by_line;
 				$namespace_line = $this_line;
 			}
@@ -30,14 +30,15 @@ class Signature{
 
 		$php_file_after_namespace = implode("\n",$phpfile_by_line); //we want to ignore the <?php ... up to the namespace part...
 
+		file_put_contents(__DIR__."/signed_phpfile_string.last",$php_file_after_namespace);
+
 		$signed_php_file = "<?php
 /*
-Note: because this file was signed, everyting orignally placed before the namespace line has been replaced... with this comment ;)
-FILE_SIGNATURE=$signature_to_add
+Note: because this file was signed, everyting orignally placed before the name space line has been replaced... with this comment ;)
+FILE_SIG=$signature_to_add
 */
 $namespace_line
-$php_file_aftter_namespace
-";
+$php_file_after_namespace";
 
 		return($signed_php_file);
 		
@@ -59,18 +60,25 @@ $php_file_aftter_namespace
 		while( ! $has_seen_namespace){
 			$this_line = array_shift($phpfile_by_line);
 			if(strlen($this_line) > 0){
-				if(strpos($this_line,'namespace ') !== false){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
+				if(strpos($this_line,'namespace ') === 0){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
 					$has_seen_namespace = true; //lets not take any more lines from $phpfile_by_line;
+					$namespace_line = $this_line;
 				}
 			}
 		}
 
-		$php_file_to_sign = implode("\n",$phpfile_by_line); //we want to ignore the <?php ... up to the namespace part...
+		$php_file_to_sign = "$namespace_line\n" .implode("\n",$phpfile_by_line); //we want to ignore the <?php ... up to the namespace part...
 	
-		echo "\n\n#####\n$php_file_to_sign\n####\n";
-
+		//echo "\n\n#####\n$php_file_to_sign\n####\n";
+		file_put_contents(__DIR__."/calculating_signature_one.last",$php_file_to_sign);
 
 		$signature = md5($php_file_to_sign);
+		if(self::$is_debug > 1){
+			echo "calculate_signature_from_phpfile_string: Calculating signature from phpfile string... was given \n######\n$phpfile_string\n##########\n";		
+			echo "calculate_signature_from_phpfile_string: Signing the following \n######\n$php_file_to_sign\n##########\n";		
+			echo "calculate_signature_from_phpfile_string: got signature:$signature\n";
+		}
+
 
 		return($signature);
 	}	
@@ -81,14 +89,14 @@ $php_file_aftter_namespace
 		$recalculated_signature = self::calculate_signature_from_phpfile_string($signed_phpfile_string);
 		$in_file_signature = self::get_signature_from_signed_phpfile_string($signed_phpfile_string);
 
-		if(self::$is_debug){
-			echo "Comparing in_file_signature of $in_file_signature to the calculated signature of $recalculated_signature\n";
+		if(self::$is_debug > 0){
+			echo "has_signed_file_changed: Comparing in_file_signature of $in_file_signature to the calculated signature of $recalculated_signature\n";
 		}
 
 		if($in_file_signature == $recalculated_signature){
-			return(true);
-		}else{
 			return(false);
+		}else{
+			return(true);
 		}
 
 	}
@@ -105,7 +113,9 @@ $php_file_aftter_namespace
 		$is_done_looking = false;
 		while( ! $is_done_looking){
 			$this_line = array_shift($phpfile_by_line);
-			if(strpos('FILE_SIGNATURE=',$this_line) !== false){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
+			//echo "Working on \n\t\t$this_line\n";
+			if(strpos($this_line,'FILE_SIG=') !== false){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
+			//	echo "found FILE_SIG=\n";
 				$is_done_looking = true; //because we found the signature
 				$exploded  = explode('=',trim($this_line));
 				if(isset($exploded[1])){
@@ -113,12 +123,17 @@ $php_file_aftter_namespace
 					if(strlen($possible_signature) == 32){
 						//then this is an md5, lets return it..
 						$return_me = $possible_signature;
+					}else{
+			//			echo "not 32 chars\n";
+						$return_me = false;
 					}
 				}else{
+			//		echo "explode failed \n";
 					$return_me = false;
 				}
 			}
-			if(strpos('namespace ',$this_line) !== false){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
+			if(strpos($this_line,'namespace ') === 0){ //we are looking go the line like 'namespace App;' or 'namespace ThatAwesomeNamespace;' or whatever.. 
+			//	echo "Got to namespace\n";
 				$is_done_looking = true; //because there is no signature to find..
 				$return_me = false;
 			}
@@ -128,7 +143,6 @@ $php_file_aftter_namespace
 
 	}
 
-	
 
 
 }//end class

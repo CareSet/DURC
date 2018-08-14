@@ -436,7 +436,7 @@ $create_table_sql
 
 		if(file_exists($child_file)){
 			$current_file_contents = file_get_contents($child_file);
-			$current_file_signature = 
+	//		$current_file_signature =  
 		}
 
 
