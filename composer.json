@@ -23,7 +23,7 @@
 	"illuminate/support": "^5.5.0",
         "nesbot/carbon": "^1.22",
         "proai/laravel-handlebars": "~1.6",
-        "sebastian/diff": "^2.0"
+        "sebastian/diff": "^1.0"
     },
     "psr-4": {
             "App\\": "app/",
