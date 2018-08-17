@@ -1,5 +1,6 @@
 {
     "name": "careset/durc",
+    "version": "0.0.1",
     "description": "DURC is reverse CRUD",
     "type": "library",
     "license": "MIT",
@@ -23,7 +24,7 @@
 	"illuminate/support": "^5.5.0",
         "nesbot/carbon": "^1.22",
         "proai/laravel-handlebars": "~1.6",
-        "sebastian/diff": "^1.0"
+        "sebastian/diff": "^3.0"
     },
     "psr-4": {
             "App\\": "app/",
