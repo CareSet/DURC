@@ -23,8 +23,8 @@ This project only works on Laravel 5.5
 Publish the configuration of DURC and laravel-handlebars
 
 ```bash
-$ php artisan vendor:publish --provider="CareSet\DURC\DURCServiceProvider"
-$ php artisan vendor:publish --tag=laravel-handlebars
+php artisan vendor:publish --provider="CareSet\DURC\DURCServiceProvider"
+php artisan vendor:publish --tag=laravel-handlebars
 ```
 ### Add stuff to your config files
 
