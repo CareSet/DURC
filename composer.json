@@ -1,6 +1,5 @@
 {
     "name": "careset/durc",
-    "version": "0.0.1",
     "description": "DURC is reverse CRUD",
     "type": "library",
     "license": "MIT",
