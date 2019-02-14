@@ -149,7 +149,7 @@ $('.select2_$column_name').select2({
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
-<img src='/images/DURC/ic_today_black_24dp_1x.png'> 
+<img src='/css/ic_today_black_24dp_1x.png'> 
 </button>
 <button type='button' class='btn btn-primary' id='$today_id'> Today and Now</button>
 
@@ -197,7 +197,7 @@ $('.select2_$column_name').select2({
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
-<img src='/images/DURC/ic_today_black_24dp_1x.png'> 
+<img src='/css/ic_today_black_24dp_1x.png'> 
 </button>
 <button type='button' class='btn btn-primary' id='$today_id'> Today and Now</button>
 

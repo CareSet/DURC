@@ -48,9 +48,9 @@ class MustacheMenuGenerator extends \CareSet\DURC\DURCGenerator {
     <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="/css/DURC/anytime.5.2.0.css">
+<link rel="stylesheet" href="/css/anytime.5.2.0.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-<link rel="stylesheet" href="/css/DURC/simplemde.css">
+<link rel="stylesheet" href="/css/simplemde.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/codemirror.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/theme/lesser-dark.css">
@@ -102,8 +102,8 @@ h1 {
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-<script src="/js/DURC/anytime.5.2.0.js"></script>
-<script src="/js/DURC/simplemde.min.js"></script>
+<script src="/js/anytime.5.2.0.js"></script>
+<script src="/js/simplemde.min.js"></script>
 <script src="/js/form.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/codemirror.js"></script>
   </head>
