@@ -94,6 +94,7 @@ h1 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
+  .AnyTime-pkr { z-index: 9999 }
 </style>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
