@@ -202,6 +202,10 @@ $with_summary_array_code
 		//what is the field I should be searching
                 \$search_fields = $class_name"."::getSearchFields();
 
+		//sometimes there is an image field that contains the url of an image
+		//but this is typically null
+		$img_field = $class_name"."::getImgField();
+
 		\$where_sql = '';
 		\$or = '';
 		foreach(\$search_fields as \$this_field){
@@ -228,6 +232,15 @@ $with_summary_array_code
 				}
 			}
 			\$tmp['text'] = \$tmp_text;
+
+			if(!is_null(\$image_field)){ //then there is an image for this entry
+				if(isset(\$this_row[\$image_field])){
+					\$tmp['img_url'] = \$this_row[\$image_field];
+				}else{	
+					\$tmp['img_url'] = null;
+				}
+			}
+
 			\$real_array[] = \$tmp;
 		}
 

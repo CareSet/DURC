@@ -22,6 +22,7 @@ class DURCModel extends Model{
 		return($this->fresh($this->DURC_selfish_with));
 	}
 
+	//return the field that is the best field for using to name this object for the purposes of drop-downs and select widgets etc etc..
 	public static function getNameField(){
 	
 		$my_class = get_called_class();
@@ -119,7 +120,59 @@ class DURCModel extends Model{
 		}
 	}
 
-	//get the value of the fields that shoudl allow for searches on this object
+	//static function to get the right image field
+	public static function getImgField(){
+
+		$my_class = get_called_class();
+		//the field 'select_img_url' is the top of the priority list if it exists..
+		if(isset($my_class::$field_type_map['select_img_url'])){
+			return('select_img_url');
+		}
+		
+		$hell_no = [
+			'id',
+			'password',
+			'passwd',
+			'pwd',
+			'updated_at',
+			'created_at',
+			'updated_dt',
+			'created_dt',
+			'updated_date',
+			'created_date',
+		];
+
+		$my_class = get_called_class();
+
+		
+		$label_field_stubs = [
+			'image_uri',
+			'image_url',
+			'img_uri',
+			'img_url',
+			];
+
+		//simply return the first matching field.. 
+		foreach($label_field_stubs as $this_stub){
+
+			//first use a field with 'name' in the string somewhere...
+			foreach($my_class::$field_type_map as $field => $field_type){
+				$input_type = DURC::$column_type_map[strtolower($field_type)]['input_type'];	
+				if(strpos(strtolower($field),$this_stub) !== false && $input_type == 'text'){
+					//then this is the first 'name' field with a varchar type. This is the winner.
+					return($field);
+				}
+			}
+		}
+
+		//then we do not have any img fields...
+		//lets return null  at  the default
+		return(null);	
+	
+
+	}
+
+	//get the value of the fields that should allow for searches on this object
 	public function _getBestSearchFields(){
 
 		$result = self::getSearchFields();
