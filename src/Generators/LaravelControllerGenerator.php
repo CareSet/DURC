@@ -204,7 +204,7 @@ $with_summary_array_code
 
 		//sometimes there is an image field that contains the url of an image
 		//but this is typically null
-		$img_field = $class_name"."::getImgField();
+		\$img_field = $class_name"."::getImgField();
 
 		\$where_sql = '';
 		\$or = '';
@@ -233,9 +233,9 @@ $with_summary_array_code
 			}
 			\$tmp['text'] = \$tmp_text;
 
-			if(!is_null(\$image_field)){ //then there is an image for this entry
-				if(isset(\$this_row[\$image_field])){
-					\$tmp['img_url'] = \$this_row[\$image_field];
+			if(!is_null(\$img_field)){ //then there is an image for this entry
+				if(isset(\$this_row[\$img_field])){
+					\$tmp['img_url'] = \$this_row[\$img_field];
 				}else{	
 					\$tmp['img_url'] = null;
 				}
