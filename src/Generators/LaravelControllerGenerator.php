@@ -234,6 +234,7 @@ $with_summary_array_code
 			\$tmp['text'] = \$tmp_text;
 
 			if(!is_null(\$img_field)){ //then there is an image for this entry
+				\$tmp['img_field'] = \$img_field;
 				if(isset(\$this_row[\$img_field])){
 					\$tmp['img_url'] = \$this_row[\$img_field];
 				}else{	
