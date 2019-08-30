@@ -38,22 +38,92 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 
 		if($is_debug){
 			$structure_comment = "/*\n";
-			$structure_comment .= "//fields:\n";
+			$structure_comment .= "\n//fields:\n";
 			$structure_comment .= var_export($fields,true);
-			$structure_comment .= "//has_many\n";
+			$structure_comment .= "\n//has_many\n";
 			$structure_comment .= var_export($has_many,true);
-			$structure_comment .= "//has_one\n";
+			$structure_comment .= "\n//has_one\n";
 			$structure_comment .= var_export($has_one,true);
-			$structure_comment .= "//belongs_to\n";
+			$structure_comment .= "\n//belongs_to\n";
 			$structure_comment .= var_export($belongs_to,true);
-			$structure_comment .= "//many_many\n";
+			$structure_comment .= "\n//many_many\n";
 			$structure_comment .= var_export($many_many,true);
-			$structure_comment .= "//many_through\n";
+			$structure_comment .= "\n//many_through\n";
 			$structure_comment .= var_export($many_through,true);
-			$structure_comment .= "/*\n";	
+			$structure_comment .= "*\\\n";	
 		}else{
 			$structure_comment = '';
 		}
+
+		$select_us = [];
+		$joins = [];
+		$pre_sql_php = '';
+		$decoration_php = '';
+
+		foreach($fields as $field_index => $field_data){
+			
+			$select_us[$field_data['column_name']] = ['field' => "$table.".$field_data['column_name'],  'as' => $field_data['column_name']];
+		}
+		
+		
+		if(!is_null($belongs_to)){
+			$add_back = [];
+			foreach($belongs_to as $other_table => $other_table_contents){
+
+				//this is what we have for every table that our interneal something_id fields link to...
+				$prefix = $other_table_contents['prefix'];
+				$type = $other_table_contents['type'];
+				$to_table = $other_table_contents['to_table'];
+				$to_db = $other_table_contents['to_db'];
+				$local_key = $other_table_contents['local_key'];
+				$other_columns  = $other_table_contents['other_columns'];
+				
+				$pre_sql_php .= "\n\$$other_table"."_field = \App\\$type::getNameField();";	
+				
+				$decoration_php .= "
+\$$other_table"."_tmp = \$\$$other_table"."_field;
+if(isset(\$$other_table"."_tmp)){
+	\$row[\$$other_table"."_field] = \"<a target='_blank' href='/Zermelo/DURC_$other_table/\$$local_key'>\$$other_table"."_tmp</a>\";
+}
+";
+
+
+				$add_back[$local_key] = $select_us[$local_key]; //we still need to have the id!!! but at the end of the report!!
+				$select_us[$local_key] = [
+						'field' => "$to_table.\$$other_table"."_field",
+						'as' => "\$$other_table"."_field",
+					];
+
+				$joins[] = "
+LEFT JOIN $to_db.$to_table ON 
+	$to_table.id =
+	$table.$local_key
+";
+
+			}
+			//fold the identifiers back into the repoort (because we need them to link
+			foreach($add_back as $local_key => $to_add ){
+				$select_us[] = $to_add;
+			}
+		}
+		
+
+
+		$select_sql = '';
+		$c = '';
+		foreach($select_us as $select_index => $select_data){
+			$field = $select_data['field'];
+			$as = $select_data['as'];
+			$select_sql .= "$c $field AS $as\n";
+			$c = ',';
+		}
+		
+		$join_sql = '';
+		foreach($joins as $this_join){
+			$join_sql .= $this_join;
+		}
+
+
 
 		$report_class_name = "DURC_$class_name";
 
@@ -86,16 +156,25 @@ class $report_class_name extends AbstractTabularReport
 
         \$index = \$this->getCode();
 
+$pre_sql_php
+
+
         if(is_null(\$index)){
 
                 \$sql = \"
-SELECT * FROM $database.$table
+SELECT 
+$select_sql
+FROM $database.$table
+$join_sql
 \";
 
         }else{
 
                 \$sql = \"
-SELECT * FROM $database.$table WHERE id = \$index
+SELECT 
+$select_sql 
+FROM $database.$table 
+WHERE id = \$index
 \";
 
         }
@@ -113,10 +192,15 @@ SELECT * FROM $database.$table WHERE id = \$index
     public function MapRow(array \$row, int \$row_number) :array
     {
 
+$pre_sql_php
+
         extract(\$row);
 
         //link this row to its DURC editor
         \$row['id'] = \"<a href='/DURC/$class_name/\$id'>\$id</a>\";
+
+$decoration_php
+
 
         return \$row;
     }
@@ -147,9 +231,10 @@ SELECT * FROM $database.$table WHERE id = \$index
         return(1200); //twenty minutes by default
    }
 
+}
+
 $structure_comment
 
-}
 ?>";
 	
 	$signed_zermelo_report = Signature::sign_phpfile_string($report_php_code);
