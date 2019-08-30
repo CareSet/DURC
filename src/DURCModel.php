@@ -123,6 +123,8 @@ class DURCModel extends Model{
 	//static function to get the right image field
 	public static function getImgField(){
 
+		//return('bob');
+
 		$my_class = get_called_class();
 		//the field 'select_img_url' is the top of the priority list if it exists..
 		if(isset($my_class::$field_type_map['select_img_url'])){
@@ -145,21 +147,21 @@ class DURCModel extends Model{
 		$my_class = get_called_class();
 
 		
-		$label_field_stubs = [
-			'image_uri',
-			'image_url',
+		$img_field_stubs = [
 			'img_uri',
 			'img_url',
+			'image_uri',
+			'image_url',
 			];
 
 		//simply return the first matching field.. 
-		foreach($label_field_stubs as $this_stub){
+		foreach($img_field_stubs as $this_stub){
 
-			//first use a field with 'name' in the string somewhere...
+			//first use a field with 'img_url' (etc) in the string somewhere...
 			foreach($my_class::$field_type_map as $field => $field_type){
 				$input_type = DURC::$column_type_map[strtolower($field_type)]['input_type'];	
 				if(strpos(strtolower($field),$this_stub) !== false && $input_type == 'text'){
-					//then this is the first 'name' field with a varchar type. This is the winner.
+					//then this is the first 'img_url' (etc) field with a varchar type. This is the winner.
 					return($field);
 				}
 			}
