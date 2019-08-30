@@ -34,6 +34,27 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 
         public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/',$create_table_sql){
 
+		$is_debug = true;
+
+		if($is_debug){
+			$structure_comment = "/*\n";
+			$structure_comment .= "//fields:\n";
+			$structure_comment .= var_export($fields,true);
+			$structure_comment .= "//has_many\n";
+			$structure_comment .= var_export($has_many,true);
+			$structure_comment .= "//has_one\n";
+			$structure_comment .= var_export($has_one,true);
+			$structure_comment .= "//belongs_to\n";
+			$structure_comment .= var_export($belongs_to,true);
+			$structure_comment .= "//many_many\n";
+			$structure_comment .= var_export($many_many,true);
+			$structure_comment .= "//many_through\n";
+			$structure_comment .= var_export($many_through,true);
+			$structure_comment .= "/*\n";	
+		}else{
+			$structure_comment = '';
+		}
+
 		$report_class_name = "DURC_$class_name";
 
 	
@@ -125,6 +146,8 @@ SELECT * FROM $database.$table WHERE id = \$index
    public function howLongToCacheInSeconds(){
         return(1200); //twenty minutes by default
    }
+
+$structure_comment
 
 }
 ?>";
