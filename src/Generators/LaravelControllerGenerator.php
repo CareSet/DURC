@@ -231,7 +231,7 @@ $with_summary_array_code
 					\$tmp_text .=  \"\$data \";
 				}
 			}
-			\$tmp['text'] = \$tmp_text;
+			\$tmp['text'] = trim(\$tmp_text);
 
 			if(!is_null(\$img_field)){ //then there is an image for this entry
 				\$tmp['img_field'] = \$img_field;
