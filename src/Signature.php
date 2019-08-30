@@ -35,7 +35,7 @@ class Signature{
 
 		$signed_php_file = "<?php
 /*
-Note: because this file was signed, everything orignally placed before the name space line has been replaced... with this comment ;)
+Note: because this file was signed, everything originally placed before the name space line has been replaced... with this comment ;)
 FILE_SIG=$signature_to_add
 */
 $namespace_line
