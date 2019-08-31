@@ -60,20 +60,27 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 		$pre_sql_php = '';
 		$decoration_php = '';
 
-		foreach($fields as $field_index => $field_data){
-			
+		//to start, we presume that we will simply select for every data field in the array
+		foreach($fields as $field_index => $field_data){	
 			$select_us[$field_data['column_name']] = ['field' => "$table.".$field_data['column_name'],  'as' => $field_data['column_name']];
 		}
 		
-		
+		$i = 0;
+		$letters = range('A','Z');
 		if(!is_null($belongs_to)){
 			$add_back = [];
 			foreach($belongs_to as $other_table => $other_table_contents){
-
+				$i++; //for getting new letters..
 				//this is what we have for every table that our interneal something_id fields link to...
 				$prefix = $other_table_contents['prefix'];
+				if(is_null($prefix)){
+					$col_prefix = '';
+				}else{
+					$col_prefix = "$prefix"."_";
+				}
 				$type = $other_table_contents['type'];
 				$to_table = $other_table_contents['to_table'];
+				$to_table_alias = $letters[$i] ."_$to_table"; //we need reliable table aliases, even if we join to the same table again and again
 				$to_db = $other_table_contents['to_db'];
 				$local_key = $other_table_contents['local_key'];
 				$other_columns  = $other_table_contents['other_columns'];
@@ -83,32 +90,34 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 				$decoration_php .= "
 \$$other_table"."_tmp = \$\$$other_table"."_field;
 if(isset(\$$other_table"."_tmp)){
-	\$row[\$$other_table"."_field] = \"<a target='_blank' href='/Zermelo/DURC_$other_table/\$$local_key'>\$$other_table"."_tmp</a>\";
+	\$row[\$$other_table"."_field] = \"<a target='_blank' href='/Zermelo/DURC_$to_table/\$$local_key'>\$$other_table"."_tmp</a>\";
 }
 ";
 
 
+				//now we calculate how to modify the select_us fields to account for the fact that we would prefer
+				//to display the name fields of the objects on the other side of the links...
 				$add_back[$local_key] = $select_us[$local_key]; //we still need to have the id!!! but at the end of the report!!
 				$select_us[$local_key] = [
-						'field' => "$to_table.\$$other_table"."_field",
-						'as' => "\$$other_table"."_field",
+						'field' => "$to_table_alias.\$$other_table"."_field",
+						'as' => "$col_prefix\$$other_table"."_field",
 					];
 
 				$joins[] = "
-LEFT JOIN $to_db.$to_table ON 
-	$to_table.id =
+LEFT JOIN $to_db.$to_table AS $to_table_alias ON 
+	$to_table_alias.id =
 	$table.$local_key
 ";
 
 			}
-			//fold the identifiers back into the repoort (because we need them to link
+			//fold the id_fields (i.e. tag_id and person_id etc etc)  back into the repoort (because we need them for decorations)
 			foreach($add_back as $local_key => $to_add ){
 				$select_us[] = $to_add;
 			}
 		}
 		
 
-
+		//now we are doing the specific aliases for the SELECT portion of the SQL
 		$select_sql = '';
 		$c = '';
 		foreach($select_us as $select_index => $select_data){
@@ -118,6 +127,7 @@ LEFT JOIN $to_db.$to_table ON
 			$c = ',';
 		}
 		
+		//now we add all of the joins..
 		$join_sql = '';
 		foreach($joins as $this_join){
 			$join_sql .= $this_join;
@@ -174,7 +184,8 @@ $join_sql
 SELECT 
 $select_sql 
 FROM $database.$table 
-WHERE id = \$index
+$join_sql
+WHERE $table.id = \$index
 \";
 
         }
