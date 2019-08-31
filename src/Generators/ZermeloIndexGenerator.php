@@ -85,12 +85,13 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 				$local_key = $other_table_contents['local_key'];
 				$other_columns  = $other_table_contents['other_columns'];
 				
-				$pre_sql_php .= "\n\$$other_table"."_field = \App\\$type::getNameField();";	
+				$pre_sql_php .= "\n\$$to_table"."_field = \App\\$type::getNameField();";	
 				
 				$decoration_php .= "
-\$$other_table"."_tmp = \$\$$other_table"."_field;
+\$$other_table"."_tmp = '$col_prefix'.\$$to_table"."_field;
+\$$other_table"."_label = \$row[\$$other_table"."_tmp];
 if(isset(\$$other_table"."_tmp)){
-	\$row[\$$other_table"."_field] = \"<a target='_blank' href='/Zermelo/DURC_$to_table/\$$local_key'>\$$other_table"."_tmp</a>\";
+	\$row[\$$other_table"."_tmp] = \"<a target='_blank' href='/Zermelo/DURC_$to_table/\$$local_key'>\$$other_table"."_label</a>\";
 }
 ";
 
@@ -99,8 +100,8 @@ if(isset(\$$other_table"."_tmp)){
 				//to display the name fields of the objects on the other side of the links...
 				$add_back[$local_key] = $select_us[$local_key]; //we still need to have the id!!! but at the end of the report!!
 				$select_us[$local_key] = [
-						'field' => "$to_table_alias.\$$other_table"."_field",
-						'as' => "$col_prefix\$$other_table"."_field",
+						'field' => "$to_table_alias.\$$to_table"."_field",
+						'as' => "$col_prefix\$$to_table"."_field",
 					];
 
 				$joins[] = "
