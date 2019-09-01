@@ -60,6 +60,31 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 		$pre_sql_php = '';
 		$decoration_php = '';
 
+
+		$pre_sql_php = "
+	//get the local image field for this report... null if not found..
+	\$img_field_name = \App\\$class_name::getImgField();
+	if(isset(\$\$img_field_name)){
+		\$img_field = \$\$img_field_name;
+	}else{
+		\$img_field = null;
+	}
+";
+
+	$decoration_php .= "
+
+	if(isset(\$img_field)){  //is it set
+		if(strlen(\$img_field) > 0){ //and it is it really a url..
+			\$row[\$img_field_name] = \"<img width='300' src='\$img_field'>\";
+		}
+	}
+
+
+";
+
+
+
+
 		//to start, we presume that we will simply select for every data field in the array
 		foreach($fields as $field_index => $field_data){	
 			$select_us[$field_data['column_name']] = ['field' => "$table.".$field_data['column_name'],  'as' => $field_data['column_name']];
@@ -86,6 +111,7 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 				$other_columns  = $other_table_contents['other_columns'];
 				
 				$pre_sql_php .= "\n\$$to_table"."_field = \App\\$type::getNameField();";	
+				$pre_sql_php .= "\n\$$to_table"."_img_field = \App\\$type::getImgField();";	
 				
 				$decoration_php .= "
 \$$other_table"."_tmp = '$col_prefix'.\$$to_table"."_field;
@@ -93,6 +119,13 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 if(isset(\$$other_table"."_tmp)){
 	\$row[\$$other_table"."_tmp] = \"<a target='_blank' href='/Zermelo/DURC_$to_table/\$$local_key'>\$$other_table"."_label</a>\";
 }
+
+\$$other_table"."_img_tmp = '$col_prefix'.\$$to_table"."_img_field;
+if(isset(\$$other_table"."_img_tmp)){
+	\$row[\$$other_table"."_img_tmp] = \"<img width='200px' src='\$$other_table"."_img_tmp'>\";
+}
+
+
 ";
 
 
@@ -203,10 +236,11 @@ WHERE $table.id = \$index
     //decorate the results of the query with useful results
     public function MapRow(array \$row, int \$row_number) :array
     {
+	//we think it is safe to extract here because we are getting this from the DB and not a user directly..
+        extract(\$row);
 
 $pre_sql_php
 
-        extract(\$row);
 
         //link this row to its DURC editor
         \$row['id'] = \"<a href='/DURC/$class_name/\$id'>\$id</a>\";

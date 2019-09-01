@@ -121,6 +121,7 @@ class DURCModel extends Model{
 	}
 
 	//static function to get the right image field
+	//return null if we cannot find anything.
 	public static function getImgField(){
 
 		//return('bob');
