@@ -69,11 +69,15 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 	}else{
 		\$img_field = null;
 	}
+
+	\$joined_select_field_sql  = '';
+
+
 ";
 
 	$decoration_php .= "
 
-	if(isset(\$img_field)){  //is it set
+	if(isset(\$\$img_field_name)){  //is it set
 		if(strlen(\$img_field) > 0){ //and it is it really a url..
 			\$row[\$img_field_name] = \"<img width='300' src='\$img_field'>\";
 		}
@@ -90,7 +94,7 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 			$select_us[$field_data['column_name']] = ['field' => "$table.".$field_data['column_name'],  'as' => $field_data['column_name']];
 		}
 		
-		$i = 0;
+		$i = -1;
 		$letters = range('A','Z');
 		if(!is_null($belongs_to)){
 			$add_back = [];
@@ -103,6 +107,7 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 				}else{
 					$col_prefix = "$prefix"."_";
 				}
+
 				$type = $other_table_contents['type'];
 				$to_table = $other_table_contents['to_table'];
 				$to_table_alias = $letters[$i] ."_$to_table"; //we need reliable table aliases, even if we join to the same table again and again
@@ -110,32 +115,45 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 				$local_key = $other_table_contents['local_key'];
 				$other_columns  = $other_table_contents['other_columns'];
 				
-				$pre_sql_php .= "\n\$$to_table"."_field = \App\\$type::getNameField();";	
-				$pre_sql_php .= "\n\$$to_table"."_img_field = \App\\$type::getImgField();";	
+				$pre_sql_php .= "
+	\$$to_table"."_field = \App\\$type::getNameField();	
+	\$joined_select_field_sql .= \"
+, $to_table_alias.\$$to_table"."_field  AS $col_prefix\$$to_table"."_field
+\"; 
+	\$$to_table"."_img_field = \App\\$type::getImgField();
+	if(!is_null(\$$to_table"."_img_field)){
+		if(\$is_debug){echo \"$to_table has an image field of: |\$$to_table"."_img_field|\n\";}
+		\$joined_select_field_sql .= \"
+, $to_table_alias.\$$to_table"."_img_field  AS $col_prefix\$$to_table"."_img_field
+\"; 
+	}
+";	
 				
 				$decoration_php .= "
 \$$other_table"."_tmp = '$col_prefix'.\$$to_table"."_field;
-\$$other_table"."_label = \$row[\$$other_table"."_tmp];
 if(isset(\$$other_table"."_tmp)){
-	\$row[\$$other_table"."_tmp] = \"<a target='_blank' href='/Zermelo/DURC_$to_table/\$$local_key'>\$$other_table"."_label</a>\";
+	\$$other_table"."_data = \$row[\$$other_table"."_tmp];
+	\$row[\$$other_table"."_tmp] = \"<a target='_blank' href='/Zermelo/DURC_$to_table/\$$local_key'>\$$other_table"."_data</a>\";
 }
 
 \$$other_table"."_img_tmp = '$col_prefix'.\$$to_table"."_img_field;
-if(isset(\$$other_table"."_img_tmp)){
-	\$row[\$$other_table"."_img_tmp] = \"<img width='200px' src='\$$other_table"."_img_tmp'>\";
+if(isset(\$$other_table"."_img_tmp) && strlen(\$$other_table"."_img_tmp) > 0){
+	\$$other_table"."_img_data = \$row[\$$other_table"."_img_tmp];
+	\$row[\$$other_table"."_img_tmp] = \"<img width='200px' src='\$$other_table"."_img_data'>\";
 }
-
-
 ";
 
 
 				//now we calculate how to modify the select_us fields to account for the fact that we would prefer
 				//to display the name fields of the objects on the other side of the links...
+				//we now do this is along the way... TODO erase this code if it works
+/*
 				$add_back[$local_key] = $select_us[$local_key]; //we still need to have the id!!! but at the end of the report!!
 				$select_us[$local_key] = [
 						'field' => "$to_table_alias.\$$to_table"."_field",
 						'as' => "$col_prefix\$$to_table"."_field",
 					];
+*/
 
 				$joins[] = "
 LEFT JOIN $to_db.$to_table AS $to_table_alias ON 
@@ -149,15 +167,18 @@ LEFT JOIN $to_db.$to_table AS $to_table_alias ON
 				$select_us[] = $to_add;
 			}
 		}
-		
+	
+		//we manually add id so that it is always at the beginnig..
+		//so lets remove it here..
+		unset($select_us['id']);	
 
 		//now we are doing the specific aliases for the SELECT portion of the SQL
 		$select_sql = '';
-		$c = '';
+		$c = ''; //TODO remove this later...
 		foreach($select_us as $select_index => $select_data){
 			$field = $select_data['field'];
 			$as = $select_data['as'];
-			$select_sql .= "$c $field AS $as\n";
+			$select_sql .= ", $field AS $as\n";
 			$c = ',';
 		}
 		
@@ -198,15 +219,18 @@ class $report_class_name extends AbstractTabularReport
     public function GetSQL()
     {
 
+        \$is_debug = false; //lots of debugging echos will be show instead of the report
+
         \$index = \$this->getCode();
 
 $pre_sql_php
 
-
         if(is_null(\$index)){
 
                 \$sql = \"
-SELECT 
+SELECT
+$table.id
+\$joined_select_field_sql 
 $select_sql
 FROM $database.$table
 $join_sql
@@ -215,7 +239,9 @@ $join_sql
         }else{
 
                 \$sql = \"
-SELECT 
+SELECT
+$table.id 
+\$joined_select_field_sql
 $select_sql 
 FROM $database.$table 
 $join_sql
@@ -224,7 +250,6 @@ WHERE $table.id = \$index
 
         }
 
-        \$is_debug = false;
         if(\$is_debug){
                 echo \"<pre>\$sql\";
                 exit();
@@ -236,6 +261,9 @@ WHERE $table.id = \$index
     //decorate the results of the query with useful results
     public function MapRow(array \$row, int \$row_number) :array
     {
+
+	\$is_debug = false;
+	
 	//we think it is safe to extract here because we are getting this from the DB and not a user directly..
         extract(\$row);
 
