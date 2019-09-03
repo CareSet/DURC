@@ -22,6 +22,25 @@ class DURCModel extends Model{
 		return($this->fresh($this->DURC_selfish_with));
 	}
 
+	//overriding this can change how a card_body is calculated in the json for single data option..
+	public function getCardBody(){
+
+		
+		$my_class = get_called_class();
+		$name_field = $my_class::getNameField();
+
+		$my_name = $this->$name_field;
+
+		$card_body = "
+  <div class='card-body'>
+    <h5 class='card-title'>$my_name</h5>
+  </div>
+";
+
+		return($card_body);
+
+	}
+
 	//return the field that is the best field for using to name this object for the purposes of drop-downs and select widgets etc etc..
 	public static function getNameField(){
 	
