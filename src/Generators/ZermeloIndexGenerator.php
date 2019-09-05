@@ -50,7 +50,7 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 			$structure_comment .= var_export($many_many,true);
 			$structure_comment .= "\n//many_through\n";
 			$structure_comment .= var_export($many_through,true);
-			$structure_comment .= "*\\\n";	
+			$structure_comment .= "*/\n";	
 		}else{
 			$structure_comment = '';
 		}
