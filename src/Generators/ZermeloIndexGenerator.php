@@ -131,13 +131,13 @@ class ZermeloIndexGenerator extends \CareSet\DURC\DURCGenerator {
 				
 				$decoration_php .= "
 \$$other_table"."_tmp = '$col_prefix'.\$$to_table"."_field;
-if(isset(\$$other_table"."_tmp)){
+if(isset(\$row[\$$other_table"."_tmp])){
 	\$$other_table"."_data = \$row[\$$other_table"."_tmp];
 	\$row[\$$other_table"."_tmp] = \"<a target='_blank' href='/Zermelo/DURC_$to_table/\$$local_key'>\$$other_table"."_data</a>\";
 }
 
 \$$other_table"."_img_tmp = '$col_prefix'.\$$to_table"."_img_field;
-if(isset(\$$other_table"."_img_tmp) && strlen(\$$other_table"."_img_tmp) > 0){
+if(isset(\$row[\$$other_table"."_img_tmp]) && strlen(\$$other_table"."_img_tmp) > 0){
 	\$$other_table"."_img_data = \$row[\$$other_table"."_img_tmp];
 	\$row[\$$other_table"."_img_tmp] = \"<img width='200px' src='\$$other_table"."_img_data'>\";
 }
