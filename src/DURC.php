@@ -127,6 +127,35 @@ class DURC{
 
 	}//end getTables
 
+	//using the users durc configuration..
+	//return a list of the create form  urls for the list view
+	public static function getDURCUrlArray(){		
+		$user_edit_file_name = base_path()."/config/DURC_config.edit_me.json";
+		$user_config = json_decode(file_get_contents($user_edit_file_name),true);
+
+		$return_me = [];
+		foreach($user_config as $db => $durc_array){
+			foreach($durc_array as $durc_string => $durc_details){
+				$create_url = "/DURC/$durc_string/create";
+				$durc_listing = new \stdClass;			
+				$durc_listing->label = $durc_string;
+				$durc_listing->create_url = $create_url;
+				$list_url = "/Zermelo/DURC_$durc_string";
+				$durc_listing->list_url = $list_url;
+				$return_me[$durc_string] = $durc_listing;
+			}
+		}
+
+		//put them in alpha order
+		ksort($return_me);
+
+		//but use numeric keys in the end...
+		$return_me = array_values($return_me);
+
+		return($return_me);
+	}
+
+
 	/*
 		A simple method to write the json config file
 	*/
