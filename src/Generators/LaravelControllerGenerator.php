@@ -202,6 +202,10 @@ $with_summary_array_code
 		//what is the field I should be searching
                 \$search_fields = $class_name"."::getSearchFields();
 
+		//sometimes there is an image field that contains the url of an image
+		//but this is typically null
+		\$img_field = $class_name"."::getImgField();
+
 		\$where_sql = '';
 		\$or = '';
 		foreach(\$search_fields as \$this_field){
@@ -227,7 +231,17 @@ $with_summary_array_code
 					\$tmp_text .=  \"\$data \";
 				}
 			}
-			\$tmp['text'] = \$tmp_text;
+			\$tmp['text'] = trim(\$tmp_text);
+
+			if(!is_null(\$img_field)){ //then there is an image for this entry
+				\$tmp['img_field'] = \$img_field;
+				if(isset(\$this_row[\$img_field])){
+					\$tmp['img_url'] = \$this_row[\$img_field];
+				}else{	
+					\$tmp['img_url'] = null;
+				}
+			}
+
 			\$real_array[] = \$tmp;
 		}
 
@@ -304,7 +318,23 @@ $with_summary_array_code
     public function jsonone(Request \$request, \$$class_name"."_id){
 		\$$class_name = \App\\$class_name::find(\$$class_name"."_id);
 		\$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
-		return response()->json(\$$class_name"."->toArray());
+		\$return_me_array = \$$class_name"."->toArray();
+		
+		//lets see if we can calculate a card-img-top for a front end bootstrap card interface
+		\$img_uri_field = \App\\$class_name::getImgField();
+		if(!is_null(\$img_uri_field)){ //then this object has an image link..
+			if(!isset(\$return_me_array['card_img_top'])){ //allow the user to use this as a field without pestering..
+				\$return_me_array['card_img_top'] = \$$class_name->\$img_uri_field;
+			}
+		}
+
+		//lets get a card_body from the DURC mode class!!
+		if(!isset(\$return_me_array['card_body'])){ //allow the user to use this as a field without pestering..
+			//this is simply the name unless someone has put work into this...
+			\$return_me_array['card_body'] = \$$class_name"."->getCardBody();
+		}
+		
+		return response()->json(\$return_me_array);
  	}
 
 
