@@ -10,7 +10,7 @@ namespace CareSet\DURC\Generators;
 use CareSet\DURC\DURC;
 use CareSet\DURC\Signature;
 
-class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
+class experiment_LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
 
         public static function start(
