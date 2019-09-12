@@ -139,7 +139,7 @@ $delete_alert_code
 
 		$template_text .= "
   <div class='form-group row'>
-    <div class='col-sm-10'>
+    <div class='col-sm-8'>
       <button type='submit' class='btn btn-primary'>Save Data</button>
     </div>
   </div>

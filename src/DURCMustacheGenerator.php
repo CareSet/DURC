@@ -100,8 +100,8 @@ class DURCMustacheGenerator extends DURCGenerator {
 
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
-    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
-    <div class='col-sm-10'>
+    <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
+    <div class='col-sm-8'>
 	Current id value: {{"."$column_name"."}} (see below for lookup value)<br>
 	<select class='select2_$column_name form-control' id='$column_name' name='$column_name' form-control'>
 	<option value='{{"."$column_name"."}}' selected='selected'>{{"."$column_name"."}}</option>
@@ -144,8 +144,8 @@ $('.select2_$column_name').select2({
 
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
-    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
-    <div class='col-sm-10'>
+    <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
+    <div class='col-sm-8'>
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
@@ -192,8 +192,8 @@ $('.select2_$column_name').select2({
 
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
-    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
-    <div class='col-sm-10'>
+    <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
+    <div class='col-sm-8'>
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
@@ -262,8 +262,8 @@ $('.select2_$column_name').select2({
 	
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
-    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
-    <div class='col-sm-10'>
+    <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
+    <div class='col-sm-8'>
 	<textarea style='height: auto;'  id='$column_name' name='$column_name'>{{"."$column_name"."}}
 
 </textarea>
@@ -298,8 +298,8 @@ $('.select2_$column_name').select2({
 	
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
-    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
-    <div class='col-sm-10'>
+    <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
+    <div class='col-sm-8'>
 	<textarea id='$column_name' name='$column_name'>{{"."$column_name"."}}</textarea>
     </div>
   </div>
@@ -327,8 +327,8 @@ $('.select2_$column_name').select2({
 	
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
-    <label for='$column_name' class='col-sm-2 col-form-label'>$column_name</label>
-    <div class='col-sm-10'>
+    <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
+    <div class='col-sm-8'>
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
     </div>
   </div>
@@ -349,8 +349,8 @@ $('.select2_$column_name').select2({
 
         $field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
-    <div class='col-sm-2'><label>$column_name</label></div>
-    <div class='col-sm-10'>
+    <div class='col-sm-4'><label>$column_name</label></div>
+    <div class='col-sm-8'>
         <div class='checkbox'>
             <input type='checkbox' id='$column_name' name='$column_name' {{"."$column_name"."}} >
        </div> 
