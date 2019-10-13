@@ -21,7 +21,7 @@
 	"php" : "^7.0",
 	"illuminate/console": "^5.5.0",
 	"illuminate/support": "^5.5.0",
-        "nesbot/carbon": "^1.22",
+        "nesbot/carbon": "^2.0",
         "proai/laravel-handlebars": "~1.6"
     },
     "psr-4": {
