@@ -7,7 +7,10 @@ use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\DB;
 
 /*
-        This is where all of the work is done...
+	This abstract class details exactly how a generator is supposed to work
+	Each generators compiles from the database to a different type of 
+	output... some create views, others creat zermelo reports
+	still others make eloquent parent/child objects
 */
 abstract class DURCGenerator{
 
