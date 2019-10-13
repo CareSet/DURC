@@ -6,8 +6,11 @@
      "keywords": [
 		"laravel",
 		"crud",
-		"orm"
+		"orm",
+		"mysql",
+		"mariadb"
     ],
+    "homepage": "https://github.com/CareSet/DURC",
     "authors": [
         {
             "name": "Fred Trotter",
@@ -18,10 +21,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-	"php" : "^7.0",
-	"illuminate/console": "^5.5.0",
-	"illuminate/support": "^5.5.0",
-        "nesbot/carbon": "^2.0",
+	"php" : "^7.2",
         "proai/laravel-handlebars": "~1.6"
     },
     "psr-4": {
