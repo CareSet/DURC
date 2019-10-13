@@ -2,7 +2,9 @@
 /*
 	This is the place where the actual command is orchestrated.
 	it ends up being our "main()"
-
+	This is going to loop over the contents of the database
+	and generate the meta models that we will rely on in the second phase
+	and export them as json files
 
 */
 namespace CareSet\DURC;
