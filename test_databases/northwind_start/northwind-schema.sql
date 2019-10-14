@@ -1,7 +1,7 @@
 
 SET FOREIGN_KEY_CHECKS=0;
 DROP SCHEMA IF EXISTS `northwind_model` ;
-CREATE SCHEMA IF NOT EXISTS `northwind_model` DEFAULT CHARACTER SET latin1 ;
+CREATE SCHEMA IF NOT EXISTS `northwind_model` DEFAULT CHARACTER SET utf8mb4 ;
 
 
 -- -----------------------------------------------------
@@ -278,7 +278,7 @@ DEFAULT CHARACTER SET = utf8;
 
 
 DROP SCHEMA IF EXISTS `northwind_data` ;
-CREATE SCHEMA IF NOT EXISTS `northwind_data` DEFAULT CHARACTER SET latin1 ;
+CREATE SCHEMA IF NOT EXISTS `northwind_data` DEFAULT CHARACTER SET utf8mb4 ;
 
 
 -- -----------------------------------------------------
