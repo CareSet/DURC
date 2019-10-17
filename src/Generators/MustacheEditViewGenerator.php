@@ -142,8 +142,10 @@ $delete_alert_code
 				require_once($durc_eloquent_model_location);
 		
 				$is_hidden    = $model::isFieldHiddenInGenericDurcEditor($field_data['column_name']);			
-				$field_data['is_view_only'] = $model::isFieldHiddenInGenericDurcEditor($field_data['column_name']);			
-			
+				$field_data['is_view_only'] = $model::isFieldViewOnlyInGenericDurcEditor($field_data['column_name']);			
+				if($field_data['is_view_only'] || $is_hidden ){
+					var_export($field_data);
+				}	
 			}else{
 				$is_hidden    = false;
 				$field_data['is_view_only'] = false; 
@@ -154,7 +156,6 @@ $delete_alert_code
 				//note tha hidden values will break when they are required in the underlying database...
 				//and they are not already set... or set using a DB default... or allowing NULL in field... etc etc.. 
 			}else{
-				$field_data['is_view_only'] = true;
 				$field_html = parent::_get_field_html($URLroot,$field_data); //this is defined in ../DURCMustacheGenerator.php
 				//echo $field_html;
 				$template_text .= $field_html;

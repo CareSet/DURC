@@ -432,11 +432,11 @@ $child_class_code .= "
         }
 
 	//add fields here to make them view-only in the default DURC web interface
-        public static \$UX_view_only_columns = [
+        public static \$UX_view_only_col = [
         ];
 
         public static function isFieldViewOnlyInGenericDurcEditor(\$field){
-                if(in_array(\$field,self::\$UX_view_only__columns)){
+                if(in_array(\$field,self::\$UX_view_only_col)){
                         return(true);
                 }
         }

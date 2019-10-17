@@ -303,7 +303,7 @@ $('.select2_$column_name').select2({
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-8'>
-	<textarea style='height: auto;'  id='$column_name' name='$column_name' $maybe_readonly_html>{{"."$column_name"."}}
+	<textarea style='height: auto;'  id='$column_name' name='$column_name' >{{"."$column_name"."}}
 
 </textarea>
     </div>
