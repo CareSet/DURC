@@ -419,11 +419,27 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 
 $child_class_code .= "
 
+	//look in the parent class for the SQL used to generate the underlying table
 
-// Last generated SQL Schema
-/*
-$create_table_sql
-*/
+	//add fields here to entirely hide them in the default DURC web interface.
+        public static \$UX_hidden_col = [
+        ];
+
+        public static function isFieldHiddenInGenericDurcEditor(\$field){
+                if(in_array(\$field,self::\$UX_hidden_col)){
+                        return(true);
+                }
+        }
+
+	//add fields here to make them view-only in the default DURC web interface
+        public static \$UX_view_only_columns = [
+        ];
+
+        public static function isFieldViewOnlyInGenericDurcEditor(\$field){
+                if(in_array(\$field,self::\$UX_view_only__columns)){
+                        return(true);
+                }
+        }
 
 	//your stuff goes here..
 	

@@ -98,12 +98,20 @@ class DURCMustacheGenerator extends DURCGenerator {
 		$foreign_db = $field_data['foreign_db'];
 		$foreign_table = $field_data['foreign_table'];
 
+		$is_view_only = $field_data['is_view_only'];
+	
+		if($is_view_only){
+			$maybe_disabled_html = ' disabled ';
+		}else{
+			$maybe_disabled_html = '';
+		}
+
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-8'>
 	Current id value: {{"."$column_name"."}} (see below for lookup value)<br>
-	<select class='select2_$column_name form-control' id='$column_name' name='$column_name' form-control'>
+	<select class='select2_$column_name form-control' id='$column_name' name='$column_name' $maybe_disabled_html >
 	<option value='{{"."$column_name"."}}' selected='selected'>{{"."$column_name"."}}</option>
 	</select>
     </div>
@@ -142,11 +150,20 @@ $('.select2_$column_name').select2({
 		$today_id = $column_name . "_TodayNow";
 		$colConv = $column_name ."Conv";
 
+		$is_view_only = $field_data['is_view_only'];
+	
+		if($is_view_only){
+			$maybe_readonly_html = ' readonly ';
+		}else{
+			$maybe_readonly_html = '';
+		}
+
+
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-8'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html >
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
 <img src='/css/ic_today_black_24dp_1x.png'> 
@@ -190,16 +207,25 @@ $('.select2_$column_name').select2({
 		$today_id = $column_name . "_TodayNow";
 		$colConv = $column_name ."Conv";
 
+
+		$is_view_only = $field_data['is_view_only'];
+	
+		if($is_view_only){
+			$maybe_readonly_html = ' readonly ';
+		}else{
+			$maybe_readonly_html = '';
+		}
+
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-8'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html >
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
 <img src='/css/ic_today_black_24dp_1x.png'> 
 </button>
-<button type='button' class='btn btn-primary' id='$today_id'> Today and Now</button>
+<button type='button' class='btn btn-primary' id='$today_id'> Today </button>
 
 <script>
 	var $colConv = new AnyTime.Converter({format: '%Y-%m-%d'});
@@ -259,12 +285,25 @@ $('.select2_$column_name').select2({
 		}
 		
 
+		$is_view_only = $field_data['is_view_only'];
 	
-		$field_html = "
+		if($is_view_only){
+			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-8'>
-	<textarea style='height: auto;'  id='$column_name' name='$column_name'>{{"."$column_name"."}}
+	<pre>>{{"."$column_name"."}}</pre>
+    </div>
+  </div>	";
+
+
+		}else{
+	
+			$field_html = "
+  <div class='form-group row {{"."$column_name"."_row_class}}'>
+    <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
+    <div class='col-sm-8'>
+	<textarea style='height: auto;'  id='$column_name' name='$column_name' $maybe_readonly_html>{{"."$column_name"."}}
 
 </textarea>
     </div>
@@ -281,6 +320,9 @@ $('.select2_$column_name').select2({
 
 </script>
 ";
+		}
+
+
 		return($field_html);
 	}
 
@@ -295,12 +337,27 @@ $('.select2_$column_name').select2({
 		$foreign_db = $field_data['foreign_db'];
 		$foreign_table = $field_data['foreign_table'];
 
+		$is_view_only = $field_data['is_view_only'];
 	
-		$field_html = "
+		if($is_view_only){
+			//TODO make a simple JS markdown function work here... 
+
+			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-8'>
-	<textarea id='$column_name' name='$column_name'>{{"."$column_name"."}}</textarea>
+	<pre>{{"."$column_name"."}}</pre>
+    </div>
+  </div>
+";
+
+		}else{
+	
+			$field_html = "
+  <div class='form-group row {{"."$column_name"."_row_class}}'>
+    <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
+    <div class='col-sm-8'>
+	<textarea id='$column_name' name='$column_name'  >{{"."$column_name"."}}</textarea>
     </div>
   </div>
 <script>
@@ -310,6 +367,8 @@ $('.select2_$column_name').select2({
 	});
 </script>
 ";
+		}
+
 		return($field_html);
 	}
 
@@ -324,12 +383,19 @@ $('.select2_$column_name').select2({
 		$foreign_db = $field_data['foreign_db'];
 		$foreign_table = $field_data['foreign_table'];
 
+		$is_view_only = $field_data['is_view_only'];
 	
+		if($is_view_only){
+			$maybe_readonly_html = ' readonly ';
+		}else{
+			$maybe_readonly_html = '';
+		}
+
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-8'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}'>
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html>
     </div>
   </div>
 ";
@@ -347,12 +413,21 @@ $('.select2_$column_name').select2({
         $foreign_db = $field_data['foreign_db'];
         $foreign_table = $field_data['foreign_table'];
 
+
+		$is_view_only = $field_data['is_view_only'];
+	
+		if($is_view_only){
+			$maybe_readonly_html = ' readonly ';
+		}else{
+			$maybe_readonly_html = '';
+		}
+
         $field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <div class='col-sm-4'><label>$column_name</label></div>
     <div class='col-sm-8'>
         <div class='checkbox'>
-            <input type='checkbox' id='$column_name' name='$column_name' {{"."$column_name"."}} >
+            <input type='checkbox' id='$column_name' name='$column_name' {{"."$column_name"."}} $maybe_readonly_html >
        </div> 
     </div>
   </div>
