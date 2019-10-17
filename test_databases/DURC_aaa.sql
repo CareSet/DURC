@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.2.11-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.16  Distrib 10.2.22-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: aaaDurctest
+-- Host: localhost    Database: DURC_aaa
 -- ------------------------------------------------------
--- Server version	10.2.11-MariaDB-10.2.11+maria~xenial-log
+-- Server version	10.2.22-MariaDB-10.2.22+maria~xenial-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -52,7 +52,7 @@ CREATE TABLE `author` (
   `created_date` datetime DEFAULT NULL,
   `updated_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=266 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=266 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,7 +78,7 @@ CREATE TABLE `author_book` (
   `book_id` int(11) NOT NULL,
   `authortype_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,7 +104,7 @@ CREATE TABLE `authortype` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +131,7 @@ CREATE TABLE `book` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -143,79 +143,6 @@ LOCK TABLES `book` WRITE;
 INSERT INTO `book` VALUES (1,'Hacking Healthcare - A guide to Meaningful Use','2009-09-08 00:00:00','2017-12-05 00:00:00','2017-12-05 00:00:00'),(2,'Of Mice and Men','1937-09-08 00:00:00','2017-12-05 00:00:00','2017-12-05 00:00:00'),(3,'This Side of Paradise','1920-12-05 00:00:00','2017-12-05 00:00:00','2017-12-05 00:00:00');
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
-
-
---
--- Table structure for table `bookextended`
---
-
-CREATE TABLE `bookextended` (
-  `book_id` int(11) NOT NULL,
-  `ISBN` varchar(255) NOT NULL,
-  `local_isle` varchar(255) NOT NULL,
-  `local_shelf` int(255) NOT NULL,
-  PRIMARY KEY (`book_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `bookextended`
---
-LOCK TABLES `bookextended` WRITE;
-INSERT INTO `bookextended` (`book_id`, `ISBN`, `local_isle`, `local_shelf`) VALUES
-(1, '12345', 'L', 112),
-(2, '66666', 'R', 32);
-UNLOCK TABLES;
-
---
--- Table structure for table `booleantest`
---
-DROP TABLE IF EXISTS `test_boolean`;
-
-CREATE TABLE `test_boolean` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `label` varchar(255) NOT NULL,
-  `is_something` varchar(255) NOT NULL,
-  `has_something` varchar(255) NOT NULL,
-  `is_something2` tinyint(4) DEFAULT NULL,
-  `has_something2` tinyint(4) DEFAULT NULL,
-  `has_something3` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `booleantest`
---
-
-LOCK TABLES `test_boolean` WRITE;
-INSERT INTO `test_boolean` (`id`, `label`, `is_something`, `has_something`, `is_something2`, `has_something2`, `has_something3`) VALUES
-(1, 'Test checkbox', 'yes', '1', 1, 0, 1),
-(2, 'Test checkbox', '2', 'no', 0, 2, 0);
-UNLOCK TABLES;
-
---
--- Table structure for table `test_created_only`
---
-DROP TABLE IF EXISTS `test_created_only`;
-
-CREATE TABLE `test_created_only` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `test_created_only`
---
-
-LOCK TABLES `test_created_only` WRITE;
-INSERT INTO `test_created_only` (`id`, `name`, `created_at`) VALUES
-(1, 'Test 1', '2018-02-22 00:00:00'),
-(2, 'Test 2', '2018-02-21 00:00:00');
-UNLOCK TABLES;
-
-
-
 
 --
 -- Table structure for table `comment`
@@ -231,7 +158,7 @@ CREATE TABLE `comment` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -259,7 +186,7 @@ CREATE TABLE `donation` (
   `updated_at` datetime NOT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,7 +213,7 @@ CREATE TABLE `foreignkeytestgizmo` (
   `updated_at` datetime NOT NULL,
   `deleted_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -316,7 +243,7 @@ CREATE TABLE `foreignkeytestthingy` (
   PRIMARY KEY (`id`),
   KEY `gizmopickupaskey` (`gizmopickupaskey`),
   CONSTRAINT `forgizmo` FOREIGN KEY (`gizmopickupaskey`) REFERENCES `foreignkeytestgizmo` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -341,17 +268,17 @@ CREATE TABLE `funnything` (
   `thisint` int(11) DEFAULT NULL,
   `thisfloat` float DEFAULT NULL,
   `thisdecimal` decimal(5,5) DEFAULT NULL,
-  `thisvarchar` varchar(100) DEFAULT NULL,
+  `thisvarchar` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `thisdate` date DEFAULT NULL,
   `thisdatetime` datetime DEFAULT NULL,
   `thistimestamp` timestamp NULL DEFAULT NULL,
-  `thischar` char(1) NOT NULL,
-  `thistext` text NOT NULL,
+  `thischar` char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thistext` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `thisblob` blob DEFAULT NULL,
   `thistinyint` tinyint(11) NOT NULL,
-  `thistinytext` tinytext NOT NULL,
+  `thistinytext` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,6 +289,38 @@ LOCK TABLES `funnything` WRITE;
 /*!40000 ALTER TABLE `funnything` DISABLE KEYS */;
 INSERT INTO `funnything` VALUES (1,1,1.1,0.00000,'vc','2017-12-05','2017-12-19 00:00:00','2017-12-21 00:00:00','c','t',NULL,1,'tt');
 /*!40000 ALTER TABLE `funnything` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `magicField`
+--
+
+DROP TABLE IF EXISTS `magicField`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `magicField` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `editsome_markdown` varchar(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `typesome_sql_code` varchar(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `typesome_php_code` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `typesome_python_code` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `typesome_javascript_code` varchar(3000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `this_datetime` datetime NOT NULL,
+  `this_date` date NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `magicField`
+--
+
+LOCK TABLES `magicField` WRITE;
+/*!40000 ALTER TABLE `magicField` DISABLE KEYS */;
+/*!40000 ALTER TABLE `magicField` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -378,7 +337,7 @@ CREATE TABLE `post` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,7 +365,7 @@ CREATE TABLE `sibling` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -417,6 +376,60 @@ LOCK TABLES `sibling` WRITE;
 /*!40000 ALTER TABLE `sibling` DISABLE KEYS */;
 INSERT INTO `sibling` VALUES (1,'Maria',1,2,'2017-12-05 00:00:00','2017-12-05 00:00:00'),(2,'Joan',1,4,'2017-12-05 00:00:00','2017-12-05 00:00:00'),(4,'Tim',NULL,2,'2017-12-05 00:00:00','2017-12-05 00:00:00');
 /*!40000 ALTER TABLE `sibling` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `test_boolean`
+--
+
+DROP TABLE IF EXISTS `test_boolean`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_boolean` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) NOT NULL,
+  `is_something` varchar(255) NOT NULL,
+  `has_something` varchar(255) NOT NULL,
+  `is_something2` tinyint(4) DEFAULT NULL,
+  `has_something2` tinyint(4) DEFAULT NULL,
+  `has_something3` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_boolean`
+--
+
+LOCK TABLES `test_boolean` WRITE;
+/*!40000 ALTER TABLE `test_boolean` DISABLE KEYS */;
+INSERT INTO `test_boolean` VALUES (1,'Test checkbox','yes','1',1,0,1),(2,'Test checkbox','2','no',0,2,0);
+/*!40000 ALTER TABLE `test_boolean` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `test_created_only`
+--
+
+DROP TABLE IF EXISTS `test_created_only`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `test_created_only` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test_created_only`
+--
+
+LOCK TABLES `test_created_only` WRITE;
+/*!40000 ALTER TABLE `test_created_only` DISABLE KEYS */;
+INSERT INTO `test_created_only` VALUES (1,'Test 1','2018-02-22 00:00:00'),(2,'Test 2','2018-02-21 00:00:00');
+/*!40000 ALTER TABLE `test_created_only` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -433,7 +446,7 @@ CREATE TABLE `vote` (
   `updated_at` datetime NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -455,4 +468,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-01 15:14:50
+-- Dump completed on 2019-10-16 19:46:20
