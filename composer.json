@@ -22,7 +22,8 @@
     "minimum-stability": "dev",
     "require": {
 	"php" : "^7.2",
-        "proai/laravel-handlebars": "~1.6"
+        "proai/laravel-handlebars": "~1.6",
+	"erusev/parsedown": "^1.7"
     },
     "psr-4": {
             "App\\": "app/",
