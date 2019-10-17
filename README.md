@@ -141,6 +141,23 @@ Because we build function names from the field names in the table, we have to ha
 You can start a field with a digit '1', or '0' but you cannot start a function that way.. so beware...
 
 
+# Using Eloquent Child Classes to steer
+The basic idea of DURC is that you generate some child classes that inherent from auto-generated parents.
+When you substantially change your database structure, you re-run the generator, but the generator will 
+not touch any code that you have put in your child classes under the /app/ directory. 
+
+So if you have made changes to /app/yourthing.php then it will not be overwritten...
+but if the underlying yourthing table now has a new field that links to another table.. well that should all 
+work as expected because the parent class (which is overwritten each time code is generated) is now smarter.
+
+Its a little bit of a snake eating its tail, but things you put into your child-DURC class files can change how the 
+next round of code-generation happens. Specifically if you populate the following UX fields: 
+
+* public static $UX_hidden_col
+* public static $UX_view_only_col
+
+Which does what it sounds like. The next time a view is generated it will not show the fields that are hidden and fields with view only will either be disabled or readonly. 
+
 # TROUBLESHOOTING
 
 If you get the error "No application encryption key has been specified"
