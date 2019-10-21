@@ -121,7 +121,8 @@ class DURCMustacheGenerator extends DURCGenerator {
 
 $('.select2_$column_name').select2({
   ajax: {
-    	url: '$URLroot"."searchjson/$foreign_table/',
+    	url: '$URLroot"."searchjson/$foreign_table',
+	delay: 1000,
     	dataType: 'json'
   }
 });
