@@ -22,6 +22,28 @@ class DURCModel extends Model{
 		return($this->fresh($this->DURC_selfish_with));
 	}
 
+	public static function isFieldNullable($field)
+    {
+        $my_class = get_called_class();
+        $nullable = true;
+        if (isset($my_class::non_nullable_fields[$field])) {
+            $nullable = false;
+        }
+
+        return $nullable;
+    }
+
+    public static function getDefaultValueForField($field)
+    {
+        $my_class = get_called_class();
+        $default_value = null;
+        if (isset($my_class::default_values[$field])) {
+            $default_value = $my_class::default_values[$field];
+        }
+
+        return $default_value;
+    }
+
 	//overriding this can change how a card_body is calculated in the json for single data option..
 	public function getCardBody(){
 

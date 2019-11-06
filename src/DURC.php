@@ -82,7 +82,9 @@ class DURC{
 						'is_foreign_key' => false,
 						'is_linked_key' => false,
 						'foreign_db' => null,
-						'foreign_table' => null
+						'foreign_table' => null,
+                        'is_nullable' => ($column->IS_NULLABLE === 'NO') ? false : true,
+                        'default_value' => $column->COLUMN_DEFAULT,
 						];
 				}
 	            	}

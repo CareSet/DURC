@@ -47,7 +47,7 @@ class MySQLDumpGenerator extends \CareSet\DURC\DURCGenerator {
 		
 			//sed command removes autoincriment.. which will constantly result in new file structure as data is added...
 			//from https://stackoverflow.com/a/26328331/144364
-			$mysqldump_command = "mysqldump -u $user -p$password --no-data --compact $database $table | sed 's/ AUTO_INCREMENT=[0-9]*//g' > $file_path";
+			$mysqldump_command = "/Applications/MAMP/Library/bin/mysqldump -u $user -p$password --no-data --compact $database $table | sed 's/ AUTO_INCREMENT=[0-9]*//g' > $file_path";
 			
 			exec($mysqldump_command);
 
