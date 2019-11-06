@@ -88,6 +88,58 @@ class DURCMustacheGenerator extends DURCGenerator {
 
 	}
 
+	protected static function _get_default_value($field_data)
+    {
+        $default_value = null;
+        if ((isset($field_data['default_value']) &&
+                $field_data['default_value'] !== null)) {
+            $default_value = $field_data['default_value'];
+        }
+
+        return $default_value;
+    }
+
+    protected static function _is_nullable($field_data)
+    {
+        $is_nullable = false;
+        if ((isset($field_data['is_nullable']) &&
+            $field_data['is_nullable'] !== null)) {
+            $is_nullable = $field_data['is_nullable'];
+        }
+
+        return $is_nullable;
+    }
+
+    protected static function _is_required($field_data)
+    {
+        $required = false;
+        if (self::_is_nullable($field_data) === false &&
+            self::_get_default_value($field_data) === null) {
+            $required = true;
+        }
+
+        // Make an exception for auto-increment fields, because they populate automatically
+        if (isset($field_data['is_auto_increment']) &&
+            $field_data['is_auto_increment'] === true) {
+            $required = false;
+        }
+
+        return $required;
+    }
+
+    protected static function _get_null_checkbox_elem($field_data)
+    {
+        $column_name = $field_data['column_name'];
+
+        // This is the checkbox element
+        $html = "<div class='col-sm-1'>
+                    <input class='form-check-input null-checkbox' type='checkbox' data-elem='{$column_name}' name='{$column_name}Null' id='{$column_name}Null' value='{$column_name}Null' {{{$column_name}_checked}}>
+                    <label class='form-check-label' for='{$column_name}Null'>null</label>
+                </div>";
+
+        return $html;
+    }
+
 	//this returns both the html and the javascript required to kick start an AJAX powered select2 instance.
 	public static function _get_select2_field_html($URLroot, $field_data){
 
@@ -109,7 +161,7 @@ class DURCMustacheGenerator extends DURCGenerator {
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
-    <div class='col-sm-8'>
+    <div class='col-sm-7'>
 	Current id value: {{"."$column_name"."}} (see below for lookup value)<br>
 	<select class='select2_$column_name form-control' id='$column_name' name='$column_name' $maybe_disabled_html >
 	<option value='{{"."$column_name"."}}' selected='selected'>{{"."$column_name"."}}</option>
@@ -172,7 +224,7 @@ $('.select2_$column_name').select2({
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
-    <div class='col-sm-8'>
+    <div class='col-sm-7'>
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html >
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
@@ -229,7 +281,7 @@ $('.select2_$column_name').select2({
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
-    <div class='col-sm-8'>
+    <div class='col-sm-7'>
       <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html >
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
@@ -301,7 +353,7 @@ $('.select2_$column_name').select2({
 			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
-    <div class='col-sm-8'>
+    <div class='col-sm-7'>
 	<pre>>{{"."$column_name"."}}</pre>
     </div>
   </div>	";
@@ -312,7 +364,7 @@ $('.select2_$column_name').select2({
 			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
-    <div class='col-sm-8'>
+    <div class='col-sm-7'>
 	<textarea style='height: auto;'  id='$column_name' name='$column_name' >{{"."$column_name"."}}
 
 </textarea>
@@ -355,7 +407,7 @@ $('.select2_$column_name').select2({
 			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
-    <div class='col-sm-8'>
+    <div class='col-sm-7'>
 	<pre>{{"."$column_name"."}}</pre>
     </div>
   </div>
@@ -366,7 +418,7 @@ $('.select2_$column_name').select2({
 			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
-    <div class='col-sm-8'>
+    <div class='col-sm-7'>
 	<textarea id='$column_name' name='$column_name'  >{{"."$column_name"."}}</textarea>
     </div>
   </div>
@@ -393,6 +445,15 @@ $('.select2_$column_name').select2({
 		$foreign_db = $field_data['foreign_db'];
 		$foreign_table = $field_data['foreign_table'];
 
+        // Get our default value, if there is one, so we can put it in the placeholder,
+        $default_value = self::_get_default_value($field_data);
+
+        // If we don't have a default value, and this field is not nullable, we have to make it required,
+        $required = '';
+        if (self::_is_required($field_data) === true) {
+            $required = 'required';
+        }
+
 		$is_view_only = $field_data['is_view_only'];
 	
 		if($is_view_only){
@@ -404,11 +465,16 @@ $('.select2_$column_name').select2({
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
-    <div class='col-sm-8'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html>
-    </div>
-  </div>
-";
+    <div class='col-sm-7'>
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html $required>
+    </div>";
+		if (self::_is_nullable($field_data)) {
+		    // If we have a nullable field, add the null checkbox
+            $field_html .= self::_get_null_checkbox_elem($field_data);
+		}
+
+
+        $field_html .="</div>";
 
 		return($field_html);
 	}
@@ -435,7 +501,7 @@ $('.select2_$column_name').select2({
         $field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <div class='col-sm-4'><label>$column_name</label></div>
-    <div class='col-sm-8'>
+    <div class='col-sm-7'>
         <div class='checkbox'>
             <input type='checkbox' id='$column_name' name='$column_name' {{"."$column_name"."}} $maybe_readonly_html >
        </div> 
