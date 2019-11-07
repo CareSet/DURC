@@ -283,7 +283,7 @@ class $parent_class_name extends DURCModel{
 		$parent_class_code .= "			]; //end field_type_map
 		
     // Indicate which fields are nullable for the UI to be able to validate required form elements
-    static \$non_nullable_fields = [
+    protected \$non_nullable_fields = [
 ";
         foreach($fields as $field_index => $field_data) {
             // If the field can be NULL, add to this array
@@ -295,8 +295,8 @@ class $parent_class_name extends DURCModel{
 		}
         $parent_class_code .= "			]; // End of nullable fields
 
-    // List the default values for each field (if any) indicated by the DB schema, to be used as placeholder on form elements
-    static \$default_values = [
+    // Use Eloquent attributes array to specify the default values for each field (if any) indicated by the DB schema, to be used as placeholder on form elements
+    protected \$attributes = [
 ";
         foreach($fields as $field_index => $field_data) {
             // If the field has a default value, add it to this array
@@ -308,7 +308,7 @@ class $parent_class_name extends DURCModel{
                 }
             }
 		}
-        $parent_class_code .= "			]; // End of default values
+        $parent_class_code .= "			]; // End of attributes
         
 		//everything is fillable by default
 		protected \$guarded = [];

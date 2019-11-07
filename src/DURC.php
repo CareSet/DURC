@@ -85,6 +85,7 @@ class DURC{
 						'foreign_table' => null,
                         'is_nullable' => ($column->IS_NULLABLE === 'NO') ? false : true,
                         'default_value' => $column->COLUMN_DEFAULT,
+                        'is_auto_increment' => (strpos(strtolower($column->EXTRA),'auto_increment') !== false)
 						];
 				}
 	            	}

@@ -384,17 +384,23 @@ $('.select2_$column_name').select2({
 		$foreign_db = $field_data['foreign_db'];
 		$foreign_table = $field_data['foreign_table'];
 
-        // Get our default value, if there is one, so we can put it in the placeholder
+        // Get our default value, if there is one, so we can put it in the placeholder,
+        // but only if the field is non-nullable
         $default_value = '';
-        if (isset($field_data['default_value']) &&
-            $field_data['default_value'] !== null) {
+        if ((isset($field_data['default_value']) &&
+                $field_data['default_value'] !== null) &&
+            (isset($field_data['is_nullable']) &&
+                $field_data['is_nullable'] === false)) {
             $default_value = $field_data['default_value'];
         }
 
-        // If we don't have a default value, and this field is not nullable, we have to make it required
+        // If we don't have a default value, and this field is not nullable, we have to make it required,
+        // unless the filed is an auto-increment
         $required = '';
-        if (isset($field_data['is_nullable']) &&
-            $field_data['is_nullable'] === false &&
+        if ((isset($field_data['is_nullable']) &&
+                $field_data['is_nullable'] === false) &&
+            (isset($field_data['is_autoincrement']) &&
+                $field_data['is_autoincrement'] === false) &&
             $default_value === '') {
             $required = 'required';
         }
