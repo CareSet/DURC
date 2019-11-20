@@ -77,8 +77,11 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
             $data_type = $field_data['data_type'];
             $field_update_from_request .= "		\$tmp_$class_name"."->$this_field = DURC::formatForStorage( '$this_field', '$data_type', \$request->$this_field ); \n";
         }
-        $field_update_from_request .= "		\$tmp_$class_name"."->save();\n";
 
+        // These lines create the code for saving and redirecting the controller when an error occurs
+        $save_model_data = "		\$tmp_$class_name"."->save();\n";
+        $save_new_model_redirect = "      return redirect(\"/DURC/$class_name/create\")->with('status', 'There was an error in your data.');\n";
+        $save_update_model_redirect = "      return redirect(\"/DURC/$class_name/{\$id}\")->with('status', 'There was an error in your data.');\n";
 
 		$parent_class_text = "<?php
 
@@ -295,9 +298,15 @@ $with_summary_array_code
 	//the games we play to easily auto-generate code..
 	\$tmp_$class_name = \$myNew$class_name;
 	$field_update_from_request
+	
+	try {
+	    $save_model_data
+	} catch (\\Exception \$e) {
+	    $save_new_model_redirect
+	}
 
 	\$new_id = \$myNew$class_name"."->id;
-
+	
 	return redirect(\"$URLroot$class_name/\$new_id\")->with('status', 'Data Saved!');
     }//end store function
 
@@ -424,6 +433,12 @@ $with_summary_array_code
 	$field_update_from_request
 
 	\$id = \$$class_name"."->id;
+	
+    try {
+	    $save_model_data
+	} catch (\\Exception \$e) {
+	    $save_update_model_redirect
+	}
 
 	return redirect(\"$URLroot$class_name/\$id\")->with('status', 'Data Saved!');
         
