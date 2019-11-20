@@ -397,11 +397,11 @@ $('.select2_$column_name').select2({
         // If we don't have a default value, and this field is not nullable, we have to make it required,
         // unless the filed is an auto-increment
         $required = '';
-        if ((isset($field_data['is_nullable']) &&
+        if (((isset($field_data['is_nullable']) &&
                 $field_data['is_nullable'] === false) &&
-            (isset($field_data['is_autoincrement']) &&
-                $field_data['is_autoincrement'] === false) &&
-            $default_value === '') {
+            $default_value === '') ||
+            (isset($field_data['is_auto_increment']) &&
+                $field_data['is_auto_increment'] === false)) {
             $required = 'required';
         }
 
