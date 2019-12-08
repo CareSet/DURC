@@ -19,9 +19,14 @@ class DURCWriteCommand extends Command{
     public function handle(){
 	//what does this do?
 
-	//only one code generator for now...
-	$generatorClasses = [
+
+	$firstPhaseGenerators = [
 			'Eloquent Models' => 		'CareSet\DURC\Generators\LaravelEloquentGenerator',
+		];
+
+	//second phase generators get the benifit of actually using the first-generation generators 
+	//in their results... 	
+	$secondPhaseGenerators = [
 			'Web Controllers' => 		'CareSet\DURC\Generators\LaravelControllerGenerator',
 			'Mustache Edit Views' =>	'CareSet\DURC\Generators\MustacheEditViewGenerator',
 			'Mustache Index Page' => 	'CareSet\DURC\Generators\MustacheIndexViewGenerator',
@@ -30,7 +35,9 @@ class DURCWriteCommand extends Command{
 			'Mustache Menu' => 		'CareSet\DURC\Generators\MustacheMenuGenerator',	
 			'MySQLDump' => 			'CareSet\DURC\Generators\MySQLDumpGenerator',	
 			'Zermelo Index' => 		'CareSet\DURC\Generators\ZermeloIndexGenerator',
+
 		];
+
 
 	$config_file = $this->option('config_file');
 
@@ -53,8 +60,34 @@ class DURCWriteCommand extends Command{
 	$config = DURC::readDURCDesignConfigJSON($config_file);
 
 	//each generator handles the creation of different type of file...
-	foreach($generatorClasses as $generator_label => $this_generator){
-		echo "Generating $generator_label...\t\t\t";
+	//for the first phase...
+	foreach($firstPhaseGenerators as $generator_label => $this_generator){
+		echo "\nPhase 1: Generating $generator_label...\t\t\t";
+		$this->run_one_generator($config,$this_generator);
+		echo "\nPhase 1: Finished $generator_label... \n";	
+	}
+
+	//each generator handles the creation of different type of file...
+	//for the first phase...
+	foreach($secondPhaseGenerators as $generator_label => $this_generator){
+		echo "\nPhase 2: Generating $generator_label...\t\t\t";
+		$this->run_one_generator($config,$this_generator);
+		echo "\nPhase 2: Finished $generator_label... \n";	
+	}
+
+	echo "DURC:write all done.\n";
+
+//	$has_many_struct = DURC::getHasMany($db_struct);
+//	$belongs_to_struct = DURC::getHasMany($db_struct);
+	
+    }
+
+
+	private function run_one_generator($config,$this_generator){
+
+		$squash = true; //TODO where should this come from???
+					//why it missing... wtf is going on?
+		$URLroot = '/DURC/';
 		$this_generator::start($config,$squash,$URLroot);
 
 		foreach($config as $this_db => $db_data){
@@ -125,17 +158,9 @@ class DURCWriteCommand extends Command{
 
 		$this_generator::finish($config,$squash,$URLroot);
 		echo "done\n";
+
 	}
 
-	echo "DURC:write all done.\n";
-
-
-
-//	$has_many_struct = DURC::getHasMany($db_struct);
-//	$belongs_to_struct = DURC::getHasMany($db_struct);
-	
-
-    }
 
 	private function _get_or_null($array,$key){
 		if(isset($array[$key])){

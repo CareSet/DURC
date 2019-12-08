@@ -122,7 +122,7 @@ $delete_alert_code
   <div class='card-header'>
 <h4> {{durc_instance_name}}</h4>
 <ul>
-<li> <a href='$URLroot$class_name/'>Return to $class_name list</a> </li>
+<li> <a href='/Zermelo/DURC_$class_name/'>Return to $class_name list</a> </li>
 {{^is_new}}
 <li> <a href='$URLroot$class_name/create'>Create new $class_name </a> </li>
 {{/is_new}}
@@ -140,9 +140,17 @@ $delete_alert_code
 			$durc_eloquent_model_location = base_path() . "/app/$class_name.php";
 			if(file_exists($durc_eloquent_model_location)){
 				require_once($durc_eloquent_model_location);
-		
-				$is_hidden    = $model::isFieldHiddenInGenericDurcEditor($field_data['column_name']);			
-				$field_data['is_view_only'] = $model::isFieldViewOnlyInGenericDurcEditor($field_data['column_name']);			
+	
+				if(method_exists($model,'isFieldHiddenInGenericEditor')){	
+					$is_hidden    = $model::isFieldHiddenInGenericDurcEditor($field_data['column_name']);
+				}else{
+					$is_hidden = false;
+				}
+				if(method_exists($model,'isFieldViewOnlyInGenericDurcEditor')){
+					$field_data['is_view_only'] = $model::isFieldViewOnlyInGenericDurcEditor($field_data['column_name']);
+				}else{
+					$field_data['is_view_only'] = false;
+				}
 				if($field_data['is_view_only'] || $is_hidden ){
 					var_export($field_data);
 				}	

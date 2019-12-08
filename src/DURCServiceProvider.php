@@ -44,6 +44,7 @@ class DURCServiceProvider extends ServiceProvider
             }
         });
     }
+
     public function provides()
     {
         return ['command.DURC'];

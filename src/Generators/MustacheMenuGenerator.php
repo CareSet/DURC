@@ -116,7 +116,7 @@ h1 {
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="DURC/">DURC <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="/Zermelo/DURC/">DURC <span class="sr-only">(current)</span></a>
             </li>
           </ul>
         </div>
@@ -125,8 +125,6 @@ h1 {
 
     <div class="container-fluid">
       <div class="row">
-        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
-          <ul class="nav nav-pills flex-column">
 
 ';	
 
@@ -145,9 +143,8 @@ h1 {
 
 
 		$trailer = '
-          </ul>
-        </nav>
-        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+	<div class="col-md-1"></div>
+        <main role="main" class="ml-sm-auto col-md-11 pt-3">
                 {{{content}}}
         </main>
       </div>
@@ -168,12 +165,14 @@ h1 {
 		//we just need to add a little snippet to the route file..
 		$file = MustacheMenuGenerator::getFile();
 
-
+/*
 		$snippet = "
             <li class='nav-item'>
               <a class='nav-link' href='$URLroot$class_name/'>$class_name</a>
             </li>
 ";
+*/
+		$snippet = ''; //ads nothing..but perhaps some day...
 
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);
 
