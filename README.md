@@ -115,6 +115,7 @@ version of DURC, they are all db syntax that we intended to support.
 
 
 * Do not use plural names in your tables. DURC is singular only and does not do any transforms between singluar and plural. They are too complicated and do not provide enough benifit.
+* Do not use camel case in your tables. Tables must be this_good_data and not thisGoodData. This will be fixed in the future, but it is a current limitation.
 * You must have AutoIncrement and PRIMARY key set on the 'id' field of each table. This is what DURC will link things to.
 * If you want to link a field to the id of another table, then ensure that you end the field name with YourThing_id
 * you can have more than one linking key, so Another_YourThing_id and AFine_YourThing_id will both work as expected
