@@ -39,6 +39,7 @@ class DURCMineCommand extends Command{
 	$new_struct = [];
 	$table_namespace = [];
 	foreach($db_struct as $db => $table_list){
+	    if(count($table_list) > 0){
 		foreach($table_list as $this_table_name => $column_data){
 			
 			$table_tag = strtolower($this_table_name); //lets use lowercase for linking purposes
@@ -65,6 +66,9 @@ class DURCMineCommand extends Command{
 				}
 			}
 		}
+	    }else{//end if table_list count is over zero	
+		echo "$db does not appear to have any tables to read...\n";
+	    }
 	}
 
 	//in the second pass we look for links to those tables...
