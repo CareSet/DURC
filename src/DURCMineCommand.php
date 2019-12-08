@@ -83,6 +83,11 @@ class DURCMineCommand extends Command{
 			}else{
 
 				foreach($column_data as $column_index => $column_data){
+				    if(!isset($column_data['column_name'])){
+					    //this happens with nameless columns from temporal tables...
+					    //it would just be better if it did not even exist.
+					   unset($new_struct[$this_db][strtolower($this_table_name)]['column_data'][$column_index]);
+				    }else{
 					$column_name = $column_data['column_name'];
 					$data_type = $column_data['data_type'];
 					$is_foreign_key = $column_data['is_foreign_key'];
@@ -167,6 +172,7 @@ class DURCMineCommand extends Command{
 					}else{ //end if(strtolower($last_three) == '_id'){
 						//this column is not an _id and this process does not care about it.
 					}
+				    }
 
 				}// end loop over columns for this table..
 
