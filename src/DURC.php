@@ -207,6 +207,16 @@ class DURC{
 	$l_data_type = strtolower($data_type);
 
 
+	$char_types = [
+		'char',
+		'varchar',
+		'tinytext',
+		'mediumtext',
+		'text',
+		'longtext',
+		];
+
+
         $input_type = '';
         if ( ( 		$l_data_type == 'tinyint' ||
                 	$l_data_type == 'boolean' ) 
@@ -219,9 +229,8 @@ class DURC{
         } else {
 		//lets see if this is markdown.. it is if its a character type,
 		//and if it ends in '_markdown' or some other equviilent string
-		if(	$l_data_type == 'text' ||
-			$l_data_type == 'varchar'){
-		
+		if(in_array($l_data_type,$char_types)){
+
 			$its_markdown = false;	
 			$markdown_strings = [ '_markdown', '_markdn' ];
 			foreach($markdown_strings as $this_markdown_string){
@@ -229,20 +238,23 @@ class DURC{
 				//https://stackoverflow.com/a/36569425/144364
 				$doesItEndWithMarkdown = substr_compare( $column_name, $this_markdown_string , -strlen( $this_markdown_string ) ) === 0;
 				if($doesItEndWithMarkdown){
+//					echo "Note:$column_name looks like a markdown column  ";
 					return('markdown');
 				}
 			}
 
+			if(strpos($column_name,'_code') !== false){ //then this loop is worth doing!!
 			//now we do the same thing with all of the code strings
-			foreach(self::$code_language_map as $this_code_stub => $this_code_mode){
+				foreach(self::$code_language_map as $this_code_stub => $this_code_mode){
+					$this_code_string = "_$this_code_stub"."_code";
 
-				$this_code_string = "_$this_code_stub"."_code";
+					$doesItEndWithCode = substr_compare( $column_name, $this_code_string , -strlen( $this_code_string ) ) === 0;
+					if($doesItEndWithCode){
+//						echo "Note:$column_name looks like a code column  ";
+						return('code');
+					}
 
-				$doesItEndWithCode = substr_compare( $column_name, $this_code_string , -strlen( $this_code_string ) ) === 0;
-				if($doesItEndWithCode){
-					return('code');
 				}
-
 			}
 
             		return(self::$column_type_map[strtolower($data_type)]['input_type']);
@@ -401,6 +413,7 @@ class DURC{
   'http' => 'http',
   'idl' => 'idl',
   'javascript' => 'javascript',
+  'json' => 'javascript',
   'jinja2' => 'jinja2',
   'jsx' => 'jsx',
   'julia' => 'julia',
