@@ -30,10 +30,33 @@ class DURCModel extends Model{
 		$name_field = $my_class::getNameField();
 
 		$my_name = $this->$name_field;
+		$my_durc_name = (new \ReflectionClass($this))->getShortName();	
+		$my_id = $this->id;
 
+		//lets find all of the urls..
+		$urls_to_add = [];
+		foreach($this->toArray() as $field => $value){
+			if(strpos($field,'_url') !== false){
+				//then this is a url..
+				$urls_to_add[$field] = $value;
+			}
+		}
+	
 		$card_body = "
   <div class='card-body'>
-    <h5 class='card-title'>$my_name</h5>
+<p class='card-text'>
+$my_name
+	<ul>
+		<li>
+	<a href='/DURC/$my_durc_name/$my_id/' target='_blank'>edit</a>
+		 </li>
+";
+		foreach($urls_to_add as $label => $url){
+			$card_body .= "<li><a target='_blank' href='$url'>$label</a></li>";
+		}
+$card_body .= "
+	</ul>
+</p>
   </div>
 ";
 
