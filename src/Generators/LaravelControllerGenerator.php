@@ -217,12 +217,14 @@ $with_summary_array_code
 			\$or = ' OR ';
 		}
 
-		\$query = $class_name::whereRaw(\$where_sql)
-		            ->skip(20*(\$page-1))
-					->take(20);
-					
+		\$query = $class_name::whereRaw(\$where_sql);
+		            
 		\$count = \$query->count();			
-		\$these = \$query->get();
+		\$these = \$query
+		            ->skip(20*(\$page-1))
+					->take(20)
+					->get();
+					
         \$more = \$count > \$page * 20;
 
 		\$return_me['pagination'] = ['more' => \$more];
