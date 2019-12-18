@@ -75,7 +75,14 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
             }
 
             $data_type = $field_data['data_type'];
+            // Here we are conditioning setting the value on whether there is a DEFAULT value set in the schema.
+            // In the conditions whhere we should be using the default value, we don't call formatForStorage(),
+            // We just allow the "attribute" of the Eloquent model to handle the default
+            $field_update_from_request .= "if (!empty(\$request->$this_field) || // If a value is passed, always use the value\n";
+            $field_update_from_request .= "    (\$tmp_$class_name"."->isFieldNullable"."('$this_field') && // OR, if the IS nullable, if an empty string is entered, use empty string when saving whether there is default or not\n";
+            $field_update_from_request .= "        empty(\$request->$this_field))) {\n";
             $field_update_from_request .= "		\$tmp_$class_name"."->$this_field = DURC::formatForStorage( '$this_field', '$data_type', \$request->$this_field ); \n";
+            $field_update_from_request .= "}";
         }
 
         // These lines create the code for saving and redirecting the controller when an error occurs

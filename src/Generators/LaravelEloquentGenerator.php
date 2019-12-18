@@ -281,7 +281,35 @@ class $parent_class_name extends DURCModel{
 
 
 		$parent_class_code .= "			]; //end field_type_map
+		
+    // Indicate which fields are nullable for the UI to be able to validate required form elements
+    protected \$non_nullable_fields = [
+";
+        foreach($fields as $field_index => $field_data) {
+            // If the field can be NULL, add to this array
+            if (isset($field_data['is_nullable']) &&
+                $field_data['is_nullable'] === false) {
+                $this_field = $field_data['column_name'];
+                $parent_class_code .= "		'$this_field',\n";
+            }
+		}
+        $parent_class_code .= "			]; // End of nullable fields
 
+    // Use Eloquent attributes array to specify the default values for each field (if any) indicated by the DB schema, to be used as placeholder on form elements
+    protected \$attributes = [
+";
+        foreach($fields as $field_index => $field_data) {
+            // If the field has a default value, add it to this array
+            if (isset($field_data['default_value'])) {
+                $default_value = $field_data['default_value'];
+                if ($default_value) {
+                    $this_field = $field_data['column_name'];
+                    $parent_class_code .= "		'$this_field' => '$default_value',\n";
+                }
+            }
+		}
+        $parent_class_code .= "			]; // End of attributes
+        
 		//everything is fillable by default
 		protected \$guarded = [];
 

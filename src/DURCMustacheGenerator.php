@@ -393,6 +393,27 @@ $('.select2_$column_name').select2({
 		$foreign_db = $field_data['foreign_db'];
 		$foreign_table = $field_data['foreign_table'];
 
+        // Get our default value, if there is one, so we can put it in the placeholder,
+        // but only if the field is non-nullable
+        $default_value = '';
+        if ((isset($field_data['default_value']) &&
+                $field_data['default_value'] !== null) &&
+            (isset($field_data['is_nullable']) &&
+                $field_data['is_nullable'] === false)) {
+            $default_value = $field_data['default_value'];
+        }
+
+        // If we don't have a default value, and this field is not nullable, we have to make it required,
+        // unless the filed is an auto-increment
+        $required = '';
+        if (((isset($field_data['is_nullable']) &&
+                $field_data['is_nullable'] === false) &&
+            $default_value === '') ||
+            (isset($field_data['is_auto_increment']) &&
+                $field_data['is_auto_increment'] === false)) {
+            $required = 'required';
+        }
+
 		$is_view_only = $field_data['is_view_only'];
 	
 		if($is_view_only){
@@ -405,7 +426,7 @@ $('.select2_$column_name').select2({
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-8'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html>
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html $required>
     </div>
   </div>
 ";

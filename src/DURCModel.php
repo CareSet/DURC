@@ -13,6 +13,10 @@ use Illuminate\Database\Eloquent\Model;
 */
 class DURCModel extends Model{
 
+    // By default, all fields are nullable, but this is overriddedn in child classes
+    // Depending on what is mined from the database shcema
+    protected $non_nullable_fields = [];
+
 	/**
 	*	This function allows us to avoid the recursive eager loading problem by allowing a controller (etc) to specify
  	*	That only one level of eager loading will occur, starting from the object-in-focus...
@@ -21,6 +25,17 @@ class DURCModel extends Model{
 	public function fresh_with_relations(){
 		return($this->fresh($this->DURC_selfish_with));
 	}
+
+	public function isFieldNullable($field)
+    {
+        $nullable = true;
+        // See if this field name is in the array of non-nullable fields
+        if (in_array($field, $this->non_nullable_fields)) {
+            $nullable = false;
+        }
+
+        return $nullable;
+    }
 
 	//overriding this can change how a card_body is calculated in the json for single data option..
 	public function getCardBody(){
