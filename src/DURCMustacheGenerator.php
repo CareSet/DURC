@@ -137,24 +137,9 @@ class DURCMustacheGenerator extends DURCGenerator {
         }
         // This is the checkbox element
         $html = "<div class='col-sm-1'>
-                    <input class='form-check-input null-checkbox' type='checkbox' name='$column_name-null' id='$column_name-null' value='$column_name-null' $checked>
-                    <label class='form-check-label' for='$column_name-null'>null</label>
+                    <input class='form-check-input null-checkbox' type='checkbox' data-elem='{$column_name}' name='{$column_name}Null' id='{$column_name}Null' value='{$column_name}Null' $checked>
+                    <label class='form-check-label' for='{$column_name}Null'>null</label>
                 </div>";
-
-        // This bit of javascript controls the null checkbox functionality
-        $html .= "<script type='text/javascript'>
-            let last_{$column_name}_value = $('#$column_name').val();
-            $('#$column_name-null').change(function(e) {
-                if ($(this).prop('checked')) {
-                    last_{$column_name}_value = $('#$column_name').val();
-                    $('#$column_name').val(null);
-                    $('#$column_name').attr('readonly', true);
-                } else {
-                    $('#$column_name').val(last_{$column_name}_value);
-                    $('#$column_name').attr('readonly', false);
-                }
-            });
-        </script>";
 
         return $html;
     }
