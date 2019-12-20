@@ -40,7 +40,7 @@ class DURCModel extends Model{
     public function getNullableFields()
     {
         $nullable = [];
-        foreach($this->getColumnListing() as $key => $value) {
+        foreach($this->attributes as $key => $value) {
             if ($this->isFieldNullable($key)) {
                 $nullable[]= $key;
             }

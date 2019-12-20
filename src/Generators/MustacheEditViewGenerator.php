@@ -370,8 +370,11 @@ $template_text .= "
     
     <script type='text/javascript'>
     // This javascript controls the null checkboxes
-        $(document).ready(function(){
+        $(document).ready(function() {
+            
+            // keep an assoc array of the last entered values
             let last_null_values = {};
+            
             $('.null-checkbox').change(function(e) {
 
                 // get the id of the element we're next to
@@ -387,6 +390,9 @@ $template_text .= "
                     $('#'+id).attr('readonly', false);
                 }
             });
+            
+            // Trigger change on page load
+            $('.null-checkbox').change();
         });
     </script>
 ";
