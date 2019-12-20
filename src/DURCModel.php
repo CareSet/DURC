@@ -37,6 +37,28 @@ class DURCModel extends Model{
         return $nullable;
     }
 
+    public function getNullableFields()
+    {
+        $nullable = [];
+        foreach($this->getColumnListing() as $key => $value) {
+            if ($this->isFieldNullable($key)) {
+                $nullable[]= $key;
+            }
+        }
+
+        return $nullable;
+    }
+
+    public function getDefautValue($field)
+    {
+        $default = null;
+        if (in_array($field, $this->attributes)) {
+            $default = $this->attributes[$field];
+        }
+
+        return $default;
+    }
+
 	//overriding this can change how a card_body is calculated in the json for single data option..
 	public function getCardBody(){
 

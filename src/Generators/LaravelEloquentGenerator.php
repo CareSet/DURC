@@ -287,7 +287,7 @@ class $parent_class_name extends DURCModel{
 ";
         foreach($fields as $field_index => $field_data) {
             // If the field can be NULL, add to this array
-            if (isset($field_data['is_nullable']) &&
+            if (array_key_exists('is_nullable', $field_data) &&
                 $field_data['is_nullable'] === false) {
                 $this_field = $field_data['column_name'];
                 $parent_class_code .= "		'$this_field',\n";
@@ -300,12 +300,15 @@ class $parent_class_name extends DURCModel{
 ";
         foreach($fields as $field_index => $field_data) {
             // If the field has a default value, add it to this array
-            if (isset($field_data['default_value'])) {
+            if (array_key_exists('default_value', $field_data)) {
                 $default_value = $field_data['default_value'];
-                if ($default_value) {
-                    $this_field = $field_data['column_name'];
+                $this_field = $field_data['column_name'];
+                if ($default_value === null) {
+                    $parent_class_code .= "		'$this_field' => null,\n";
+                } else {
                     $parent_class_code .= "		'$this_field' => '$default_value',\n";
                 }
+
             }
 		}
         $parent_class_code .= "			]; // End of attributes
