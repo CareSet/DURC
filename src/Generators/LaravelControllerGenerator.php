@@ -199,6 +199,7 @@ $with_summary_array_code
    	public function search(Request \$request){
 
 		\$q = \$request->input('q');
+		\$page = \$request->input('page');
 
 		//TODO we need to escape this query string to avoid SQL injection.
 
@@ -216,12 +217,17 @@ $with_summary_array_code
 			\$or = ' OR ';
 		}
 
-		\$these = $class_name::whereRaw(\$where_sql)
+		\$query = $class_name::whereRaw(\$where_sql);
+		            
+		\$count = \$query->count();			
+		\$these = \$query
+		            ->skip(20*(\$page-1))
 					->take(20)
 					->get();
+					
+        \$more = \$count > \$page * 20;
 
-
-		\$return_me['pagination'] = ['more' => false];
+		\$return_me['pagination'] = ['more' => \$more];
 		\$raw_array = \$these->toArray();
 
 		\$real_array = [];
