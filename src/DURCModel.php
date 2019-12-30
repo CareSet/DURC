@@ -46,13 +46,13 @@ class DURCModel extends Model{
   <div class='card-body'>
 <p class='card-text'>
 $my_name
-	<ul>
-		<li>
+	<ul class='list-group'>
+		<li class='list-group-item'>
 	<a href='/DURC/$my_durc_name/$my_id/' target='_blank'>edit</a>
 		 </li>
 ";
 		foreach($urls_to_add as $label => $url){
-			$card_body .= "<li><a target='_blank' href='$url'>$label</a></li>";
+			$card_body .= "<li class='list-group-item'><a target='_blank' href='$url'>$label</a></li>";
 		}
 $card_body .= "
 	</ul>
