@@ -242,7 +242,8 @@ $with_summary_array_code
 			}
 			\$tmp['text'] = trim(\$tmp_text);
 
-			\$tmp['text'] .= '('.\$this_row['id'].')';;
+			//show the id of the data at the end of the select..
+			\$tmp['text'] .= ' ('.\$this_row['id'].')';;
 
 			if(!is_null(\$img_field)){ //then there is an image for this entry
 				\$tmp['img_field'] = \$img_field;
