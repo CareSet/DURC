@@ -100,7 +100,7 @@ class DURCWriteCommand extends Command{
 				$column_data = $this->_get_or_null($table_data,'column_data');
 				if(is_null($column_data)){
 					echo "Error: $this_db.$this_table ($this_class_name) did not have columns defined\n";
-					exit();
+					exit(1);
 				}
 
 				$has_many = $this->_get_or_null($table_data,'has_many');

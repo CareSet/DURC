@@ -39,7 +39,8 @@ class DURCMineCommand extends Command{
 	$new_struct = [];
 	$table_namespace = [];
 	foreach($db_struct as $db => $table_list){
-	    if(count($table_list) > 0){
+
+	    if(is_countable($table_list) && count($table_list) > 0){
 		foreach($table_list as $this_table_name => $column_data){
 			
 			$table_tag = strtolower($this_table_name); //lets use lowercase for linking purposes
@@ -67,7 +68,8 @@ class DURCMineCommand extends Command{
 			}
 		}
 	    }else{//end if table_list count is over zero	
-		echo "$db does not appear to have any tables to read...\n";
+		echo "Critical Error: $db does not appear to have any tables to read... this is too confusing for DURC to handle\n";
+		exit(1); //exit with a nonzero value to indicate a failure.
 	    }
 	}
 
@@ -224,7 +226,7 @@ class DURCMineCommand extends Command{
 
 	if($fatal_error){
 		echo "Had Fatal Error. Exiting\n";
-		exit();
+		exit(1);
 	}
 
 	//now merge db_struct and new_struct...

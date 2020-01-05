@@ -60,7 +60,16 @@ class DURC{
 	*/
 	public static function getTables($db_name){
 
-	        $table_columns = DB::select('SELECT * FROM information_schema.COLUMNS where TABLE_SCHEMA = ? ORDER BY TABLE_NAME,ORDINAL_POSITION', [$db_name]);
+	        $table_select_sql = "
+SELECT * 
+FROM information_schema.COLUMNS 
+WHERE  
+	`TABLE_SCHEMA` = ? AND 
+	`TABLE_NAME` NOT LIKE  '\_%'
+ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
+";
+
+	        $table_columns = DB::select($table_select_sql, [$db_name]);
 
 	        if(is_array($table_columns) && !empty($table_columns))
 	        {
@@ -180,7 +189,7 @@ class DURC{
 			
 		if(!file_exists($config_file_name)){
 			echo "Error: $config_file_name config file does not exist... drowning in confusion...\n";
-			exit();
+			exit(1);
 		}
 
 		$config_json = file_get_contents($config_file_name);
