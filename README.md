@@ -113,7 +113,7 @@ In order to generate the Laravel Eloquent classes automagically, you have to fol
 in how you setup your database. While not all of these rules have an impact in the current
 version of DURC, they are all db syntax that we intended to support. 
 
-
+* suppose you want to have a table in the database that is ignored by DURC.... simply prefix the table with an underscore. So DURC will not pay attention to a table called.
 * Do not use plural names in your tables. DURC is singular only and does not do any transforms between singluar and plural. They are too complicated and do not provide enough benifit.
 * Do not use camel case in your tables. Tables must be this_good_data and not thisGoodData. This will be fixed in the future, but it is a current limitation.
 * You must have AutoIncrement and PRIMARY key set on the 'id' field of each table. This is what DURC will link things to.
