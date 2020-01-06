@@ -142,6 +142,16 @@ Because we build function names from the field names in the table, we have to ha
 You can start a field with a digit '1', or '0' but you cannot start a function that way.. so beware...
 
 
+# Automatically generated API
+
+Once DURC has generated its classes, it will also automatically generate an API endpoint for each table. 
+
+Visiting 
+ /DURC/json/yourtablenamehere/1
+
+Will show the entry of yourtablename with an id of 1. DURC knows how to get the related data to yourtablename and will show all of the data in other tables that
+it understands is linked to yourtablename id = 1.
+
 # Using Eloquent Child Classes to steer
 The basic idea of DURC is that you generate some child classes that inherent from auto-generated parents.
 When you substantially change your database structure, you re-run the generator, but the generator will 
