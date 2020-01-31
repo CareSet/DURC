@@ -392,7 +392,12 @@ $template_text .= "
             });
             
             // Trigger change on page load
-            $('.null-checkbox').change();
+            $('.null-checkbox').each(function() {
+                if ($(this).prop('checked')) {
+                    let id = $(this).attr('data-elem');
+                    $('#'+id).attr('readonly', true);
+                }
+            });
         });
     </script>
 ";

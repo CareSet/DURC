@@ -52,7 +52,7 @@ class DURCModel extends Model{
     public function getDefautValue($field)
     {
         $default = null;
-        if (in_array($field, $this->attributes)) {
+        if (array_key_exists($field, $this->attributes)) {
             $default = $this->attributes[$field];
         }
 

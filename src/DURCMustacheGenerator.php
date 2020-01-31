@@ -130,14 +130,10 @@ class DURCMustacheGenerator extends DURCGenerator {
     protected static function _get_null_checkbox_elem($field_data)
     {
         $column_name = $field_data['column_name'];
-        $checked = '';
-        if (self::_is_nullable($field_data) &&
-            self::_get_default_value($field_data) === null) {
-            $checked = 'checked';
-        }
+
         // This is the checkbox element
         $html = "<div class='col-sm-1'>
-                    <input class='form-check-input null-checkbox' type='checkbox' data-elem='{$column_name}' name='{$column_name}Null' id='{$column_name}Null' value='{$column_name}Null' $checked>
+                    <input class='form-check-input null-checkbox' type='checkbox' data-elem='{$column_name}' name='{$column_name}Null' id='{$column_name}Null' value='{$column_name}Null' {{{$column_name}_checked}}>
                     <label class='form-check-label' for='{$column_name}Null'>null</label>
                 </div>";
 
