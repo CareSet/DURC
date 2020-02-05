@@ -433,6 +433,47 @@ INSERT INTO `test_created_only` VALUES (1,'Test 1','2018-02-22 00:00:00'),(2,'Te
 UNLOCK TABLES;
 
 --
+-- Table structure for table `test_null_default`
+--
+
+CREATE TABLE `test_null_default` (
+  `id` int(11) NOT NULL,
+  `null_var` varchar(255) DEFAULT NULL,
+  `non_null_var_def` varchar(255) NOT NULL,
+  `non_null_var_no_def` varchar(255) DEFAULT NULL,
+  `nullable_w_default` varchar(255) DEFAULT 'THIS IS THE DEFAULT',
+  `non_null_default` varchar(255) NOT NULL DEFAULT 'I CANNOT BE NULL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `test_null_default`
+--
+LOCK TABLES `test_null_default` WRITE;
+INSERT INTO `test_null_default` (`id`, `null_var`, `non_null_var_def`, `non_null_var_no_def`, `nullable_w_default`, `non_null_default`) VALUES
+(1, 'three', 'smelly', 'four', 'THIS IS THE DEFAULT', 'I CANNOT BE NULL'),
+(2, NULL, 'non null', NULL, 'THIS IS THE DEFAULT', 'I CANNOT BE NULL');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `test_null_default`
+--
+ALTER TABLE `test_null_default`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `test_null_default`
+--
+ALTER TABLE `test_null_default`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+UNLOCK TABLES;
+--
 -- Table structure for table `vote`
 --
 

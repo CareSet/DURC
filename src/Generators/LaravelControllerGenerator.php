@@ -75,13 +75,16 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
             }
 
             $data_type = $field_data['data_type'];
-            $field_update_from_request .= "		\$tmp_$class_name"."->$this_field = DURC::formatForStorage( '$this_field', '$data_type', \$request->$this_field ); \n";
+
+            // Here we set up the call to formatForStorage, which also sets the default value for non-nullable fields
+            // that has a default value defined in the database.
+            $field_update_from_request .= "		\$tmp_$class_name"."->$this_field = DURC::formatForStorage( '$this_field', '$data_type', \$request->$this_field, \$tmp_$class_name ); \n";
         }
 
         // These lines create the code for saving and redirecting the controller when an error occurs
         $save_model_data = "		\$tmp_$class_name"."->save();\n";
-        $save_new_model_redirect = "      return redirect(\"/DURC/$class_name/create\")->with('status', 'There was an error in your data.');\n";
-        $save_update_model_redirect = "      return redirect(\"/DURC/$class_name/{\$id}\")->with('status', 'There was an error in your data.');\n";
+        $save_new_model_redirect = "      return redirect(\"/DURC/$class_name/create\")->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
+        $save_update_model_redirect = "      return redirect(\"/DURC/$class_name/{\$id}\")->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
 
 		$parent_class_text = "<?php
 
@@ -407,6 +410,12 @@ $with_summary_array_code
                 \$this->view_data[\$key] = DURC::formatForDisplay( \$field_type, \$key, \$value );
             } else {
                 \$this->view_data[\$key] = \$value;
+            }
+            
+            // If this is a nullable field, see whether null checkbox should be checked by default
+			if (\$$class_name"."->isFieldNullable(\$key) &&
+                \$value == null) {
+			    \$this->view_data[\"{\$key}_checked\"] = \"checked\";
             }
 		}
 

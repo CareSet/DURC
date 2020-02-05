@@ -91,7 +91,10 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 						'is_foreign_key' => false,
 						'is_linked_key' => false,
 						'foreign_db' => null,
-						'foreign_table' => null
+						'foreign_table' => null,
+                        'is_nullable' => ($column->IS_NULLABLE === 'NO') ? false : true,
+                        'default_value' => $column->COLUMN_DEFAULT,
+                        'is_auto_increment' => (strpos(strtolower($column->EXTRA),'auto_increment') !== false)
 						];
 				}
 	            	}
@@ -279,12 +282,14 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 
     /**
      * @param $field_name
+     * @param $field_type
      * @param $value
-     * @return mixed
+     * @param null $model
+     * @return false|int|string
      *
      * Use rules to format a form input value for storage into the database
      */
-    public static function formatForStorage( $field_name, $field_type, $value )
+    public static function formatForStorage( $field_name, $field_type, $value, $model = null)
     {
         $formattedValue = $value;
         if ( self::mapColumnDataTypeToInputType( $field_type, $field_name ) == 'boolean' ) {
@@ -298,6 +303,16 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
             // Convert to SQL format for storage
             if ( !empty($value) ) {
                 $formattedValue = date( 'Y-m-d h:i:s', strtotime( $value ) );
+            }
+        }
+        
+        if ($model instanceof DURCModel) {
+            if ($value == null &&
+                !$model->isFieldNullable($field_name)) {
+                // Value is null, but can't be null because of Database constraints
+                // This function will get the default value as defined by database, or null if
+                // there is no default value for this column defined
+                $formattedValue = $model->getDefautValue($field_name);
             }
         }
 
