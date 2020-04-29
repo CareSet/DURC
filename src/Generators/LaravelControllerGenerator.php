@@ -59,12 +59,12 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
 		$parent_class_name = "$class_name";
 
-		$parent_file_name = "$parent_class_name"."Controller.php";	
-		$child_file_name = "$class_name"."Controller.php";	
+		$parent_file_name = "$parent_class_name"."Controller.php";
+		$child_file_name = "$class_name"."Controller.php";
 
 		$possible_updated_at_field = self::get_possible_updated_at( $fields );
 		$possible_created_at_field = self::get_possible_created_at( $fields );
-        $field_update_from_request = '';
+        $field_update_from_request = "\n";
         foreach($fields as $field_data){
             $this_field = $field_data['column_name'];
 
@@ -76,15 +76,16 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
             $data_type = $field_data['data_type'];
 
-            // Here we set up the call to formatForStorage, which also sets the default value for non-nullable fields
+            // Here we set up the set on the attribute, which contains a call to formatForStorage() in the model,
+            // which also sets the default value for non-nullable fields
             // that has a default value defined in the database.
-            $field_update_from_request .= "		\$tmp_$class_name"."->$this_field = DURC::formatForStorage( '$this_field', '$data_type', \$request->$this_field, \$tmp_$class_name ); \n";
+            $field_update_from_request .= "        \$tmp_$class_name"."->$this_field = \$request->$this_field;\n";
         }
 
         // These lines create the code for saving and redirecting the controller when an error occurs
-        $save_model_data = "		\$tmp_$class_name"."->save();\n";
-        $save_new_model_redirect = "      return redirect(\"/DURC/$class_name/create\")->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
-        $save_update_model_redirect = "      return redirect(\"/DURC/$class_name/{\$id}\")->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
+        $save_model_data = "    \$tmp_$class_name"."->save();\n";
+        $save_new_model_redirect = "    return redirect(\"/DURC/$class_name/create\")->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
+        $save_update_model_redirect = "    return redirect(\"/DURC/$class_name/{\$id}\")->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
 
 		$parent_class_text = "<?php
 
@@ -153,18 +154,18 @@ $with_summary_array_code
         \$return_me['data'] = \$return_me_data;
 		
 		
-                foreach(\$return_me['data'] as \$data_i => \$data_row){
-                        foreach(\$data_row as \$key => \$value){
-                                if(is_array(\$value)){
-                                        foreach(\$value as \$lowest_key => \$lowest_data){
-                                                //then this is a loaded attribute..
-                                                //lets move it one level higher...
-                                                \$return_me['data'][\$data_i][\$key .'_id_DURClabel'] = \$lowest_data;
-                                        }
-                                        unset(\$return_me['data'][\$data_i][\$key]);
+        foreach(\$return_me['data'] as \$data_i => \$data_row){
+                foreach(\$data_row as \$key => \$value){
+                        if(is_array(\$value)){
+                                foreach(\$value as \$lowest_key => \$lowest_data){
+                                        //then this is a loaded attribute..
+                                        //lets move it one level higher...
+                                        \$return_me['data'][\$data_i][\$key .'_id_DURClabel'] = \$lowest_data;
                                 }
+                                unset(\$return_me['data'][\$data_i][\$key]);
                         }
                 }
+        }
 
 
 		//helps with logic-less templating...
@@ -284,17 +285,17 @@ $with_summary_array_code
      * @return \Illuminate\Http\Response
      */
     public function index(Request \$request){
-	\$main_template_name = \$this->_getMainTemplateName();
-
-
-	\$this->view_data = \$this->_get_index_list(\$request);
-
-	if(\$request->has('debug')){
-		var_export(\$this->view_data);
-		exit();
-	}
-	\$durc_template_results = view('DURC.$class_name.index',\$this->view_data);        
-	return view(\$main_template_name,['content' => \$durc_template_results]);
+        \$main_template_name = \$this->_getMainTemplateName();
+    
+    
+        \$this->view_data = \$this->_get_index_list(\$request);
+    
+        if(\$request->has('debug')){
+            var_export(\$this->view_data);
+            exit();
+        }
+        \$durc_template_results = view('DURC.$class_name.index',\$this->view_data);        
+        return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
 
@@ -305,21 +306,21 @@ $with_summary_array_code
     */ 
     public function store(Request \$request){
 
-	\$myNew$class_name = new $class_name();
+        \$myNew$class_name = new $class_name();
 
-	//the games we play to easily auto-generate code..
-	\$tmp_$class_name = \$myNew$class_name;
-	$field_update_from_request
-	
-	try {
-	    $save_model_data
-	} catch (\\Exception \$e) {
-	    $save_new_model_redirect
-	}
+        //the games we play to easily auto-generate code..
+        \$tmp_$class_name = \$myNew$class_name;
+        $field_update_from_request
 
-	\$new_id = \$myNew$class_name"."->id;
-	
-	return redirect(\"$URLroot$class_name/\$new_id\")->with('status', 'Data Saved!');
+        try {
+            $save_model_data
+        } catch (\\Exception \$e) {
+            $save_new_model_redirect
+        }
+
+        \$new_id = \$myNew$class_name"."->id;
+    
+        return redirect(\"$URLroot$class_name/\$new_id\")->with('status', 'Data Saved!');
     }//end store function
 
     /**
@@ -364,9 +365,9 @@ $with_summary_array_code
      * @return \Illuminate\Http\Response
      */
     public function create(){
-	// but really, we are just going to edit a new object..
-	\$new_instance = new $class_name();
-	return \$this->edit(\$new_instance);
+        // but really, we are just going to edit a new object..
+        \$new_instance = new $class_name();
+        return \$this->edit(\$new_instance);
     }
 
 
@@ -377,66 +378,66 @@ $with_summary_array_code
      */
     public function edit($class_name \$$class_name){
 
-	\$main_template_name = \$this->_getMainTemplateName();
-
-	//do we have a status message in the session? The view needs it...
-	\$this->view_data['session_status'] = session('status',false);
-	if(\$this->view_data['session_status']){
-		\$this->view_data['has_session_status'] = true;
-	}else{
-		\$this->view_data['has_session_status'] = false;
-	}
-
-	\$this->view_data['csrf_token'] = csrf_token();
-	
-	
-	foreach ( $class_name::\$field_type_map as \$column_name => \$field_type ) {
-        // If this field name is in the configured list of hidden fields, do not display the row.
-        \$this->view_data[\"{\$column_name}_row_class\"] = '';
-        if ( in_array( \$column_name, self::\$hidden_fields_array ) ) {
-            \$this->view_data[\"{\$column_name}_row_class\"] = 'd-none';
+        \$main_template_name = \$this->_getMainTemplateName();
+    
+        //do we have a status message in the session? The view needs it...
+        \$this->view_data['session_status'] = session('status',false);
+        if(\$this->view_data['session_status']){
+            \$this->view_data['has_session_status'] = true;
+        }else{
+            \$this->view_data['has_session_status'] = false;
         }
-    }
-
-	if(\$$class_name"."->exists){	//we will not have old data if this is a new object
-
-		//well lets properly eager load this object with a refresh to load all of the related things
-		\$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
-
-		//put the contents into the view...
-		foreach(\$$class_name"."->toArray() as \$key => \$value){
-			if ( isset( $class_name::\$field_type_map[\$key] ) ) {
-                \$field_type = $class_name::\$field_type_map[ \$key ];
-                \$this->view_data[\$key] = DURC::formatForDisplay( \$field_type, \$key, \$value );
-            } else {
-                \$this->view_data[\$key] = \$value;
+    
+        \$this->view_data['csrf_token'] = csrf_token();
+        
+        
+        foreach ( $class_name::\$field_type_map as \$column_name => \$field_type ) {
+            // If this field name is in the configured list of hidden fields, do not display the row.
+            \$this->view_data[\"{\$column_name}_row_class\"] = '';
+            if ( in_array( \$column_name, self::\$hidden_fields_array ) ) {
+                \$this->view_data[\"{\$column_name}_row_class\"] = 'd-none';
             }
-            
-            // If this is a nullable field, see whether null checkbox should be checked by default
-			if (\$$class_name"."->isFieldNullable(\$key) &&
-                \$value == null) {
-			    \$this->view_data[\"{\$key}_checked\"] = \"checked\";
+        }
+    
+        if(\$$class_name"."->exists){	//we will not have old data if this is a new object
+    
+            //well lets properly eager load this object with a refresh to load all of the related things
+            \$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
+    
+            //put the contents into the view...
+            foreach(\$$class_name"."->toArray() as \$key => \$value){
+                if ( isset( $class_name::\$field_type_map[\$key] ) ) {
+                    \$field_type = $class_name::\$field_type_map[ \$key ];
+                    \$this->view_data[\$key] = DURC::formatForDisplay( \$field_type, \$key, \$value );
+                } else {
+                    \$this->view_data[\$key] = \$value;
+                }
+                
+                // If this is a nullable field, see whether null checkbox should be checked by default
+                if (\$$class_name"."->isFieldNullable(\$key) &&
+                    \$value == null) {
+                    \$this->view_data[\"{\$key}_checked\"] = \"checked\";
+                }
             }
-		}
-
-		//what is this object called?
-		\$name_field = \$$class_name"."->_getBestName();
-		\$this->view_data['is_new'] = false;
-		\$this->view_data['durc_instance_name'] = \$$class_name"."->\$name_field;
-	}else{
-		\$this->view_data['is_new'] = true;
-	}
-
-	\$debug = false;
-	if(\$debug){
-		echo '<pre>';
-		var_export(\$this->view_data);
-		exit();
-	}
-	
-
-	\$durc_template_results = view('DURC.$class_name.edit',\$this->view_data);        
-	return view(\$main_template_name,['content' => \$durc_template_results]);
+    
+            //what is this object called?
+            \$name_field = \$$class_name"."->_getBestName();
+            \$this->view_data['is_new'] = false;
+            \$this->view_data['durc_instance_name'] = \$$class_name"."->\$name_field;
+        }else{
+            \$this->view_data['is_new'] = true;
+        }
+    
+        \$debug = false;
+        if(\$debug){
+            echo '<pre>';
+            var_export(\$this->view_data);
+            exit();
+        }
+        
+    
+        \$durc_template_results = view('DURC.$class_name.edit',\$this->view_data);        
+        return view(\$main_template_name,['content' => \$durc_template_results]);
     }
 
     /**
@@ -447,19 +448,17 @@ $with_summary_array_code
      */
     public function update(Request \$request, $class_name \$$class_name){
 
-	\$tmp_$class_name = \$$class_name;
-	$field_update_from_request
-
-	\$id = \$$class_name"."->id;
-	
-    try {
-	    $save_model_data
-	} catch (\\Exception \$e) {
-	    $save_update_model_redirect
-	}
-
-	return redirect(\"$URLroot$class_name/\$id\")->with('status', 'Data Saved!');
+        \$tmp_$class_name = \$$class_name;
+        $field_update_from_request
+        \$id = \$$class_name"."->id;
         
+        try {
+        $save_model_data
+        } catch (\\Exception \$e) {
+        $save_update_model_redirect
+        }
+    
+        return redirect(\"$URLroot$class_name/\$id\")->with('status', 'Data Saved!');
     }
 
     /**
@@ -484,7 +483,7 @@ $with_summary_array_code
 }
 ";
 
-		
+
 
 		$child_class_text = "<?php
 

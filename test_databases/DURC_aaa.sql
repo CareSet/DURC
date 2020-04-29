@@ -473,6 +473,33 @@ ALTER TABLE `test_null_default`
 ALTER TABLE `test_null_default`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 UNLOCK TABLES;
+
+
+--
+-- Table structure for table `test_default_dates`
+--
+CREATE TABLE `test_default_date` (
+  `id` int(11) NOT NULL,
+  `datetime_none` datetime NOT NULL,
+  `date_none` date NOT NULL,
+  `datetime_current` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_current` varchar(255) DEFAULT 'Current timestamp not supported for date',
+  `datetime_null` datetime DEFAULT NULL,
+  `date_null` date DEFAULT NULL,
+  `datetime_defined` datetime NOT NULL DEFAULT '2000-01-01 01:23:45',
+  `date_defined` date NOT NULL DEFAULT '2000-01-01'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `test_default_dates`
+--
+ALTER TABLE `test_default_dates`
+  ADD PRIMARY KEY (`id`);
+
 --
 -- Table structure for table `vote`
 --

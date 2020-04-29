@@ -220,12 +220,21 @@ $('.select2_$column_name').select2({
 			$maybe_readonly_html = '';
 		}
 
+        // Get our default value, if there is one, so we can put it in the placeholder,
+        $default_value = self::_get_default_value($field_data);
+
+        // If we don't have a default value, and this field is not nullable, we have to make it required,
+        $required = '';
+        if (self::_is_required($field_data) === true) {
+            $required = 'required';
+        }
+
 
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html >
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html $required>
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
 <img src='/css/ic_today_black_24dp_1x.png'> 
@@ -278,11 +287,20 @@ $('.select2_$column_name').select2({
 			$maybe_readonly_html = '';
 		}
 
+        // Get our default value, if there is one, so we can put it in the placeholder,
+        $default_value = self::_get_default_value($field_data);
+
+        // If we don't have a default value, and this field is not nullable, we have to make it required,
+        $required = '';
+        if (self::_is_required($field_data) === true) {
+            $required = 'required';
+        }
+
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html >
+      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html $required>
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
 <img src='/css/ic_today_black_24dp_1x.png'> 
