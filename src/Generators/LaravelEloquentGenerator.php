@@ -9,9 +9,9 @@ namespace CareSet\DURC\Generators;
 
 use CareSet\DURC\DURC;
 use CareSet\DURC\Signature;
+use Illuminate\Support\Str;
 
 class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
-
 
         public static function start(
 							$db_config,
@@ -28,7 +28,26 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 		//does nothing need to comply with abstract class
 	}
 
+    protected static function _generate_validation_rule_for_field($field) {
+        $rules = [];
+        if ($field['data_type'] === 'int') {
+            $rules []= 'integer';
+        }
 
+        if (self::_is_nullable($field) === true) {
+            $rules []= 'nullable';
+        }
+
+        if (self::_is_required($field) == true) {
+            $rules []= 'required';
+        }
+
+        if (count($rules)) {
+            return implode("|", $rules);
+        }
+
+        return false;
+    }
 
 	public static function run_generator($class_name,$database,$table,$fields,$has_many,$has_one = null, $belongs_to, $many_many, $many_through, $squash, $URLroot,$create_table_sql){
 
@@ -46,7 +65,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
             }
         }
 
-		$updated_at_code = null;	
+		$updated_at_code = null;
 		$created_at_code = null;
 
         $this_possible_created_at = self::get_possible_created_at( $fields );
@@ -87,8 +106,8 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 		$parent_class_name = "$class_name";
 
-		$parent_file_name = "$parent_class_name.php";	
-		$child_file_name = "$class_name.php";	
+		$parent_file_name = "$parent_class_name.php";
+		$child_file_name = "$class_name.php";
 
 
 	//before we start the durc parent class code, we need to calculate several things, based on "has_many" and belongs_to relationships
@@ -99,12 +118,12 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	$has_many_code = "\n//DURC HAS_MANY SECTION\n";
 	if(!is_null($has_many)){
 		foreach($has_many as $other_table_name => $relate_details){
-		
-			$prefix = $relate_details['prefix'];	
-			$type = $relate_details['type'];	
-			$from_table = $relate_details['from_table'];	
-			$from_db = $relate_details['from_db'];	
-			$from_column = $relate_details['from_column']; 
+
+			$prefix = $relate_details['prefix'];
+			$type = $relate_details['type'];
+			$from_table = $relate_details['from_table'];
+			$from_db = $relate_details['from_db'];
+			$from_column = $relate_details['from_column'];
 
 			$local_key = 'id';
 
@@ -119,7 +138,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	}
 
 ";
-	
+
 			//now lets sort out what should go in $with
 			$with_array[$other_table_name] = 'from many';
 		}
@@ -158,16 +177,16 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
             $has_one_code .= "\n\t\t\t//DURC did not detect any has_one relationships";
         }
 
-	
+
 	$belongs_to_code = "\n//DURC BELONGS_TO SECTION\n";
 	if(!is_null($belongs_to)){
 		foreach($belongs_to as $other_table_name => $relate_details){
-		
-			$prefix = $relate_details['prefix'];	
-			$type = $relate_details['type'];	
-			$to_table = $relate_details['to_table'];	
-			$to_db = $relate_details['to_db'];	
-			$to_column = 'id'; //our central assumption 
+
+			$prefix = $relate_details['prefix'];
+			$type = $relate_details['type'];
+			$to_table = $relate_details['to_table'];
+			$to_db = $relate_details['to_db'];
+			$to_column = 'id'; //our central assumption
 
 			$local_key = $relate_details['local_key'];
 
@@ -199,7 +218,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	$with_code = "	protected \$DURC_selfish_with = [ \n"; //this will end up using both has_many and belongs_to relationships...
 
 	foreach($with_array as $this_with_item => $from){
-			$with_code .= "\t\t\t'$this_with_item', //from $from\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload. 
+			$with_code .= "\t\t\t'$this_with_item', //from $from\n"; //the default is to automatically load has many in toArray and the $with variable forces autoload.
 	}
 
 	$with_code .= "\t\t];\n"; //not that unless there is either a has_many or belongs to, this is going to end up being an empty array
@@ -215,8 +234,8 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
 	if(count($date_fields) > 0){
 		$date_code = "//DURC detected the following date fields\n\t\tprotected \$dates = [\n";
-	
-		foreach($date_fields as $this_date_field){	
+
+		foreach($date_fields as $this_date_field){
 			$date_code .= "\t\t\t$this_date_field,";
 		}
 
@@ -225,6 +244,35 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 		$date_code = "//DURC did not detect any date fields";
 	}
 
+	// Build the mutators
+    // Mutators are functions that modify the data as they are saved into the model for storage into the database
+    // We loop through each of the fields, and generate a mutator and call formatForStorage() on the value. This way,
+    // the formatForStorage() function will be called automaticcally for each "set" on the attribute.
+    // For example, if the field type is boolean, we want to make sure we are saving a 1 or 0, and not an 'on' value
+    // generated by a checkbox on the UI
+    $mutators_code = "\n\t// These are mutators generated for all model attributes.\n\t// Mutators are called implicitly when getting and setting the attribute\n";
+    foreach ($fields as $create_mutator) {
+        $field_name = $create_mutator['column_name'];
+        $field_type = $create_mutator['data_type'];
+
+        $mutator_setter_method_name = "set".Str::studly($field_name)."Attribute";
+        $mutator_setter_signature = "\tpublic function $mutator_setter_method_name(\$value)\n";
+        $mutator_setter_body = "\t{\n";
+        $mutator_setter_body .= "\t\t\$formatted_value = DURC::formatForStorage('$field_name', '$field_type', \$value, \$this);\n";
+        $mutator_setter_body .= "\t\t\$this->attributes['$field_name'] = \$formatted_value;\n";
+        $mutator_setter_body .= "\t}\n\n";
+
+        $mutator_getter_method_name = "get".Str::studly($create_mutator['column_name'])."Attribute";
+        $mutator_getter_signature = "\tpublic function $mutator_getter_method_name(\$value)\n";
+        $mutator_getter_body = "\t{\n";
+        $mutator_getter_body .= "\t\t\$formatted_value = \$value;\n";
+        $mutator_getter_body .= "\t\treturn \$formatted_value;\n";
+        $mutator_getter_body .= "\t}\n\n";
+
+        $mutators_code .= $mutator_getter_signature.$mutator_getter_body;
+        $mutators_code .= $mutator_setter_signature.$mutator_setter_body;
+    }
+
 		//STARTING DURC Parent CLASS
 
 		$parent_class_code = "<?php
@@ -232,6 +280,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 namespace $model_namespace\DURC\Models;
 $soft_delete_code_use_statememt
 use CareSet\DURC\DURCModel;
+use CareSet\DURC\DURC;
 /*
 	Note this class was auto-generated from 
 
@@ -266,8 +315,8 @@ class $parent_class_name extends DURCModel{
 	//for many functions to work, we need to be able to do a lookup on the field_type and get back the MariaDB/MySQL column type.
 	static \$field_type_map = [
 ";
-	
-		
+
+
 		//lets add a 'visible' array for access control at this layer''
 		foreach($fields as $field_index => $field_data){
 			if(!isset($field_data['column_name'])){
@@ -280,7 +329,7 @@ class $parent_class_name extends DURCModel{
 		}
 
 
-		$parent_class_code .= "			]; //end field_type_map
+		$parent_class_code .= "\t]; //end field_type_map
 		
     // Indicate which fields are nullable for the UI to be able to validate required form elements
     protected \$non_nullable_fields = [
@@ -293,10 +342,10 @@ class $parent_class_name extends DURCModel{
                 $parent_class_code .= "		'$this_field',\n";
             }
 		}
-        $parent_class_code .= "			]; // End of nullable fields
+        $parent_class_code .= "\t]; // End of nullable fields
 
-    // Use Eloquent attributes array to specify the default values for each field (if any) indicated by the DB schema, to be used as placeholder on form elements
-    protected \$attributes = [
+    // Use default_values array to specify the default values for each field (if any) indicated by the DB schema, to be used as placeholder on form elements
+    protected \$default_values = [
 ";
         foreach($fields as $field_index => $field_data) {
             // If the field has a default value, add it to this array
@@ -306,17 +355,33 @@ class $parent_class_name extends DURCModel{
                 if ($default_value === null) {
                     $parent_class_code .= "		'$this_field' => null,\n";
                 } else {
-                    $parent_class_code .= "		'$this_field' => '$default_value',\n";
+                    $escaped_default_value = addslashes($default_value);
+                    $parent_class_code .= "		'$this_field' => '$escaped_default_value',\n";
                 }
 
             }
 		}
-        $parent_class_code .= "			]; // End of attributes
+        $parent_class_code .= "\t];  // End of attributes
         
-		//everything is fillable by default
-		protected \$guarded = [];
-
-
+    //everything is fillable by default
+    protected \$guarded = [];
+		
+    // These are validation rules used by the DURCModel parent to validate data before storage
+    protected static \$rules = [\n";
+    foreach($fields as $field_index => $field_data) {
+        // If the field's field type has an associated rule, add it here
+        if (array_key_exists('data_type', $field_data)) {
+            $rules = self::_generate_validation_rule_for_field($field_data);
+            if ($rules !== false) {
+                $this_field = $field_data['column_name'];
+                $parent_class_code .= "\t\t'$this_field' => '$rules',\n";
+            }
+        }
+    }
+        $parent_class_code .= "\t]; // End of validation rules
+		
+        $mutators_code 
+        
 		$has_many_code
 		
 		$has_one_code
@@ -382,12 +447,12 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 	$child_class_code .= "\n//DURC HAS_MANY SECTION\n";
 	if(!is_null($has_many)){
 		foreach($has_many as $other_table_name => $relate_details){
-		
-			$prefix = $relate_details['prefix'];	
-			$type = $relate_details['type'];	
-			$from_table = $relate_details['from_table'];	
-			$from_db = $relate_details['from_db'];	
-			$from_column = $relate_details['from_column']; 
+
+			$prefix = $relate_details['prefix'];
+			$type = $relate_details['type'];
+			$from_table = $relate_details['from_table'];
+			$from_db = $relate_details['from_db'];
+			$from_column = $relate_details['from_column'];
 
 			$local_key = 'id';
 
@@ -401,7 +466,7 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 	}
 
 ";
-	
+
 		}
 	}else{
 		$child_class_code .= "\t\t\t//DURC did not detect any has_many relationships";
@@ -412,13 +477,13 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 	$child_class_code .= "\n//DURC BELONGS_TO SECTION\n";
 	if(!is_null($belongs_to)){
 		foreach($belongs_to as $other_table_name => $relate_details){
-		
-			$prefix = $relate_details['prefix'];	
-			$type = $relate_details['type'];	
-			$to_table = $relate_details['to_table'];	
+
+			$prefix = $relate_details['prefix'];
+			$type = $relate_details['type'];
+			$to_table = $relate_details['to_table'];
 			$to_db = $relate_details['to_db'];
-			$to_column = 'id';	
-			$local_key = $relate_details['local_key']; 
+			$to_column = 'id';
+			$local_key = $relate_details['local_key'];
 
 			if(!isset($used_functions[$other_table_name])){
 				$child_class_code .= "
@@ -431,12 +496,12 @@ class $class_name extends \\$model_namespace\DURC\Models\\$parent_class_name
 	}
 
 ";
-	
+
 			}else{
 				$child_class_code .= "
 \t\t//DURC would have added $other_table_name but it was already used in has_many. 
 \t\t//You will have to resolve these recursive relationships in your code.";
-				
+
 
 			}
 
@@ -488,7 +553,7 @@ $child_class_code .= "
 
 
 		//get a signed version of the code that we want to save
-		$signed_child_class_code = Signature::sign_phpfile_string($child_class_code); 
+		$signed_child_class_code = Signature::sign_phpfile_string($child_class_code);
 
 		$child_file = $app_path.$child_file_name;
 		$parent_file = $durc_app_path.$parent_file_name;
@@ -497,9 +562,9 @@ $child_class_code .= "
 			$current_file_contents = file_get_contents($child_file);
 			$has_file_changed = Signature::has_signed_file_changed($current_file_contents);
 			if($has_file_changed){
-				//if a signed file has changed, we never never overwrite it. 
-				//it contains manually created code that needs to be protected. 
-				//so we do nothing here... 
+				//if a signed file has changed, we never never overwrite it.
+				//it contains manually created code that needs to be protected.
+				//so we do nothing here...
 				echo "Not overwriting $child_file it has been modified\n";
 			}else{
 				//if the file has not been modified, then it is still in its "autogenerated" state.
