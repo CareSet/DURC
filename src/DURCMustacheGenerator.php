@@ -10,7 +10,7 @@ use CareSet\DURC\DURC;
 	All of the mostache generators will need shared functions.
 	Ways to generate basic html components, using bootstrap
 	in repeatable ways.
-	This class hosts those shared functions... 
+	This class hosts those shared functions...
 
 */
 class DURCMustacheGenerator extends DURCGenerator {
@@ -35,7 +35,7 @@ class DURCMustacheGenerator extends DURCGenerator {
         //does nothing need to comply with abstract class
     }
 
-	//basically a router for the other functions 
+	//basically a router for the other functions
 	public static function _get_field_html($URLroot,$field_data){
 
 		$column_name = $field_data['column_name'];
@@ -88,45 +88,6 @@ class DURCMustacheGenerator extends DURCGenerator {
 
 	}
 
-	protected static function _get_default_value($field_data)
-    {
-        $default_value = null;
-        if ((isset($field_data['default_value']) &&
-                $field_data['default_value'] !== null)) {
-            $default_value = $field_data['default_value'];
-        }
-
-        return $default_value;
-    }
-
-    protected static function _is_nullable($field_data)
-    {
-        $is_nullable = false;
-        if ((isset($field_data['is_nullable']) &&
-            $field_data['is_nullable'] !== null)) {
-            $is_nullable = $field_data['is_nullable'];
-        }
-
-        return $is_nullable;
-    }
-
-    protected static function _is_required($field_data)
-    {
-        $required = false;
-        if (self::_is_nullable($field_data) === false &&
-            self::_get_default_value($field_data) === null) {
-            $required = true;
-        }
-
-        // Make an exception for auto-increment fields, because they populate automatically
-        if (isset($field_data['is_auto_increment']) &&
-            $field_data['is_auto_increment'] === true) {
-            $required = false;
-        }
-
-        return $required;
-    }
-
     protected static function _get_null_checkbox_elem($field_data)
     {
         $column_name = $field_data['column_name'];
@@ -151,7 +112,7 @@ class DURCMustacheGenerator extends DURCGenerator {
 		$foreign_table = $field_data['foreign_table'];
 
 		$is_view_only = $field_data['is_view_only'];
-	
+
 		if($is_view_only){
 			$maybe_disabled_html = ' disabled ';
 		}else{
@@ -207,13 +168,13 @@ $('.select2_$column_name').select2({
 		$foreign_db = $field_data['foreign_db'];
 		$foreign_table = $field_data['foreign_table'];
 
-	
+
 		$icon_id = $column_name . "_FontPicker";
 		$today_id = $column_name . "_TodayNow";
 		$colConv = $column_name ."Conv";
 
 		$is_view_only = $field_data['is_view_only'];
-	
+
 		if($is_view_only){
 			$maybe_readonly_html = ' readonly ';
 		}else{
@@ -280,7 +241,7 @@ $('.select2_$column_name').select2({
 
 
 		$is_view_only = $field_data['is_view_only'];
-	
+
 		if($is_view_only){
 			$maybe_readonly_html = ' readonly ';
 		}else{
@@ -327,7 +288,7 @@ $('.select2_$column_name').select2({
     </div>
   </div>
 ";
-	
+
 		return($field_html);
 
 	}
@@ -359,14 +320,14 @@ $('.select2_$column_name').select2({
                         }
 
                 }
-	
+
 		if($matching_code_mode == 'sql'){
 			$right_code_mode = ", mode: 'text/x-sql'"; //do we get better results passing in a specific mime type? yes we do.
 		}
-		
+
 
 		$is_view_only = $field_data['is_view_only'];
-	
+
 		if($is_view_only){
 			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
@@ -378,7 +339,7 @@ $('.select2_$column_name').select2({
 
 
 		}else{
-	
+
 			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
@@ -418,9 +379,9 @@ $('.select2_$column_name').select2({
 		$foreign_table = $field_data['foreign_table'];
 
 		$is_view_only = $field_data['is_view_only'];
-	
+
 		if($is_view_only){
-			//TODO make a simple JS markdown function work here... 
+			//TODO make a simple JS markdown function work here...
 
 			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
@@ -432,7 +393,7 @@ $('.select2_$column_name').select2({
 ";
 
 		}else{
-	
+
 			$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
@@ -466,6 +427,9 @@ $('.select2_$column_name').select2({
         // Get our default value, if there is one, so we can put it in the placeholder,
         $default_value = self::_get_default_value($field_data);
 
+        // This is the mustache template for counting if there are validation errors for this field
+        $is_invalid = "{{#errors.$column_name}}is-invalid{{/errors.$column_name}}";
+
         // If we don't have a default value, and this field is not nullable, we have to make it required,
         $required = '';
         if (self::_is_required($field_data) === true) {
@@ -473,7 +437,7 @@ $('.select2_$column_name').select2({
         }
 
 		$is_view_only = $field_data['is_view_only'];
-	
+
 		if($is_view_only){
 			$maybe_readonly_html = ' readonly ';
 		}else{
@@ -484,7 +448,12 @@ $('.select2_$column_name').select2({
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html $required>
+      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html $required>
+      <div class='invalid-feedback'>
+          <ul>
+          {{#errors.$column_name}}<li>{{.}}</li>{{/errors.$column_name}}
+          </ul>
+       </div>
     </div>";
 		if (self::_is_nullable($field_data)) {
 		    // If we have a nullable field, add the null checkbox
@@ -509,7 +478,7 @@ $('.select2_$column_name').select2({
 
 
 		$is_view_only = $field_data['is_view_only'];
-	
+
 		if($is_view_only){
 			$maybe_readonly_html = ' readonly ';
 		}else{

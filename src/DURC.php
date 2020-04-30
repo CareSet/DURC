@@ -22,10 +22,10 @@ class DURC{
 
 		'db' => [
 				'tableA' =>
-						'first_column_in_tableA' => 
+						'first_column_in_tableA' =>
 								'column_name' => 'first_column_in_tableA',
 								'data_type' => 'int',
-						'second_column_in_tableA', 
+						'second_column_in_tableA',
 								etc..
 				'tableB' =>
 						etc..
@@ -33,7 +33,7 @@ class DURC{
 		'db2' => etc..
 	*/
 	public static function getDBstruct($db_array){
-	
+
 		$db_struct = [];
 		foreach($db_array as $this_db){
 			$db_struct[$this_db] = DURC::getTables($this_db);
@@ -42,15 +42,15 @@ class DURC{
 		return($db_struct);
 	}
 
-	
+
 	/*
 		gets the tables in a single database
 
 		pass in the name of a database.
-	
+
 		get back a single stuct like so
-				'tableA' => 
-						'firsty_column_in_tableA' => 
+				'tableA' =>
+						'firsty_column_in_tableA' =>
                                                 	'column_name' => 'first_column_in_tableA',
                                                 	'data_type' => 'int',
                                                 'second_column_in_tableA',
@@ -115,13 +115,13 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 					$table_name = $this_row->TABLE_NAME;
 					$column_name = $this_row->COLUMN_NAME;
 					$referenced_db = $this_row->REFERENCED_TABLE_SCHEMA;
-					$referenced_table = $this_row->REFERENCED_TABLE_NAME;			
+					$referenced_table = $this_row->REFERENCED_TABLE_NAME;
 
 					$tables[$table_name][$column_name]['is_foreign_key'] = true;
 					$tables[$table_name][$column_name]['is_linked_key'] = true;
 					$tables[$table_name][$column_name]['foreign_db'] = $referenced_db;
 					$tables[$table_name][$column_name]['foreign_table'] = $referenced_table;
-				
+
 				}
 			}
 
@@ -141,7 +141,7 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 
 	//using the users durc configuration..
 	//return a list of the create form  urls for the list view
-	public static function getDURCUrlArray(){		
+	public static function getDURCUrlArray(){
 		$user_edit_file_name = base_path()."/config/DURC_config.edit_me.json";
 		$user_config = json_decode(file_get_contents($user_edit_file_name),true);
 
@@ -149,7 +149,7 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 		foreach($user_config as $db => $durc_array){
 			foreach($durc_array as $durc_string => $durc_details){
 				$create_url = "/DURC/$durc_string/create";
-				$durc_listing = new \stdClass;			
+				$durc_listing = new \stdClass;
 				$durc_listing->label = $durc_string;
 				$durc_listing->create_url = $create_url;
 				$list_url = "/Zermelo/DURC_$durc_string";
@@ -189,7 +189,7 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 	}
 
 	public static function readDURCDesignConfigJSON($config_file_name){
-			
+
 		if(!file_exists($config_file_name)){
 			echo "Error: $config_file_name config file does not exist... drowning in confusion...\n";
 			exit(1);
@@ -197,9 +197,9 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 
 		$config_json = file_get_contents($config_file_name);
 		$config_data = json_decode($config_json,true); //we do want an assoc..
-	
+
 		return($config_data);
-		
+
 	}
 
 	public static function get_gen_string(){
@@ -231,7 +231,7 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 
         $input_type = '';
         if ( ( 		$l_data_type == 'tinyint' ||
-                	$l_data_type == 'boolean' ) 
+                	$l_data_type == 'boolean' )
 		&&
             		( strpos( $column_name, 'has_', 0 ) === 0 ||
             		strpos( $column_name, 'is_', 0 ) === 0 ) ) {
@@ -243,7 +243,7 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 		//and if it ends in '_markdown' or some other equviilent string
 		if(in_array($l_data_type,$char_types)){
 
-			$its_markdown = false;	
+			$its_markdown = false;
 			$markdown_strings = [ '_markdown', '_markdn' ];
 			foreach($markdown_strings as $this_markdown_string){
 				//this "does it end with" logic comes from
@@ -305,14 +305,14 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
                 $formattedValue = date( 'Y-m-d h:i:s', strtotime( $value ) );
             }
         }
-        
+
         if ($model instanceof DURCModel) {
             if ($value == null &&
                 !$model->isFieldNullable($field_name)) {
                 // Value is null, but can't be null because of Database constraints
                 // This function will get the default value as defined by database, or null if
                 // there is no default value for this column defined
-                $formattedValue = $model->getDefautValue($field_name);
+                $formattedValue = $value;//model->getDefautValue($field_name);
             }
         }
 
@@ -385,9 +385,9 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 
                         ];
 
-	//this listing is specifically borrowed from the /mode/ subdirectory of the CodeMirror 
+	//this listing is specifically borrowed from the /mode/ subdirectory of the CodeMirror
 	//we actually use CodeMirror over Ace because of how its directory names clearly map to its modes
-	//however, there are some things that we need to change in order to support 
+	//however, there are some things that we need to change in order to support
 	//decent naming conventions. so we will map 'r' to rlang etc so that we can avoid strangeness
 	//we have also removed any mode with a '-' in it.. because that does not work..
 	//sorry for 'haskel-literate' et al

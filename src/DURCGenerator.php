@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 /*
 	This abstract class details exactly how a generator is supposed to work
-	Each generators compiles from the database to a different type of 
+	Each generators compiles from the database to a different type of
 	output... some create views, others creat zermelo reports
 	still others make eloquent parent/child objects
 */
@@ -17,6 +17,7 @@ abstract class DURCGenerator{
     //possible created_at field names...
     //in reverse order of priority. we pick the last one.
     protected static $valid_created_at_fields = [
+        'created_date',
         'creation_date',
         'created_at_date',
         'createdAt', //Sequlize style
@@ -59,7 +60,7 @@ abstract class DURCGenerator{
 							$URLroot);
 
 	//Run for every database and table combination
-	abstract public static function run_generator(	
+	abstract public static function run_generator(
 							$class_name,
 							$database,
 							$table,
@@ -67,8 +68,8 @@ abstract class DURCGenerator{
 							$has_many,
 							$has_one,
 							$belongs_to,
-							$many_many, 
-							$many_through, 
+							$many_many,
+							$many_through,
 							$squash,
 							$URLroot,
 							$create_table_sql);
@@ -110,5 +111,44 @@ abstract class DURCGenerator{
 
     protected static function get_possible_deleted_at( $fields ) {
         return self::get_possible_field( self::$valid_deleted_at_fields, $fields );
+    }
+
+    protected static function _get_default_value($field_data)
+    {
+        $default_value = null;
+        if ((isset($field_data['default_value']) &&
+            $field_data['default_value'] !== null)) {
+            $default_value = $field_data['default_value'];
+        }
+
+        return $default_value;
+    }
+
+    protected static function _is_nullable($field_data)
+    {
+        $is_nullable = false;
+        if ((isset($field_data['is_nullable']) &&
+            $field_data['is_nullable'] !== null)) {
+            $is_nullable = $field_data['is_nullable'];
+        }
+
+        return $is_nullable;
+    }
+
+    protected static function _is_required($field_data)
+    {
+        $required = false;
+        if (self::_is_nullable($field_data) === false &&
+            self::_get_default_value($field_data) === null) {
+            $required = true;
+        }
+
+        // Make an exception for auto-increment fields, because they populate automatically
+        if (isset($field_data['is_auto_increment']) &&
+            $field_data['is_auto_increment'] === true) {
+            $required = false;
+        }
+
+        return $required;
     }
 }

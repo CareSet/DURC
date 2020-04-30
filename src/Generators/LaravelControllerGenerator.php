@@ -85,7 +85,7 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
         // These lines create the code for saving and redirecting the controller when an error occurs
         $save_model_data = "    \$tmp_$class_name"."->save();\n";
         $save_new_model_redirect = "    return redirect(\"/DURC/$class_name/create\")->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
-        $save_update_model_redirect = "    return redirect(\"/DURC/$class_name/{\$id}\")->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
+        $save_update_model_redirect = "    return back()->withInput()->with('errors', \$tmp_".$class_name."->getErrors());\n";
 
 		$parent_class_text = "<?php
 
@@ -96,6 +96,7 @@ use Illuminate\Http\Request;
 use CareSet\DURC\DURC;
 use CareSet\DURC\DURCController;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Input;
 
 class $class_name"."Controller extends DURCController
 {
@@ -387,6 +388,17 @@ $with_summary_array_code
         }else{
             \$this->view_data['has_session_status'] = false;
         }
+        
+        // Do we have errors in the session?
+        \$errors = session('errors', false);
+        if (\$errors) {
+            \$this->view_data['errors'] = \$errors->getMessages();
+            if (\$this->view_data['errors']) {
+                \$this->view_data['has_errors'] = true;
+            } else {
+                \$this->view_data['has_errors'] = false;
+            }
+        }
     
         \$this->view_data['csrf_token'] = csrf_token();
         
@@ -406,16 +418,23 @@ $with_summary_array_code
     
             //put the contents into the view...
             foreach(\$$class_name"."->toArray() as \$key => \$value){
+                
+                if (array_key_exists(\$key, Input::old())) {
+                    \$input = Input::old(\$key);
+                } else {
+                    \$input = \$value;
+                }
+            
                 if ( isset( $class_name::\$field_type_map[\$key] ) ) {
                     \$field_type = $class_name::\$field_type_map[ \$key ];
-                    \$this->view_data[\$key] = DURC::formatForDisplay( \$field_type, \$key, \$value );
+                    \$this->view_data[\$key] = DURC::formatForDisplay( \$field_type, \$key, \$input );
                 } else {
-                    \$this->view_data[\$key] = \$value;
+                    \$this->view_data[\$key] = \$input;
                 }
                 
                 // If this is a nullable field, see whether null checkbox should be checked by default
                 if (\$$class_name"."->isFieldNullable(\$key) &&
-                    \$value == null) {
+                    \$input == null) {
                     \$this->view_data[\"{\$key}_checked\"] = \"checked\";
                 }
             }
@@ -454,11 +473,10 @@ $with_summary_array_code
         
         try {
         $save_model_data
+            return redirect(\"$URLroot$class_name/\$id\")->with('status', 'Data Saved!');
         } catch (\\Exception \$e) {
         $save_update_model_redirect
         }
-    
-        return redirect(\"$URLroot$class_name/\$id\")->with('status', 'Data Saved!');
     }
 
     /**
