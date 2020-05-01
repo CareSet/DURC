@@ -76,7 +76,25 @@ class DURCModel extends Model{
        if ($this->validate()) {
             return parent::save($options);
        } else {
-            throw new DURCInvalidDataException("DURC could not save this model because the data is invalid");
+            $messsage = "DURC could not save this ".get_class($this)." model because the data is invalid.\n\n";
+            $messsage .= "Here is the data you tried to store:\n";
+
+            foreach ($this->attributes as $key => $value) {
+               $messsage .= "$key => $value\n";
+            }
+
+           $messsage .= "\nHere are the issues:\n";
+            foreach ($this->getErrors()->getMessages() as $key => $messages) {
+               if (isset($this->attributes[$key])) {
+                   $messsage .= "$key => {$this->attributes[$key]}\n";
+               } else {
+                   $messsage .= "$key => ?\n";
+               }
+               foreach ($messages as $m) {
+                   $messsage .= "    * $m\n";
+               }
+            }
+            throw new DURCInvalidDataException($messsage);
        }
     }
 
