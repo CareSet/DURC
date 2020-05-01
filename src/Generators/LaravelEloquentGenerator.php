@@ -355,7 +355,8 @@ class $parent_class_name extends DURCModel{
                 if ($default_value === null) {
                     $parent_class_code .= "		'$this_field' => null,\n";
                 } else {
-                    $parent_class_code .= "		'$this_field' => '$default_value',\n";
+                    $escaped_default_value = addslashes($default_value);
+                    $parent_class_code .= "		'$this_field' => '$escaped_default_value',\n";
                 }
 
             }
