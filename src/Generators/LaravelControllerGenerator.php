@@ -96,7 +96,6 @@ use Illuminate\Http\Request;
 use CareSet\DURC\DURC;
 use CareSet\DURC\DURCController;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Input;
 use CareSet\DURC\DURCInvalidDataException;
 
 class $class_name"."Controller extends DURCController
@@ -332,8 +331,8 @@ $with_summary_array_code
      * @param  \App\\$$class_name  \$$class_name
      * @return \Illuminate\Http\Response
      */
-    public function show($class_name \$$class_name){
-	return(\$this->edit(\$$class_name));
+    public function show(Request \$request, $class_name \$$class_name){
+	return(\$this->edit(\$request, \$$class_name));
     }
 
     /**
@@ -368,10 +367,10 @@ $with_summary_array_code
      * Show the form for creating a new resource.
      * @return \Illuminate\Http\Response
      */
-    public function create(){
+    public function create(Request \$request){
         // but really, we are just going to edit a new object..
         \$new_instance = new $class_name();
-        return \$this->edit(\$new_instance);
+        return \$this->edit(\$request, \$new_instance);
     }
 
 
@@ -380,12 +379,12 @@ $with_summary_array_code
      * @param  \App\\$class_name  \$$class_name
      * @return \Illuminate\Http\Response
      */
-    public function edit($class_name \$$class_name){
+    public function edit(Request \$request, $class_name \$$class_name){
 
         \$main_template_name = \$this->_getMainTemplateName();
         
         // in case there's flashed input
-        \$this->view_data = Input::old();
+        \$this->view_data = \$request->old();
     
         //do we have a status message in the session? The view needs it...
         \$this->view_data['session_status'] = session('status',false);
@@ -425,8 +424,8 @@ $with_summary_array_code
             //put the contents into the view...
             foreach(\$$class_name"."->toArray() as \$key => \$value){
                 
-                if (array_key_exists(\$key, Input::old())) {
-                    \$input = Input::old(\$key);
+                if (array_key_exists(\$key, \$request->old())) {
+                    \$input = \$request->old(\$key);
                 } else {
                     \$input = \$value;
                 }
@@ -573,9 +572,9 @@ class $class_name"."Controller extends DURCParentController
      * @param  \App\\$class_name  \$$class_name
      * @return \Illuminate\Http\Response
      */
-    public function edit($class_name \$$class_name, \$is_new = false){
+    public function edit(Request \$request, $class_name \$$class_name, \$is_new = false){
         // enter your stuff here if you want...
-	return(parent::edit(\$$class_name));
+	return(parent::edit(\$request, \$$class_name));
     }
 
     /**
