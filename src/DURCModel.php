@@ -83,7 +83,7 @@ class DURCModel extends Model{
                $messsage .= "$key => $value\n";
             }
 
-           $messsage .= "\nHere are the issues:\n";
+            $messsage .= "\nHere are the issues:\n";
             foreach ($this->getErrors()->getMessages() as $key => $messages) {
                if (isset($this->attributes[$key])) {
                    $messsage .= "$key => {$this->attributes[$key]}\n";
