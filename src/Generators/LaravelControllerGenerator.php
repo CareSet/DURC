@@ -542,9 +542,9 @@ class $class_name"."Controller extends DURCParentController
      * Show the form for creating a new resource.
      * @return \Illuminate\Http\Response
      */
-    public function create(){
+    public function create(Request \$request){
         // enter your stuff here if you want...
-	return(parent::create());
+	return(parent::create(\$request));
     }
 
     /**
@@ -562,9 +562,9 @@ class $class_name"."Controller extends DURCParentController
      * @param  \App\\$$class_name  \$$class_name
      * @return \Illuminate\Http\Response
      */
-    public function show($class_name \$$class_name){
+    public function show(Request \$request, $class_name \$$class_name){
         // enter your stuff here if you want...
-	return(parent::show(\$$class_name));
+	return(parent::show(\$request, \$$class_name));
     }
 
     /**
