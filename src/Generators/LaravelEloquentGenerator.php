@@ -344,8 +344,8 @@ class $parent_class_name extends DURCModel{
 		}
         $parent_class_code .= "\t]; // End of nullable fields
 
-    // Use Eloquent attributes array to specify the default values for each field (if any) indicated by the DB schema, to be used as placeholder on form elements
-    protected \$attributes = [
+    // Use default_values array to specify the default values for each field (if any) indicated by the DB schema, to be used as placeholder on form elements
+    protected \$default_values = [
 ";
         foreach($fields as $field_index => $field_data) {
             // If the field has a default value, add it to this array

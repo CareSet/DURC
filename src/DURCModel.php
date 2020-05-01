@@ -76,7 +76,7 @@ class DURCModel extends Model{
        if ($this->validate()) {
             return parent::save($options);
        } else {
-            throw new \Exception("DURC could not save this model because the data is invalid");
+            throw new DURCInvalidDataException("DURC could not save this model because the data is invalid");
        }
     }
 
@@ -146,7 +146,7 @@ class DURCModel extends Model{
     public function getNullableFields()
     {
         $nullable = [];
-        foreach($this->attributes as $key => $value) {
+        foreach($this->default_values as $key => $value) {
             if ($this->isFieldNullable($key)) {
                 $nullable[]= $key;
             }
@@ -158,8 +158,8 @@ class DURCModel extends Model{
     public function getDefautValue($field)
     {
         $default = null;
-        if (array_key_exists($field, $this->attributes)) {
-            $default = $this->attributes[$field];
+        if (array_key_exists($field, $this->default_values)) {
+            $default = $this->default_values[$field];
         }
 
         return $default;
