@@ -291,24 +291,30 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
      */
     public static function formatForStorage( $field_name, $field_type, $value, $model = null)
     {
+
+
         $formattedValue = $value;
         if ( self::mapColumnDataTypeToInputType( $field_type, $field_name ) == 'boolean' ) {
-            if ( $value == 'on' ||
-                $value > 0 ) {
+			//support obvious notions of truth
+            if ( $value === 'on' || $value === 'true' || $value === true || $value > 0 ) {
+		//this allows us to support the use of 'on'/'true' etc  for trueness
                 $formattedValue = 1;
             } else {
+		//if it is a boolean and it is not obviously true.. then it is false..
                 $formattedValue = 0;
             }
         } else if ( $field_type == 'datetime' ) {
             // Convert to SQL format for storage
             if ( !empty($value) ) {
                 $formattedValue = date( 'Y-m-d h:i:s', strtotime( $value ) );
-            }
+            }else{
+		//what does it mean to be here?? TODO
+	    }
         }
 
+
         if ($model instanceof DURCModel) {
-            if ($value == null &&
-                !$model->isFieldNullable($field_name)) {
+            if (is_null($value) && !$model->isFieldNullable($field_name)) {
                 // Value is null, but can't be null because of Database constraints
                 // This function will get the default value as defined by database, or null if
                 // there is no default value for this column defined
@@ -316,6 +322,7 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
             }
         }
 
+	//finally we return the results of our calculation... 
         return $formattedValue;
     }
 
