@@ -1,6 +1,6 @@
 <?php
 /*
-	This file is required because of reasons. 
+	This file is needed because of reasons. 
 	When we remove it, things go haywire.. but it does not actually do anything.
 	Why cant we remove it more easily?
 */
