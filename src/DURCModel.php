@@ -74,7 +74,17 @@ class DURCModel extends Model{
     public function save(array $options = [])
     {
        if ($this->validate()) {
-            return parent::save($options);
+
+		return parent::save($options);
+/*
+		//this is where our better mysql error viewer would go...
+		try {
+            		return parent::save($options);
+		}
+		catch (\Illuminate\Database\QueryException $e) {
+			dd($e);
+		}
+*/
        } else {
             $messsage = "DURC could not save this ".get_class($this)." model because the data is invalid.\n\n";
             $messsage .= "Here is the data you tried to store:\n";

@@ -40,6 +40,10 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
         if (self::_is_required($field) == true) {
             $rules []= 'required';
+	}
+
+        if (self::_is_present($field) == true) {
+            $rules []= 'present';
         }
 
         if (count($rules)) {
@@ -331,7 +335,7 @@ class $parent_class_name extends DURCModel{
 
 		$parent_class_code .= "\t]; //end field_type_map
 		
-    // Indicate which fields are nullable for the UI to be able to validate required form elements
+    // Indicate which fields are nullable for the UI to be able to validate required/present form elements
     protected \$non_nullable_fields = [
 ";
         foreach($fields as $field_index => $field_data) {

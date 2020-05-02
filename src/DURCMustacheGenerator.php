@@ -101,7 +101,7 @@ class DURCMustacheGenerator extends DURCGenerator {
         return $html;
     }
 
-	//this returns both the html and the javascript required to kick start an AJAX powered select2 instance.
+	//this returns both the html and the javascript needed to kick start an AJAX powered select2 instance.
 	public static function _get_select2_field_html($URLroot, $field_data){
 
 		$column_name = $field_data['column_name'];
@@ -184,10 +184,14 @@ $('.select2_$column_name').select2({
         // Get our default value, if there is one, so we can put it in the placeholder,
         $default_value = self::_get_default_value($field_data);
 
-        // If we don't have a default value, and this field is not nullable, we have to make it required,
+        // If we don't have a default value, and this field is not nullable, we have to make it present,
         $required = '';
-        if (self::_is_required($field_data) === true) {
-            $required = 'required';
+        if (self::_is_present($field_data) === true) {
+            $required = 'required'; 
+		//this is the place where we reconcile the difference between the Laravel notion of 'required' and the HTML5 form notion of required 
+		//https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/required
+		//vs
+		//https://laravel.com/docs/6.x/validation#rule-required
         }
 
 
@@ -253,8 +257,8 @@ $('.select2_$column_name').select2({
 
         // If we don't have a default value, and this field is not nullable, we have to make it required,
         $required = '';
-        if (self::_is_required($field_data) === true) {
-            $required = 'required';
+        if (self::_is_present($field_data) === true) {
+            $required = 'required'; //see note about present vs required
         }
 
 		$field_html = "
@@ -432,8 +436,8 @@ $('.select2_$column_name').select2({
 
         // If we don't have a default value, and this field is not nullable, we have to make it required,
         $required = '';
-        if (self::_is_required($field_data) === true) {
-            $required = 'required';
+        if (self::_is_present($field_data) === true) {
+            $required = 'required'; //see note about the difference between present and required
         }
 
 		$is_view_only = $field_data['is_view_only'];

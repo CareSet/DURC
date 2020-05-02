@@ -137,18 +137,35 @@ abstract class DURCGenerator{
 
     protected static function _is_required($field_data)
     {
-        $required = false;
+
+	$doesItEndWithRequire = substr_compare(
+					strtolower($field_data['column_name']), 
+					'_required',
+					-strlen('_required')) === 0;
+
+	return $doesItEndWithRequire;
+
+    }
+
+    protected static function _is_present($field_data)
+    {
+
+	//the 'present' validation rule means that data field must be provided but it 
+	//can be 'empty' unlike 'required' which does not like to see 
+	// 0, null etc etc... 
+
+        $present = false;
         if (self::_is_nullable($field_data) === false &&
             self::_get_default_value($field_data) === null) {
-            $required = true;
+            $present = true;
         }
 
         // Make an exception for auto-increment fields, because they populate automatically
         if (isset($field_data['is_auto_increment']) &&
             $field_data['is_auto_increment'] === true) {
-            $required = false;
+            $present = false;
         }
 
-        return $required;
+        return $present;
     }
 }
