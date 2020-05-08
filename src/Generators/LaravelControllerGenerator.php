@@ -317,7 +317,7 @@ $with_summary_array_code
         $save_model_data
         \$new_id = \$myNew$class_name"."->id;
         return redirect(\"$URLroot$class_name/\$new_id\")->with('status', 'Data Saved!');
-        } catch (\DURCInvalidDataException \$e) {
+        } catch (DURCInvalidDataException \$e) {
         $save_update_model_redirect
         } catch (\\Exception \$e) {
         $save_new_model_redirect
