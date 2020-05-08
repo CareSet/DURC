@@ -32,7 +32,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
 		//this should not be hard coded... but here we are..
 		$model_namespace = 'App';
-	
+
 		$model = "\\App\\$class_name";
 
 		$debug = false;
@@ -136,12 +136,12 @@ $delete_alert_code
 	";
 
 		foreach($fields as $i => $field_data){
-	
+
 			$durc_eloquent_model_location = base_path() . "/app/$class_name.php";
 			if(file_exists($durc_eloquent_model_location)){
 				require_once($durc_eloquent_model_location);
-	
-				if(method_exists($model,'isFieldHiddenInGenericEditor')){	
+
+				if(method_exists($model,'isFieldHiddenInGenericDurcEditor')){
 					$is_hidden    = $model::isFieldHiddenInGenericDurcEditor($field_data['column_name']);
 				}else{
 					$is_hidden = false;
@@ -153,16 +153,16 @@ $delete_alert_code
 				}
 				if($field_data['is_view_only'] || $is_hidden ){
 					var_export($field_data);
-				}	
+				}
 			}else{
 				$is_hidden    = false;
-				$field_data['is_view_only'] = false; 
+				$field_data['is_view_only'] = false;
 			}
 
 			if($is_hidden){
 				// we do nothing here... no need to add to the form when there is nothing to add..
 				//note tha hidden values will break when they are required in the underlying database...
-				//and they are not already set... or set using a DB default... or allowing NULL in field... etc etc.. 
+				//and they are not already set... or set using a DB default... or allowing NULL in field... etc etc..
 			}else{
 				$field_html = parent::_get_field_html($URLroot,$field_data); //this is defined in ../DURCMustacheGenerator.php
 				//echo $field_html;
@@ -315,7 +315,7 @@ $delete_alert_code
 <thead>
 <tr>
 ";
-		
+
 			//generates the headers to the table
 			foreach($other_columns as $this_item){
 				$column_name = $this_item['column_name'];
@@ -334,9 +334,9 @@ $template_text .= "
 			//generates the looping rows of data using mostache tags...
 			foreach($other_columns as $this_item){
 				$column_name = $this_item['column_name'];
-				if($column_name == 'id'){	
+				if($column_name == 'id'){
 					//this is the link back to the edit view for this data item..
-					$template_text .= "\t\t\t<td><a href='$URLroot$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";	
+					$template_text .= "\t\t\t<td><a href='$URLroot$type/{{"."$column_name"."}}'>{{"."$column_name"."}}</a></td>\n";
 				}else{
 					$last_three = substr($column_name,-3);
 					if($last_three == '_id'){
@@ -348,7 +348,7 @@ $template_text .= "
 					}
 					//normal data no link
 				}
-			}		
+			}
 
 			$template_text .= "		
 		{{/.}}
@@ -363,7 +363,7 @@ $template_text .= "
 		}//end foreach belongs_to
 		$template_text .= "</div></div> <!--end belongs to card-->";
 	}//end if null belongs_to
-	
+
 
 	$template_text .= "
 <br>

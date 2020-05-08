@@ -36,6 +36,13 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
         // Write the hidden fields
         $hidden_fields_array_code = "\tprotected static \$hidden_fields_array = [\n";
         $hiddenFields = config( 'durc.hidden_fields' );
+        // Hide autoincrement fields by default
+        foreach ($fields as $field) {
+            if (self::_is_auto_increment($field)) {
+                $hiddenField = $field['column_name'];
+                $hidden_fields_array_code .= "\t\t'$hiddenField',\n";
+            }
+        }
         foreach ( $hiddenFields as $hiddenField ) {
             if ( self::has_field( $fields, $hiddenField ) ) {
                 $hidden_fields_array_code .= "\t\t'$hiddenField',\n";

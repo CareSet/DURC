@@ -30,7 +30,8 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
     protected static function _generate_validation_rule_for_field($field) {
         $rules = [];
-        if ($field['data_type'] === 'int') {
+        if ($field['data_type'] === 'int' &&
+            self::_is_auto_increment($field) === false) {
             $rules []= 'integer';
         }
 
