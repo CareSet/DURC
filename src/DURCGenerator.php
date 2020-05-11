@@ -74,8 +74,17 @@ abstract class DURCGenerator{
 							$URLroot,
 							$create_table_sql);
 
-
-    protected static function has_field( $fields, $column_name ){
+    /**
+     * @param array $fields
+     * @param $column_name
+     * @return bool
+     *
+     * Given an array of fields (see config/DURC_config.autogen.json for field attributes)
+     * check to see if the array contains the String column name passed, in the $column_name
+     * parameter. Return true if the array $fields contains $coulmn_name, false OW
+     */
+    protected static function has_field( $fields, $column_name )
+    {
         $found = false;
         foreach ( $fields as $field ) {
             if ( $field['column_name'] == $column_name ) {
@@ -87,6 +96,16 @@ abstract class DURCGenerator{
         return $found;
     }
 
+    /**
+     * @param array $valid_fields
+     * @param array $possible_fields
+     * @return bool|mixed
+     *
+     * Given an array of fields (see config/DURC_config.autogen.json for field attributes)
+     * and an array of possible fields, check to see if any of the column names in the
+     * array of valid fields exist in the array of possible fields. If it exists, return
+     * the field, otherwise return false.
+     */
     private static function get_possible_field( $valid_fields, $possible_fields )
     {
         $found_field = false;
@@ -101,18 +120,50 @@ abstract class DURCGenerator{
         return $found_field;
     }
 
-    protected static function get_possible_created_at( $fields ) {
+    /**
+     * @param array $fields
+     * @return bool|mixed
+     *
+     * Fiven an array of fields, find the possible field representing a "created at" attribute.
+     * If found, return the field, return false otherwise.
+     */
+    protected static function get_possible_created_at( $fields )
+    {
         return self::get_possible_field( self::$valid_created_at_fields, $fields );
     }
 
-    protected static function get_possible_updated_at( $fields ) {
+    /**
+     * @param array $fields
+     * @return bool|mixed
+     *
+     * Fiven an array of fields, find the possible field representing a "updated at" attribute.
+     * If found, return the field, return false otherwise.
+     */
+    protected static function get_possible_updated_at( $fields )
+    {
         return self::get_possible_field( self::$valid_updated_at_fields, $fields );
     }
 
-    protected static function get_possible_deleted_at( $fields ) {
+    /**
+     * @param array $fields
+     * @return bool|mixed
+     *
+     * Fiven an array of fields, find the possible field representing a "deleted at" attribute.
+     * If found, return the field, return false otherwise.
+     */
+    protected static function get_possible_deleted_at( $fields )
+    {
         return self::get_possible_field( self::$valid_deleted_at_fields, $fields );
     }
 
+    /**
+     * @param $field_data
+     * @return mixed|null
+     *
+     * DURC mines the default value for a field from the database schema.
+     * This function checks to see if there is a default value set for this field in the database.
+     * If there is a default value, return it, otherwise return null
+     */
     protected static function _get_default_value($field_data)
     {
         $default_value = null;
@@ -124,6 +175,14 @@ abstract class DURCGenerator{
         return $default_value;
     }
 
+    /**
+     * @param $field_data
+     * @return bool|mixed
+     *
+     * DURC mines the NULLABLE metadata from the database schema. This function
+     * check to see if this field is allowed to be NULL based on the schmea.
+     * If the field can be NULL, return true, othewise return false.
+     */
     protected static function _is_nullable($field_data)
     {
         $is_nullable = false;
@@ -133,6 +192,24 @@ abstract class DURCGenerator{
         }
 
         return $is_nullable;
+    }
+
+    /**
+     * @param $field_data
+     * @return bool
+     *
+     * DURC mines the AUTO_INCREMENT attribute from the database schema. This function
+     * checks to see if this field is an auto-increment field. If this field is an AI field,
+     * return true, otherwise return false.
+     */
+    protected static function _is_auto_increment($field_data)
+    {
+        $auto = false;
+        if (isset($field_data['is_auto_increment']) &&
+            $field_data['is_auto_increment'] === true) {
+            $auto = true;
+        }
+        return $auto;
     }
 
     protected static function _is_required($field_data)
@@ -145,16 +222,6 @@ abstract class DURCGenerator{
 
 	return $doesItEndWithRequire;
 
-    }
-
-    protected static function _is_auto_increment($field_data)
-    {
-        $auto = false;
-        if (isset($field_data['is_auto_increment']) &&
-            $field_data['is_auto_increment'] === true) {
-            $auto = true;
-        }
-        return $auto;
     }
 
     protected static function _is_present($field_data)
