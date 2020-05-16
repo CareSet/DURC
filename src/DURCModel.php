@@ -16,6 +16,12 @@ use CareSet\DURC\DURC;
 class DURCModel extends Model{
 
     /**
+     * @var array Array mapping attribute keys to their DB types,
+     * overridden in child class
+     */
+    static $field_type_map = [];
+
+    /**
      * Error message bag
      *
      * @var Illuminate\Support\MessageBag
@@ -54,15 +60,14 @@ class DURCModel extends Model{
     /**
      * DURCModel constructor.
      * @param array $attributes
-     * @param Validator|null $validator
      *
-     * Construct the model and build the validator (if no custom validator is passed)
+     * Construct the model and build the validator, which will validate our models in the save() method
      */
-    public function __construct(array $attributes = array(), Validator $validator = null)
+    public function __construct(array $attributes = array())
     {
         parent::__construct($attributes);
 
-        $this->validator = $validator ?: \App::make('validator');
+        $this->validator = \App::make('validator');
     }
 
     /**
@@ -73,6 +78,10 @@ class DURCModel extends Model{
      */
     public function save(array $options = [])
     {
+        // Run the formatter, which does conversion for DB storage on some field types
+        $this->formatForstorage();
+
+        // Try the validator, if it failes, throw an exception (which can be handled in controller)
        if ($this->validate()) {
 
 		return parent::save($options);
@@ -106,6 +115,20 @@ class DURCModel extends Model{
             }
             throw new DURCInvalidDataException($messsage);
        }
+    }
+
+    /**
+     * Format all model attributes for storage. This means:
+     * - Convert dates to DB format (though Laravel should do this automatically if specified in model)
+     * - Convert checkbox values for booleans from 'on' to 1 or 0
+     */
+    public function formatForStorage()
+    {
+        foreach ($this->attributes as $key => $value) {
+            if (isset(static::$field_type_map[$key])) {
+                $this->attributes[$key] = DURC::formatForStorage($key, static::$field_type_map[$key], $value, $this);
+            }
+        }
     }
 
     /**

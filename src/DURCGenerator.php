@@ -224,6 +224,12 @@ abstract class DURCGenerator{
 
     }
 
+    /**
+     * @param $field_data
+     * @return bool
+     *
+     * The field under validation must be present in the input data but can be empty.
+     */
     protected static function _is_present($field_data)
     {
 
