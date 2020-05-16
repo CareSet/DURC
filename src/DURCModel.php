@@ -70,6 +70,7 @@ class DURCModel extends Model{
         $this->validator = \App::make('validator');
     }
 
+
     /**
      * @param array $options
      * @return bool
@@ -219,8 +220,13 @@ class DURCModel extends Model{
         $default = null;
         if (array_key_exists($field, $this->default_values)) {
             if (strtoupper($this->default_values[$field]) === 'CURRENT_TIMESTAMP') {
-                // If the default is current timestamp, set to null so DB can do it's work
-                $default = null;
+                // If the default is current timestamp, we have to set ourselves if field is non-nullable because
+                // somthing weird is going on and the database won't set the value if the field is non-nullable,
+                // and set to CURRENT_TIMESTAMP as default
+                // TODO: maybe figure this out
+                if (!static::isFieldNullable($field)) {
+                    $default = date('Y-m-d h:i:s');
+                }
             } else if (substr_compare(ltrim($this->default_values[$field]), "(", 0, 1) === 0 &&
                 substr_compare(rtrim($this->default_values[$field]), ")", -1) === 0) {
                 // The default value specified in a DEFAULT clause can be a literal constant or an expression.

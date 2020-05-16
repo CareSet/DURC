@@ -191,7 +191,7 @@ $('.select2_$column_name').select2({
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html>
+      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html>
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
 <img src='/css/ic_today_black_24dp_1x.png'> 
@@ -201,9 +201,9 @@ $('.select2_$column_name').select2({
   <ul>
   {{#errors.$column_name}}<li>{{.}}</li>{{/errors.$column_name}}
   </ul>
-</div>
+</div>";
 
-<script>
+    $field_html.= "<script>
 	var $colConv = new AnyTime.Converter({format: '%Y-%m-%d %T'});
   	$('#$today_id').click( function(e) {
       		$('#$column_name').val($colConv.format(new Date())).change(); } );
@@ -220,9 +220,12 @@ $('.select2_$column_name').select2({
         	} );
 </script>
 
-    </div>
-  </div>
-";
+    </div>";
+        if (self::_is_nullable($field_data)) {
+            // If we have a nullable field, add the null checkbox
+            $field_html .= self::_get_null_checkbox_elem($field_data);
+        }
+  $field_html.= "</div>";
 
 		return($field_html);
 	}
@@ -259,7 +262,7 @@ $('.select2_$column_name').select2({
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html>
+      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html>
         
     <button type='button' class='btn btn-primary' id='$icon_id'>
     <img src='/css/ic_today_black_24dp_1x.png'> 
@@ -270,8 +273,7 @@ $('.select2_$column_name').select2({
       {{#errors.$column_name}}<li>{{.}}</li>{{/errors.$column_name}}
       </ul>
    </div>
-
-<script>
+   <script>
 	var $colConv = new AnyTime.Converter({format: '%Y-%m-%d'});
   	$('#$today_id').click( function(e) {
       		$('#$column_name').val($colConv.format(new Date())).change(); } );
@@ -286,11 +288,14 @@ $('.select2_$column_name').select2({
 			).focus();
         	e.preventDefault();
         	} );
-</script>
+    </script>
 
-    </div>
-  </div>
-";
+    </div>";
+        if (self::_is_nullable($field_data)) {
+            // If we have a nullable field, add the null checkbox
+            $field_html .= self::_get_null_checkbox_elem($field_data);
+        }
+  $field_html .= "</div>";
 
 		return($field_html);
 
