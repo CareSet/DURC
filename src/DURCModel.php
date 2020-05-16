@@ -206,11 +206,32 @@ class DURCModel extends Model{
         return $nullable;
     }
 
+    /**
+     * @param $field
+     * @return |null
+     *
+     * Get the default value of the field as mined from the database schema.
+     * Default values can be a literal, an expression enclosed in parentheses or
+     * current_timestamp, so we handle those cases.
+     */
     public function getDefautValue($field)
     {
         $default = null;
         if (array_key_exists($field, $this->default_values)) {
-            $default = $this->default_values[$field];
+            if (strtoupper($this->default_values[$field]) === 'CURRENT_TIMESTAMP') {
+                // If the default is current timestamp, set to null so DB can do it's work
+                $default = null;
+            } else if (substr_compare(ltrim($this->default_values[$field]), "(", 0, 1) === 0 &&
+                substr_compare(rtrim($this->default_values[$field]), ")", -1) === 0) {
+                // The default value specified in a DEFAULT clause can be a literal constant or an expression.
+                // With one exception, enclose expression default values within parentheses to distinguish them
+                // from literal constant default values.
+
+                // If this default value starts with a ( and ends with a ) then we know it's an expression.
+                $default = null;
+            } else {
+                $default = $this->default_values[$field];
+            }
         }
 
         return $default;

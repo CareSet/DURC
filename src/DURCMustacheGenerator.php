@@ -181,6 +181,9 @@ $('.select2_$column_name').select2({
 			$maybe_readonly_html = '';
 		}
 
+        // This is the mustache template for counting if there are validation errors for this field
+        $is_invalid = "{{#errors.$column_name}}is-invalid{{/errors.$column_name}}";
+
         // Get our default value, if there is one, so we can put it in the placeholder,
         $default_value = self::_get_default_value($field_data);
 
@@ -188,12 +191,17 @@ $('.select2_$column_name').select2({
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html>
+      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html>
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
 <img src='/css/ic_today_black_24dp_1x.png'> 
 </button>
 <button type='button' class='btn btn-primary' id='$today_id'> Today and Now</button>
+<div class='invalid-feedback'>
+  <ul>
+  {{#errors.$column_name}}<li>{{.}}</li>{{/errors.$column_name}}
+  </ul>
+</div>
 
 <script>
 	var $colConv = new AnyTime.Converter({format: '%Y-%m-%d %T'});
@@ -241,6 +249,9 @@ $('.select2_$column_name').select2({
 			$maybe_readonly_html = '';
 		}
 
+        // This is the mustache template for counting if there are validation errors for this field
+        $is_invalid = "{{#errors.$column_name}}is-invalid{{/errors.$column_name}}";
+
         // Get our default value, if there is one, so we can put it in the placeholder,
         $default_value = self::_get_default_value($field_data);
 
@@ -248,12 +259,17 @@ $('.select2_$column_name').select2({
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html>
-
-<button type='button' class='btn btn-primary' id='$icon_id'>
-<img src='/css/ic_today_black_24dp_1x.png'> 
-</button>
-<button type='button' class='btn btn-primary' id='$today_id'> Today </button>
+      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='' value='{{"."$column_name"."}}' $maybe_readonly_html>
+        
+    <button type='button' class='btn btn-primary' id='$icon_id'>
+    <img src='/css/ic_today_black_24dp_1x.png'> 
+    </button>
+    <button type='button' class='btn btn-primary' id='$today_id'> Today </button>
+    <div class='invalid-feedback'>
+      <ul>
+      {{#errors.$column_name}}<li>{{.}}</li>{{/errors.$column_name}}
+      </ul>
+   </div>
 
 <script>
 	var $colConv = new AnyTime.Converter({format: '%Y-%m-%d'});
