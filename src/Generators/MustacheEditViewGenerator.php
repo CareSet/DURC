@@ -391,10 +391,19 @@ $template_text .= "
                 }
             });
             
-            // Trigger change on page load
+            // Trigger change on page load. If the null box is checked, mark field readonly
+            // If the null checkbox isn't checked, but the value is empty string, check null 
+            // checkbox and also mark readonly
             $('.null-checkbox').each(function() {
+                let id = $(this).attr('data-elem');
                 if ($(this).prop('checked')) {
-                    let id = $(this).attr('data-elem');
+                    // The null box is checked
+                    $('#'+id).attr('readonly', true);
+                } else if (!$(this).prop('checked') &&
+                    $('#'+id).val() == '') {
+                    // The null box is not checked, but the value is empty
+                    // Check the null box
+                    $(this).prop('checked', 'checked');
                     $('#'+id).attr('readonly', true);
                 }
             });

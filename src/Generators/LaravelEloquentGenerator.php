@@ -28,9 +28,79 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 		//does nothing need to comply with abstract class
 	}
 
+    /**
+     * @param $field
+     * @return bool|string
+     *
+     * Generate an eloquent validation rule for a field, given what we know
+     * about the field using minded meta-data. These are rules are generally
+     * in place to try to preempt exceptions beign thrown by attempting to save
+     * invalid data into the database.
+     *
+     * We try to take advantage of as many built-in validators as possible since this
+     * issue:
+     * https://github.com/CareSet/DURC/issues/61
+     *
+     */
     protected static function _generate_validation_rule_for_field($field) {
         $rules = [];
-        if ($field['data_type'] === 'int' &&
+
+        if (self::_begins_with('_is', $field)) {
+            $rules []= 'boolean';
+        }
+
+        if (self::_ends_with('_url', $field)) {
+            $rules []= 'url';
+        }
+
+        if (self::_ends_with('_uuid', $field)) {
+            $rules []= 'uuid';
+        }
+
+        if (self::_ends_with('_alpha', $field)) {
+            $rules []= 'alpha';
+        }
+
+        if (self::_ends_with('_alpha_dash', $field)) {
+            $rules []= 'alpha_dash';
+        }
+
+        if (self::_ends_with('_alpha_num', $field)) {
+            $rules []= 'alpha_num';
+        }
+
+        if (self::_ends_with('_email', $field)) {
+            $rules []= 'email';
+        }
+
+        if (self::_ends_with('_ipv4', $field)) {
+            $rules []= 'ipv4';
+        }
+
+        if (self::_ends_with('_ipv6', $field)) {
+            $rules []= 'ipv6';
+        }
+
+        if (self::_ends_with('_json', $field)) {
+            $rules []= 'json';
+        }
+
+        if (self::_ends_with('_timezone', $field)) {
+            $rules []= 'timezone';
+        }
+
+        if ($field['data_type'] === 'decimal' ||
+            $field['data_type'] === 'float' ||
+            $field['data_type'] === 'double' ||
+            $field['data_type'] === 'real') {
+            $rules []= 'numeric';
+        }
+
+        if (($field['data_type'] === 'int' ||
+            $field['data_type'] === 'smallint' ||
+            $field['data_type'] === 'medium' ||
+            $field['data_type'] === 'bigint' ||
+            $field['data_type'] === 'tinyint' ) &&
             self::_is_auto_increment($field) === false) {
             $rules []= 'integer';
         }
@@ -39,13 +109,11 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
             $rules []= 'nullable';
         }
 
-        if (self::_is_required($field) == true) {
+        // Required validation rule allows 0 for integers
+        // but does not allow empty strings for varchars
+        if (self::_is_required($field) === true) {
             $rules []= 'required';
-	}
-
-        if (self::_is_present($field) == true) {
-            $rules []= 'present';
-        }
+	    }
 
         if (count($rules)) {
             return implode("|", $rules);

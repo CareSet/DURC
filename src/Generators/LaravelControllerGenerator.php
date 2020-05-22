@@ -91,7 +91,7 @@ class LaravelControllerGenerator extends \CareSet\DURC\DURCGenerator {
 
         // These lines create the code for saving and redirecting the controller when an error occurs
         $save_model_data = "    \$tmp_$class_name"."->save();\n";
-        $save_new_model_redirect = "    return redirect(\"/DURC/$class_name/create\")->withInput()->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
+        $save_new_model_redirect = "    return back()->withInput()->with('status', 'There was an error in your data: '.\$e->getMessage());\n";
         $save_update_model_redirect = "    return back()->withInput()->with('errors', \$tmp_".$class_name."->getErrors());\n";
 
 		$parent_class_text = "<?php
@@ -401,25 +401,27 @@ $with_summary_array_code
             \$this->view_data['has_session_status'] = false;
         }
         
-        // Do we have errors in the session?
-        \$errors = session('errors', false);
-        if (\$errors) {
-            \$this->view_data['errors'] = \$errors->getMessages();
-            if (\$this->view_data['errors']) {
-                \$this->view_data['has_errors'] = true;
-            } else {
-                \$this->view_data['has_errors'] = false;
-            }
+        // Do we have errors in the session? If so, set local error_messages array, 
+        // which contains an array for each field containing error messages
+        \$error_messages = [];
+        if (\$errors = session('errors', false)) {
+            \$error_messages = \$errors->getMessages();
         }
     
         \$this->view_data['csrf_token'] = csrf_token();
-        
         
         foreach ( $class_name::\$field_type_map as \$column_name => \$field_type ) {
             // If this field name is in the configured list of hidden fields, do not display the row.
             \$this->view_data[\"{\$column_name}_row_class\"] = '';
             if ( in_array( \$column_name, self::\$hidden_fields_array ) ) {
                 \$this->view_data[\"{\$column_name}_row_class\"] = 'd-none';
+            }
+            
+            // If this field has any errors, set them, otherwise tell view that has_errors is false for this field
+            \$this->view_data['errors'][\$column_name]['has_errors'] = false;
+            if (isset(\$error_messages[\$column_name])) {
+                \$this->view_data['errors'][\$column_name]['has_errors'] = true;
+                \$this->view_data['errors'][\$column_name]['messages'] = \$error_messages[\$column_name];
             }
         }
     

@@ -181,8 +181,8 @@ $('.select2_$column_name').select2({
 			$maybe_readonly_html = '';
 		}
 
-        // This is the mustache template for counting if there are validation errors for this field
-        $is_invalid = "{{#errors.$column_name}}is-invalid{{/errors.$column_name}}";
+        // This is the mustache template for checking if there are validation errors for this field
+        $is_invalid = "{{#errors.$column_name.has_errors}}is-invalid{{/errors.$column_name.has_errors}}";
 
         // Get our default value, if there is one, so we can put it in the placeholder,
         $default_value = self::_get_default_value($field_data);
@@ -199,7 +199,7 @@ $('.select2_$column_name').select2({
 <button type='button' class='btn btn-primary' id='$today_id'> Today and Now</button>
 <div class='invalid-feedback'>
   <ul>
-  {{#errors.$column_name}}<li>{{.}}</li>{{/errors.$column_name}}
+  {{#errors.$column_name.messages}}<li>{{.}}</li>{{/errors.$column_name.messages}}
   </ul>
 </div>";
 
@@ -252,8 +252,8 @@ $('.select2_$column_name').select2({
 			$maybe_readonly_html = '';
 		}
 
-        // This is the mustache template for counting if there are validation errors for this field
-        $is_invalid = "{{#errors.$column_name}}is-invalid{{/errors.$column_name}}";
+        // This is the mustache template for checking if there are validation errors for this field
+        $is_invalid = "{{#errors.$column_name.has_errors}}is-invalid{{/errors.$column_name.has_errors}}";
 
         // Get our default value, if there is one, so we can put it in the placeholder,
         $default_value = self::_get_default_value($field_data);
@@ -270,7 +270,7 @@ $('.select2_$column_name').select2({
     <button type='button' class='btn btn-primary' id='$today_id'> Today </button>
     <div class='invalid-feedback'>
       <ul>
-      {{#errors.$column_name}}<li>{{.}}</li>{{/errors.$column_name}}
+      {{#errors.$column_name.messages}}<li>{{.}}</li>{{/errors.$column_name.messages}}
       </ul>
    </div>
    <script>
@@ -435,8 +435,8 @@ $('.select2_$column_name').select2({
         // Get our default value, if there is one, so we can put it in the placeholder,
         $default_value = self::_get_default_value($field_data);
 
-        // This is the mustache template for counting if there are validation errors for this field
-        $is_invalid = "{{#errors.$column_name}}is-invalid{{/errors.$column_name}}";
+        // This is the mustache template for checking if there are validation errors for this field
+        $is_invalid = "{{#errors.$column_name.has_errors}}is-invalid{{/errors.$column_name.has_errors}}";
 
 		$is_view_only = $field_data['is_view_only'];
 
@@ -453,7 +453,7 @@ $('.select2_$column_name').select2({
       <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html>
       <div class='invalid-feedback'>
           <ul>
-          {{#errors.$column_name}}<li>{{.}}</li>{{/errors.$column_name}}
+          {{#errors.$column_name.messages}}<li>{{.}}</li>{{/errors.$column_name.messages}}
           </ul>
        </div>
     </div>";

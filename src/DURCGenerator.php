@@ -212,42 +212,66 @@ abstract class DURCGenerator{
         return $auto;
     }
 
-    protected static function _is_required($field_data)
+    /**
+     * @param $string
+     * @param $field_data
+     * @return bool
+     *
+     * Return true if field data column name begins with string,
+     * return false otherwise
+     */
+    protected static function _begins_with($string, $field_data)
     {
+        $doesItBeginWithString = (substr(
+            $field_data['column_name'],
+            0, strlen($string)) === $string);
 
-	$doesItEndWithRequire = substr_compare(
-					strtolower($field_data['column_name']),
-					'_required',
-					-strlen('_required')) === 0;
+        return $doesItBeginWithString;
+    }
 
-	return $doesItEndWithRequire;
+    /**
+     * @param $string
+     * @param $field_data
+     * @return bool
+     *
+     * Return true if field data column name ends with string,
+     * return false otherwise
+     */
+    protected static function _ends_with($string, $field_data)
+    {
+	    $doesItEndWithString = substr_compare(
+		    strtolower($field_data['column_name']),
+            $string,
+		    -strlen($string)) === 0;
 
+	    return $doesItEndWithString;
     }
 
     /**
      * @param $field_data
      * @return bool
      *
-     * The field under validation must be present in the input data but can be empty.
+     * The field under validation must is required, meaning that it can't be null
+     * or an empty string. 0 is allowed for integer values
      */
-    protected static function _is_present($field_data)
+    protected static function _is_required($field_data)
     {
-
-	//the 'present' validation rule means that data field must be provided but it
-	//can be 'empty' unlike 'required' which does not like to see
-	// 0, null etc etc...
-
-        $present = false;
+        $required = false;
         if (self::_is_nullable($field_data) === false &&
             self::_get_default_value($field_data) === null) {
-            $present = true;
+            $required = true;
+        }
+
+        // If the field name actually has "required" in the name, let's make it required
+        if (self::_ends_with('_required', $field_data)) {
+            $required =  true;
         }
 
         // Make an exception for auto-increment fields, because they populate automatically
         if (self::_is_auto_increment($field_data)) {
-            $present = false;
+            $required = false;
         }
 
-        return $present;
+        return $required;
     }
 }

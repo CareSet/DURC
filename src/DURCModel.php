@@ -22,6 +22,11 @@ class DURCModel extends Model{
     static $field_type_map = [];
 
     /**
+     * @var This is set by child class to be the autoincrement column name, if any
+     */
+    static $auto_increment = null;
+
+    /**
      * Error message bag
      *
      * @var Illuminate\Support\MessageBag
@@ -62,11 +67,19 @@ class DURCModel extends Model{
      * @param array $attributes
      *
      * Construct the model and build the validator, which will validate our models in the save() method
+     *
+     * Laravel (Eloquent) has a powerful built-in validation system without creating additional
+     * dependencies for DURC, so we take advantage of the built-in validator as much as possible so we
+     * can catch most errors before they reach the database and display them to the user in the form
+     * of error messages.
      */
     public function __construct(array $attributes = array())
     {
         parent::__construct($attributes);
 
+        // Build a laravel validator. We use the dependcy app make so this can possibly be overridden
+        // by dependency injection in the service provider. See:
+        // https://laravel.com/docs/6.x/container#the-make-method
         $this->validator = \App::make('validator');
     }
 
@@ -83,6 +96,7 @@ class DURCModel extends Model{
         $this->formatForstorage();
 
         // Try the validator, if it failes, throw an exception (which can be handled in controller)
+        // Validation is performed using built-in laravel validators
        if ($this->validate()) {
 
 		return parent::save($options);
@@ -133,7 +147,9 @@ class DURCModel extends Model{
     }
 
     /**
-     * Validates current attributes against rules
+     * Validates current attributes against rules in our model.
+     * See LaravelEloquentGenerator::_generate_validation_rule_for_field()
+     * for details on what validation rules are generated.
      */
     public function validate()
     {
@@ -238,6 +254,8 @@ class DURCModel extends Model{
             } else {
                 $default = $this->default_values[$field];
             }
+        } else if ($field == static::$auto_increment) {
+            $default = null;
         }
 
         return $default;
