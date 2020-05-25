@@ -102,7 +102,7 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 
 			//need to log the problems here... TODO
 			foreach($bad_tables as $table => $problem){
-				echo "Rejected $table because $problem\n";
+				echo "Rejected |$table| because $problem\n";
 			}
 
 			//now lets see about the foreign keys...
