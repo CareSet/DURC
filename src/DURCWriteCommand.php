@@ -19,6 +19,7 @@ class DURCWriteCommand extends Command{
     public function handle(){
 	//what does this do?
 
+	$is_debug = false;
 
 	$firstPhaseGenerators = [
 			'Eloquent Models' => 		'CareSet\DURC\Generators\LaravelEloquentGenerator',
@@ -62,17 +63,21 @@ class DURCWriteCommand extends Command{
 	//each generator handles the creation of different type of file...
 	//for the first phase...
 	foreach($firstPhaseGenerators as $generator_label => $this_generator){
-		echo "\nPhase 1: Generating $generator_label...\t\t\t";
+		if($is_debug){
+			echo "Phase 1: Generating $generator_label...\t\t\t\n";
+		}
 		$this->run_one_generator($config,$this_generator);
-		echo "\nPhase 1: Finished $generator_label... \n";	
+		echo "Phase 1: Finished $generator_label... \n";	
 	}
 
 	//each generator handles the creation of different type of file...
 	//for the first phase...
 	foreach($secondPhaseGenerators as $generator_label => $this_generator){
-		echo "\nPhase 2: Generating $generator_label...\t\t\t";
+		if($is_debug){
+			echo "Phase 2: Generating $generator_label...\t\t\t\n";
+		}
 		$this->run_one_generator($config,$this_generator);
-		echo "\nPhase 2: Finished $generator_label... \n";	
+		echo "Phase 2: Finished $generator_label... \n";	
 	}
 
 	echo "DURC:write all done.\n";
