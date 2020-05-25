@@ -497,7 +497,7 @@ CREATE TABLE `test_default_date` (
 --
 -- Indexes for table `test_default_dates`
 --
-ALTER TABLE `test_default_dates`
+ALTER TABLE `test_default_date`
   ADD PRIMARY KEY (`id`);
 
 --
