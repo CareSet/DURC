@@ -32,11 +32,10 @@ class MySQLDumpGenerator extends \CareSet\DURC\DURCGenerator {
         public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/',$create_table_sql){
 
 
-		$user = env('DB_USERNAME',false);
-		$password = env('DB_PASSWORD',false);
+		$user = \Config::get('database.connections.mysql.username');
+		$password = \Config::get('database.connections.mysql.password');
 
 		if($user && $password){
-
 			$path = base_path("app/DURC/SQL_schemas");	
 			if(!is_dir($path)){	//if the directory does not exist..
 				$old = umask(0);
@@ -54,6 +53,8 @@ class MySQLDumpGenerator extends \CareSet\DURC\DURCGenerator {
 				echo "Error: for SQL schema backups to work, you have to have mysqldump installed and findable with `which mysqldump`\n";
 			}
 
+		}else{
+			echo "Error: could not load username and password to use mysqldump\n";
 		}
 
 		return(true);
