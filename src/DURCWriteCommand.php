@@ -162,7 +162,7 @@ class DURCWriteCommand extends Command{
 		}
 
 		$this_generator::finish($config,$squash,$URLroot);
-		echo "done\n";
+		//echo "done\n";
 
 	}
 
