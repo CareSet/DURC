@@ -35,7 +35,8 @@ abstract class DURCGenerator{
         'updatedAt', //Sequlize style
         'update_at',
     ];
-
+    //possible deleted_at field names...
+    //in reverse order of priority. we pick the last one.
     protected static $valid_deleted_at_fields = [
         'deleted_date',
         'delete_at_date',
@@ -124,7 +125,7 @@ abstract class DURCGenerator{
      * @param array $fields
      * @return bool|mixed
      *
-     * Fiven an array of fields, find the possible field representing a "created at" attribute.
+     * Given an array of fields, find the possible field representing a "created at" attribute.
      * If found, return the field, return false otherwise.
      */
     protected static function get_possible_created_at( $fields )
@@ -136,7 +137,7 @@ abstract class DURCGenerator{
      * @param array $fields
      * @return bool|mixed
      *
-     * Fiven an array of fields, find the possible field representing a "updated at" attribute.
+     * Given an array of fields, find the possible field representing a "updated at" attribute.
      * If found, return the field, return false otherwise.
      */
     protected static function get_possible_updated_at( $fields )
@@ -148,7 +149,7 @@ abstract class DURCGenerator{
      * @param array $fields
      * @return bool|mixed
      *
-     * Fiven an array of fields, find the possible field representing a "deleted at" attribute.
+     * Given an array of fields, find the possible field representing a "deleted at" attribute.
      * If found, return the field, return false otherwise.
      */
     protected static function get_possible_deleted_at( $fields )
@@ -180,7 +181,7 @@ abstract class DURCGenerator{
      * @return bool|mixed
      *
      * DURC mines the NULLABLE metadata from the database schema. This function
-     * check to see if this field is allowed to be NULL based on the schmea.
+     * checks to see if this field is allowed to be NULL based on the schema.
      * If the field can be NULL, return true, othewise return false.
      */
     protected static function _is_nullable($field_data)
@@ -251,7 +252,7 @@ abstract class DURCGenerator{
      * @param $field_data
      * @return bool
      *
-     * The field under validation must is required, meaning that it can't be null
+     * The field under validation is required, meaning that it can't be null
      * or an empty string. 0 is allowed for integer values
      */
     protected static function _is_required($field_data)
