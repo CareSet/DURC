@@ -45,11 +45,15 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
     protected static function _generate_validation_rule_for_field($field) {
         $rules = [];
 
-        if (self::_begins_with('_is', $field)) {
+        if (self::_begins_with('is_', $field) ||
+            self::_begins_with('has_', $field) ||
+            self::_ends_with('_is', $field) ||
+            self::_ends_with('_has', $field)) {
             $rules []= 'boolean';
         }
 
-        if (self::_ends_with('_url', $field)) {
+        if (self::_ends_with('_url', $field) ||
+            self::_ends_with('_uri', $field)) {
             $rules []= 'url';
         }
 
