@@ -135,7 +135,18 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 
         // If the primary key is named other than id, then we need to tell Eloquent
         $primary_key_code = null;
-        foreach ( $fields as $field ) {
+        foreach ( $fields as $field_num => $field ) {
+
+
+		if(!isset($field['is_primary_key'])){
+			//this should never happen...
+			var_export($field);
+			echo "\nError: $class_name compile fail.. is_primary_key is not set in a field array.. field number $field_num\n";
+			echo "Sometimes this happens when you have the same table name in two different databases.. .DURC finds that confusing...\n";
+			exit();
+		}
+
+
             if ( $field['is_primary_key'] === true &&
                 $field['column_name'] !== 'id' ) {
                 $primary_key_code = "protected \$primaryKey = '{$field['column_name']}';";
