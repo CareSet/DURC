@@ -31,7 +31,7 @@ class MustacheMenuGenerator extends \CareSet\DURC\DURCGenerator {
 
 
 		$file = MustacheMenuGenerator::getFile();
-	
+
 		//the start of our menu html...
 		$header = '<!doctype html>
 <html lang="en">
@@ -48,7 +48,7 @@ class MustacheMenuGenerator extends \CareSet\DURC\DURCGenerator {
     <!-- Bootstrap core CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="/css/anytime.5.2.0.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <link rel="stylesheet" href="/css/simplemde.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.39.0/codemirror.css">
@@ -93,12 +93,45 @@ h1 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
-  .AnyTime-pkr { z-index: 9999 }
+.AnyTime-pkr { z-index: 9999 }
+
+/* 
+    For loading Select2 and other possible things that will require time
+    to render
+ */
+.loader {
+    margin: auto;
+    text-align: center;
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #007bff; /* Blue Bootstrap Primary color */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/*
+    The select2 element needs some extra CSS to match the Bootstrap CSS
+ */
+.select2-selection__rendered {
+    line-height: 36px !important;
+}
+.select2-container .select2-selection--single {
+    height: 38px !important;
+}
+.select2-selection__arrow {
+    height: 38px !important;
+}
 </style>
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script src="/js/anytime.5.2.0.js"></script>
 <script src="/js/simplemde.min.js"></script>
@@ -126,7 +159,7 @@ h1 {
     <div class="container-fluid">
       <div class="row">
 
-';	
+';
 
 
 	file_put_contents($file,$header);
@@ -138,7 +171,7 @@ h1 {
 						$squash,
 						$URLroot
 		){
-	
+
 		$file = MustacheMenuGenerator::getFile();
 
 
@@ -149,6 +182,12 @@ h1 {
         </main>
       </div>
     </div>
+    
+    <div id="loader" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="loader"></div>
+        </div>
+    </div>
 
   </body>
 </html>
@@ -156,7 +195,7 @@ h1 {
 
 		file_put_contents($file, $trailer, FILE_APPEND | LOCK_EX);
 
-	} 
+	}
 
 
         public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/',$create_table_sql){
@@ -177,7 +216,7 @@ h1 {
 		file_put_contents($file, $snippet, FILE_APPEND | LOCK_EX);
 
 		return(true);
-		
+
 
 	}//end generate function
 

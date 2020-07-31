@@ -14,4 +14,7 @@ class DURCController extends Controller{
 		return('DURC.durc_html');
 	}
 
+	public static function isSelect2($data_type, $column_name) {
+        $input_type = DURC::mapColumnDataTypeToInputType( $data_type, $column_name );
+    }
 }

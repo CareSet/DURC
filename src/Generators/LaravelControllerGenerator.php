@@ -351,6 +351,20 @@ $with_summary_array_code
 		\$$class_name = \App\\$class_name::find(\$$class_name"."_id);
 		\$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
 		\$return_me_array = \$$class_name"."->toArray();
+		\$search_fields = \App\\$class_name::getSearchFields();
+
+        \$tmp_text = '';
+        foreach(\$return_me_array as \$field => \$data){
+            if(in_array(\$field, \$search_fields)){
+                //then we need to show this text!!
+                \$tmp_text .=  \"\$data \";
+            }
+        }
+        \$return_me_array['text'] = trim(\$tmp_text);
+
+        //show the id of the data at the end of the select..
+        \$return_me_array['text'] .= ' ('.\$return_me_array['id'].')';
+		
 		
 		//lets see if we can calculate a card-img-top for a front end bootstrap card interface
 		\$img_uri_field = \App\\$class_name::getImgField();
