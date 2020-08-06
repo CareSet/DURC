@@ -125,30 +125,53 @@ class DURCMustacheGenerator extends DURCGenerator {
     <div class='col-sm-7'>
 	Current id value: {{"."$column_name"."}} (see below for lookup value)<br>
 	<select class='select2_$column_name form-control' id='$column_name' name='$column_name' $maybe_disabled_html >
-	<option value='{{"."$column_name"."}}' selected='selected'>{{"."$column_name"."}}</option>
+	<option value='{{"."$column_name"."}}' selected='selected'><!-- Replaced Dynamically with Text from related model --></option>
 	</select>
     </div>
   </div>
 
 <script type='text/javascript'>
+\$(document).ready(function () {
+    // Show the loader/spinner
+    $('#loader').modal();
+    
+    // Get the option element that is currently selected and it's foreign ID
+    const element = $('#{$foreign_table}_id option:selected');
+    const {$foreign_table}Id = element.val();
+    
+    // Use the json API to get the text of the selected element. 
+    // We do this dynamically so we don't have to figure out in the controller
+    // what elements are select2 elements, and populate from related models
+    \$.ajax({
+        type: 'GET',
+        url: '{$URLroot}json/{$foreign_table}/' + {$foreign_table}Id,
+    }).then(function (data) {
 
-$('.select2_$column_name').select2({
-  ajax: {
-    url: '$URLroot"."searchjson/$foreign_table',
-    delay: 1000,
-    dataType: 'json',
-    data: function (params) {
-          var query = {
-              q: params.term,
-              page: params.page || 1
+        // data.text has the same text string (formed from concatinating search fields) as
+        // the elements in the select list
+        element.html(data.text);
+    
+        $('.select2_$column_name').select2({
+          width: '100%',   
+          ajax: {
+            url: '$URLroot" . "searchjson/$foreign_table',
+            dataType: 'json',
+            data: function (params) {
+                  var query = {
+                      q: params.term,
+                      page: params.page || 1
+                  }
+        
+                  // Query parameters will be ?search=[term]&page=[page]
+                  return query;
+              }
           }
-
-          // Query parameters will be ?search=[term]&page=[page]
-          return query;
-      }
-  }
+        });
+        
+        // Hide the loader/spinner after the select2 has been built
+        $('#loader').modal('hide');
+    });
 });
-
 
 </script>
 
