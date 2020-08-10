@@ -500,7 +500,9 @@ class DURCMustacheGenerator extends DURCGenerator {
         $is_linked_key = $field_data['is_linked_key'];
         $foreign_db = $field_data['foreign_db'];
         $foreign_table = $field_data['foreign_table'];
-
+        // This is the mustache template for checking if there are validation errors for this field
+        // A checkbox field shoule never be "invalid" but just in case...
+        $is_invalid = "{{#errors.$column_name.has_errors}}is-invalid{{/errors.$column_name.has_errors}}";
 
 		$is_view_only = $field_data['is_view_only'];
 
@@ -515,7 +517,12 @@ class DURCMustacheGenerator extends DURCGenerator {
     <div class='col-sm-4'><label>$column_name</label></div>
     <div class='col-sm-7'>
         <div class='checkbox'>
-            <input type='checkbox' id='$column_name' name='$column_name' {{"."$column_name"."}} $maybe_readonly_html >
+            <input type='checkbox' id='$column_name' class='$is_invalid'name='$column_name' {{"."$column_name"."}} $maybe_readonly_html >
+            <div class='invalid-feedback'>
+                <ul>
+                  {{#errors.$column_name.messages}}<li>{{.}}</li>{{/errors.$column_name.messages}}
+                </ul>
+            </div>
        </div> 
     </div>
   </div>

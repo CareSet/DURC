@@ -291,10 +291,14 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
      */
     public static function formatForStorage( $field_name, $field_type, $value, $model = null)
     {
-
-
+        // We can skip the database requirements for non-nullable fields for some fields,
+        // ei: Checkboxes, where a null value is assumed to be false by the formatting routine
+        $skipDefaultRequirement = false;
         $formattedValue = $value;
         if ( self::mapColumnDataTypeToInputType( $field_type, $field_name ) == 'boolean' ) {
+            // We can skip the "default" requirement if the value comes back null, because
+            // if the value is null, then we assume FALSE
+            $skipDefaultRequirement = true;
 			//support obvious notions of truth
             if ( $value === 'on' || $value === 'true' || $value === true || $value > 0 ) {
 		//this allows us to support the use of 'on'/'true' etc  for trueness
@@ -314,7 +318,9 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 
 
         if ($model instanceof DURCModel) {
-            if (is_null($value) && !$model->isFieldNullable($field_name)) {
+            if ($skipDefaultRequirement === false &&
+                is_null($value) &&
+                !$model->isFieldNullable($field_name)) {
                 // Value is null, but can't be null because of Database constraints
                 // This function will get the default value as defined by database, or null if
                 // there is no default value for this column defined
@@ -322,7 +328,7 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
             }
         }
 
-	//finally we return the results of our calculation... 
+	//finally we return the results of our calculation...
         return $formattedValue;
     }
 
