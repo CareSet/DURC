@@ -24,6 +24,7 @@
     "require": {
 	"php" : "^7.2",
 	"erusev/parsedown": "^1.7",
+	"owen-it/laravel-auditing": "^10.0",
         "zordius/lightncandy": "^1.2.4"
     },
     "psr-4": {
