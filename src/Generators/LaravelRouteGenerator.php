@@ -54,7 +54,14 @@ this will be automatically overwritten by future DURC runs.
 
 	}//end start
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false, $URLroot = '/DURC/',$create_table_sql){
+/*
+        This accepts the data for each table in the database that DURC is aware of..
+        and generates a Laravel Route
+*/
+        public static function run_generator($data_for_gen){
+
+                $data_for_gen = $this->_check_arguments($data_for_gen); //ensure reasonable defaults...
+                extract($data_for_gen); //everything goes into the local scope... this includes all settings from the config json file...
 
             $soft_delete_route = null;
             if ( self::get_possible_deleted_at( $fields ) !== false ) {

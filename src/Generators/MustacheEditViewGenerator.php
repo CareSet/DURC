@@ -1,8 +1,6 @@
 <?php
 /*
-        This is the place where the actual command is orchestrated.
-        it ends up being our "main()"
-
+	This makes the mustache form for creating and updating the DURC record
 
 */
 namespace CareSet\DURC\Generators;
@@ -28,7 +26,14 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
 
 
-        public static function run_generator($class_name,$database,$table,$fields,$has_many = null,$has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/',$create_table_sql){
+/*
+        This accepts the data for each table in the database that DURC is aware of..
+        and generates a Mustache Edit form
+*/
+        public static function run_generator($data_for_gen){
+
+                $data_for_gen = $this->_check_arguments($data_for_gen); //ensure reasonable defaults...
+                extract($data_for_gen); //everything goes into the local scope... this includes all settings from the config json file...
 
 		//this should not be hard coded... but here we are..
 		$model_namespace = 'App';

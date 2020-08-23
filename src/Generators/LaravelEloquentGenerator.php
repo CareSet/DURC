@@ -126,8 +126,14 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
         return false;
     }
 
-	public static function run_generator($class_name,$database,$table,$fields,$has_many,$has_one = null, $belongs_to, $many_many, $many_through, $squash, $URLroot,$create_table_sql){
+/*
+        This accepts the data for each table in the database that DURC is aware of..
+        and generates a series of Laravel Eloquent Models
+*/
+        public static function run_generator($data_for_gen){
 
+                $data_for_gen = $this->_check_arguments($data_for_gen); //ensure reasonable defaults...
+                extract($data_for_gen); //everything goes into the local scope... this includes all settings from the config json file...
 
 		$model_namespace = 'App';
 
