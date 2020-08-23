@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Validator;
 use CareSet\DURC\DURC;
+use OwenIt\Auditing\Contracts\Auditable;
 
 /*
 	This is where we put all of the functions that we want all DURC models to inherit
 */
-class DURCModel extends Model{
+class DURCModel extends Model implements Auditable{
 
     /**
      * @var array Array mapping attribute keys to their DB types,
