@@ -49,7 +49,9 @@ abstract class DURCGenerator{
 
 // this is helper function for run_generator that sets the arguments to reasonable default...
 // preparese for the first extract() call call in run_generateor
-	private function _check_arguments($data_for_gen){
+	protected static function _check_arguments($data_for_gen){
+
+		//var_export($data_for_gen);
 
                 $defaults = [
                         'has_many' => null,

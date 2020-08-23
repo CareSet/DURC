@@ -29,11 +29,10 @@ class DURCMustacheGenerator extends DURCGenerator {
         //does nothing need to comply with abstract class
     }
 
-
-
-    public static function run_generator($class_name,$database,$table,$fields,$has_many = null, $has_one = null, $belongs_to = null, $many_many = null, $many_through = null, $squash = false,$URLroot = '/DURC/',$create_table_sql){
+	public static function run_generator($data_for_gen){
         //does nothing need to comply with abstract class
-    }
+
+	}
 
 	//basically a router for the other functions
 	public static function _get_field_html($URLroot,$field_data){

@@ -14,7 +14,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 /*
 	This is where we put all of the functions that we want all DURC models to inherit
 */
-class DURCModel extends Model implements Auditable{
+class DURCModel extends Model{
 
     /**
      * @var array Array mapping attribute keys to their DB types,

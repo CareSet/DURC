@@ -246,6 +246,7 @@ class DURCMineCommand extends Command{
 	$config_settings_struct = [];
 	foreach($db_struct as $this_db => $table_list){
 		foreach($table_list as $this_table_name => $column_data){
+			
 			foreach($per_object_options_default as $setting_key => $setting_default){
 				$config_settings_struct[$this_db][$this_table_name][$setting_key] = $setting_default;
 			}

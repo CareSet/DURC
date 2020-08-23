@@ -46,10 +46,10 @@ class DURCWriteCommand extends Command{
 		$relation_config_file = base_path()."/config/DURC_relation_config.edit_me.json"; //this is the user edited default config file..
 	}
 
-	$setting_config_file = $this->option('setting_config_file');
+	$settings_config_file = $this->option('setting_config_file');
 
-	if(!$setting_config_file){ //this option is not typically used... this is where things are saved by default...
-		$setting_config_file = base_path()."/config/DURC_setting_config.edit_me.json"; //this is the user edited default config file..
+	if(!$settings_config_file){ //this option is not typically used... this is where things are saved by default...
+		$settings_config_file = base_path()."/config/DURC_setting_config.json"; //this is the user edited default config file..
 	}
 
 
@@ -65,7 +65,10 @@ class DURCWriteCommand extends Command{
 	}else{
 		echo "DURC:write Beginning code generation!\n";
 	}
+
 	$relation_config = DURC::readDURCConfigJSON($relation_config_file);
+	$settings_config = DURC::readDURCConfigJSON($settings_config_file);
+
 
 	//each generator handles the creation of different type of file...
 	//for the first phase...
@@ -73,7 +76,7 @@ class DURCWriteCommand extends Command{
 		if($is_debug){
 			echo "Phase 1: Generating $generator_label...\t\t\t\n";
 		}
-		$this->run_one_generator($relation_config,$this_generator);
+		$this->run_one_generator($relation_config,$settings_config,$this_generator);
 		echo "Phase 1: Finished $generator_label... \n";	
 	}
 
@@ -83,7 +86,7 @@ class DURCWriteCommand extends Command{
 		if($is_debug){
 			echo "Phase 2: Generating $generator_label...\t\t\t\n";
 		}
-		$this->run_one_generator($relation_config,$this_generator);
+		$this->run_one_generator($relation_config,$settings_config,$this_generator);
 		echo "Phase 2: Finished $generator_label... \n";	
 	}
 
@@ -95,7 +98,7 @@ class DURCWriteCommand extends Command{
     }
 
 
-	private function run_one_generator($relation_config,$this_generator){
+	private function run_one_generator($relation_config,$settings_config,$this_generator){
 
 		$squash = true; //TODO where should this come from???
 					//why it missing... wtf is going on?
@@ -149,22 +152,30 @@ class DURCWriteCommand extends Command{
 					}
 				}
 
-				$generated_results = $this_generator::run_generator(
-						$this_class_name,
-						$this_db,
-						$this_table,
-						$column_data,
-						$has_many,
-						$has_one,
-						$belongs_to,
-						$many_many,
-						$many_through,
-						$squash,
-						$URLroot,
-						$create_table_sql
-					);
+				$data_for_gen = [
+						'class_name' => $this_class_name,
+						'database' => $this_db,
+						'table' => $this_table,
+						'fields' => $column_data,
+						'has_many' => $has_many,
+						'has_one' => $has_one,
+						'belongs_to' => $belongs_to,
+						'many_many' => $many_many,
+						'many_through' => $many_through,
+						'squash' => $squash,
+						'URLroot' => $URLroot,
+						'create_table_sql' => $create_table_sql
+					];
+
+				$this_table_settings = $settings_config[$this_db][$this_table];
+
+				//add all of the setting configuration variables to the other data passed to run_generator
+				foreach($this_table_settings as $config_var => $config_value){
+					$data_for_gen[$config_var] = $config_value;
+				}
 
 
+				$generated_results = $this_generator::run_generator($data_for_gen);
 			}
 		}
 

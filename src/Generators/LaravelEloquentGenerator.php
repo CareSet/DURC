@@ -132,7 +132,7 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 */
         public static function run_generator($data_for_gen){
 
-                $data_for_gen = $this->_check_arguments($data_for_gen); //ensure reasonable defaults...
+                $data_for_gen = self::_check_arguments($data_for_gen); //ensure reasonable defaults...
                 extract($data_for_gen); //everything goes into the local scope... this includes all settings from the config json file...
 
 		$model_namespace = 'App';
@@ -339,12 +339,22 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	}
 		//STARTING DURC Parent CLASS
 
+	if($is_audited){ 
+		$audit_use_statement = ' use \OwenIt\Auditing\Auditable; // configured using is_auditable = 1 in config json';
+		$audit_implements = ' implements Auditable ';
+	}else{
+		$audit_use_statement = ' //not auditable, configured using is_auditable = 0 in config json';
+		$audit_implements = '';
+	}	
+
+
 		$parent_class_code = "<?php
 
 namespace $model_namespace\DURC\Models;
 $soft_delete_code_use_statememt
 use CareSet\DURC\DURCModel;
 use CareSet\DURC\DURC;
+use OwenIt\Auditing\Contracts\Auditable;
 /*
 	Note this class was auto-generated from 
 
@@ -357,7 +367,9 @@ $database.$table by DURC.
 
 */
 
-class $parent_class_name extends DURCModel{
+class $parent_class_name extends DURCModel $audit_implements{
+
+	$audit_use_statement
 
     $primary_key_code
 
