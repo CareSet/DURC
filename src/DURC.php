@@ -167,16 +167,33 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 		return($return_me);
 	}
 
+	/*
+		Simple save for the Settings Config JSON file... 
+		This file just saves, and does not respect any squash value...
+		Logic implemented elsewhere must be used to ensure that loaded data was not lost.
+	*/
+	public static function writeDURCSettingConfigJSON($config_data){
+
+		$auto_gen_file_name = base_path()."/config/DURC_setting_config.json";
+
+		$config_json_text = json_encode($config_data, JSON_PRETTY_PRINT);
+
+		file_put_contents($auto_gen_file_name,$config_json_text);
+
+	}
 
 	/*
-		A simple method to write the json config file
+		A simple method to write the json relation config file
+		This configuration file uses the "trample" paradigm, where the edit_me will only be generated if the user has set the 'squash' flag
+		But the autogen version is always shown for those who want to start maintaining their own relation paradigms... 
+		Unless specific configuration is handed over as parameter for code generation.. the 'edit_me' version will always be used...
 	*/
 	public static function writeDURCDesignConfigJSON($config_data, $squash = false){
 
-		$auto_gen_file_name = base_path()."/config/DURC_config.autogen.json";
-		$user_edit_file_name = base_path()."/config/DURC_config.edit_me.json";
+		$auto_gen_file_name = base_path()."/config/DURC_relation_config.autogen.json";
+		$user_edit_file_name = base_path()."/config/DURC_relation_config.edit_me.json";
 
-		$config_json_text =json_encode($config_data, JSON_PRETTY_PRINT);
+		$config_json_text = json_encode($config_data, JSON_PRETTY_PRINT);
 
 		file_put_contents($auto_gen_file_name,$config_json_text);
 		if(!file_exists($user_edit_file_name) || $squash){ //do not overwrite user configured data unless we are squashing..
@@ -188,11 +205,16 @@ ORDER BY `TABLE_NAME`,`ORDINAL_POSITION`
 
 	}
 
-	public static function readDURCDesignConfigJSON($config_file_name){
+	/*
+		Simple function for reading the various json config files...
+		This function will read in both the 'settings' and 'relation' configuration json files... as well as any additional in the future...
+	*/
+	public static function readDURCConfigJSON($config_file_name){
 
 		if(!file_exists($config_file_name)){
-			echo "Error: $config_file_name config file does not exist... drowning in confusion...\n";
-			exit(1);
+			return([]); //return an empty array in this case...
+				//we used to crash, but the settings file will not exist the first time we read it in... 
+				//and that is acceptable... since it is always "additively built"... 
 		}
 
 		$config_json = file_get_contents($config_file_name);

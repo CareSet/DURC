@@ -13,7 +13,7 @@ use Symfony\Component\Process\Process;
 
 class DURCWriteCommand extends Command{
 
-    protected $signature = 'DURC:write {--squash} {--config_file=} {--URLroot=}';
+    protected $signature = 'DURC:write {--squash} {--relation_config_file=} {--setting_config_file=} {--URLroot=}';
     protected $description = 'DURC:write generates Templates and Eloquent Classe, inferred from your DB structure';
 
     public function handle(){
@@ -40,11 +40,18 @@ class DURCWriteCommand extends Command{
 		];
 
 
-	$config_file = $this->option('config_file');
+	$relation_config_file = $this->option('relation_config_file');
 
-	if(!$config_file){
-		$config_file = base_path()."/config/DURC_config.edit_me.json"; //this is the user edited default config file..
+	if(!$relation_config_file){ //this option is not typically used... this is where things are saved by default...
+		$relation_config_file = base_path()."/config/DURC_relation_config.edit_me.json"; //this is the user edited default config file..
 	}
+
+	$setting_config_file = $this->option('setting_config_file');
+
+	if(!$setting_config_file){ //this option is not typically used... this is where things are saved by default...
+		$setting_config_file = base_path()."/config/DURC_setting_config.edit_me.json"; //this is the user edited default config file..
+	}
+
 
 	$squash = $this->option('squash');
 
@@ -58,7 +65,7 @@ class DURCWriteCommand extends Command{
 	}else{
 		echo "DURC:write Beginning code generation!\n";
 	}
-	$config = DURC::readDURCDesignConfigJSON($config_file);
+	$relation_config = DURC::readDURCConfigJSON($relation_config_file);
 
 	//each generator handles the creation of different type of file...
 	//for the first phase...
@@ -66,7 +73,7 @@ class DURCWriteCommand extends Command{
 		if($is_debug){
 			echo "Phase 1: Generating $generator_label...\t\t\t\n";
 		}
-		$this->run_one_generator($config,$this_generator);
+		$this->run_one_generator($relation_config,$this_generator);
 		echo "Phase 1: Finished $generator_label... \n";	
 	}
 
@@ -76,7 +83,7 @@ class DURCWriteCommand extends Command{
 		if($is_debug){
 			echo "Phase 2: Generating $generator_label...\t\t\t\n";
 		}
-		$this->run_one_generator($config,$this_generator);
+		$this->run_one_generator($relation_config,$this_generator);
 		echo "Phase 2: Finished $generator_label... \n";	
 	}
 
@@ -88,14 +95,14 @@ class DURCWriteCommand extends Command{
     }
 
 
-	private function run_one_generator($config,$this_generator){
+	private function run_one_generator($relation_config,$this_generator){
 
 		$squash = true; //TODO where should this come from???
 					//why it missing... wtf is going on?
 		$URLroot = '/DURC/';
-		$this_generator::start($config,$squash,$URLroot);
+		$this_generator::start($relation_config,$squash,$URLroot);
 
-		foreach($config as $this_db => $db_data){
+		foreach($relation_config as $this_db => $db_data){
 			foreach($db_data as $this_class_name => $table_data){
 	
 		
@@ -121,7 +128,7 @@ class DURCWriteCommand extends Command{
 					foreach($has_many as $table_type => $has_many_data){
 						$from_db = $has_many_data['from_db'];
 						$from_table = $has_many_data['from_table'];
-						$has_many[$table_type]['other_columns'] = $config[$from_db][strtolower($from_table)]['column_data'];
+						$has_many[$table_type]['other_columns'] = $relation_config[$from_db][strtolower($from_table)]['column_data'];
 					}
 				}
 
@@ -129,7 +136,7 @@ class DURCWriteCommand extends Command{
                     			foreach($has_one as $table_type => $has_one_data){
                         			$from_db = $has_one_data['from_db'];
                         			$from_table = $has_one_data['from_table'];
-                        			$has_one[$table_type]['other_columns'] = $config[$from_db][strtolower($from_table)]['column_data'];
+                        			$has_one[$table_type]['other_columns'] = $relation_config[$from_db][strtolower($from_table)]['column_data'];
                     			}
                 		}
 
@@ -138,7 +145,7 @@ class DURCWriteCommand extends Command{
 					foreach($belongs_to as $table_type => $belongs_to_data){
 						$to_db = $belongs_to_data['to_db'];
 						$to_table = $belongs_to_data['to_table'];
-						$belongs_to[$table_type]['other_columns'] = $config[$to_db][strtolower($to_table)]['column_data'];
+						$belongs_to[$table_type]['other_columns'] = $relation_config[$to_db][strtolower($to_table)]['column_data'];
 					}
 				}
 
@@ -161,7 +168,7 @@ class DURCWriteCommand extends Command{
 			}
 		}
 
-		$this_generator::finish($config,$squash,$URLroot);
+		$this_generator::finish($relation_config,$squash,$URLroot);
 		//echo "done\n";
 
 	}

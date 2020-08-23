@@ -47,6 +47,32 @@ abstract class DURCGenerator{
         'deleted_at',
     ];
 
+// this is helper function for run_generator that sets the arguments to reasonable default...
+// preparese for the first extract() call call in run_generateor
+	private function _check_arguments($data_for_gen){
+
+                $defaults = [
+                        'has_many' => null,
+                        'has_one' => null,
+                        'belongs_to' => null,
+                        'many_many' => null,
+                        'many_through' => null,
+                        'squash' => false,
+                        'URLroot' => '/DURC/',
+                        'create_table_sql' => null,
+                ];
+
+                foreach($defaults as $var_name => $default_value){
+                        if(!isset($data_for_gen[$var_name])){
+                                //then this variable did not get provided inside the $data_for_gen array..
+                                $data_for_gen[$var_name] = $default_value; //set it to the default...
+                        }
+                }
+
+		return($data_for_gen); //but now with defaults properly set!!
+
+	}
+
 
     //Run only once at the beginning of generation
 	abstract public static function start(
@@ -61,19 +87,7 @@ abstract class DURCGenerator{
 							$URLroot);
 
 	//Run for every database and table combination
-	abstract public static function run_generator(
-							$class_name,
-							$database,
-							$table,
-							$fields,
-							$has_many,
-							$has_one,
-							$belongs_to,
-							$many_many,
-							$many_through,
-							$squash,
-							$URLroot,
-							$create_table_sql);
+	abstract public static function run_generator( $data_for_gen) ;
 
     /**
      * @param array $fields
