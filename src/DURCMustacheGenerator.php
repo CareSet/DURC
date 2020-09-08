@@ -135,7 +135,7 @@ class DURCMustacheGenerator extends DURCGenerator {
     $('#loader').modal();
     
     // Get the option element that is currently selected and it's foreign ID
-    const element = $('#{$foreign_table}_id option:selected');
+    const element = $('#{$column_name} option:selected');
     const {$foreign_table}Id = element.val();
     
     // Use the json API to get the text of the selected element. 
