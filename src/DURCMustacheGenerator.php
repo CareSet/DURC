@@ -206,6 +206,8 @@ class DURCMustacheGenerator extends DURCGenerator {
         // This is the mustache template for checking if there are validation errors for this field
         $is_invalid = "{{#errors.$column_name.has_errors}}is-invalid{{/errors.$column_name.has_errors}}";
 
+        $nullable_class = self::_is_nullable($field_data) ? 'nullable' : '';
+
         // Get our default value, if there is one, so we can put it in the placeholder,
         $default_value = self::_get_default_value($field_data);
 
@@ -213,7 +215,7 @@ class DURCMustacheGenerator extends DURCGenerator {
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html>
+      <input type='text' class='form-control $nullable_class $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html>
 
 <button type='button' class='btn btn-primary' id='$icon_id'>
 <img src='/css/ic_today_black_24dp_1x.png'> 
@@ -277,6 +279,8 @@ class DURCMustacheGenerator extends DURCGenerator {
         // This is the mustache template for checking if there are validation errors for this field
         $is_invalid = "{{#errors.$column_name.has_errors}}is-invalid{{/errors.$column_name.has_errors}}";
 
+        $nullable_class = self::_is_nullable($field_data) ? 'nullable' : '';
+
         // Get our default value, if there is one, so we can put it in the placeholder,
         $default_value = self::_get_default_value($field_data);
 
@@ -284,7 +288,7 @@ class DURCMustacheGenerator extends DURCGenerator {
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html>
+      <input type='text' class='form-control $nullable_class $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html>
         
     <button type='button' class='btn btn-primary' id='$icon_id'>
     <img src='/css/ic_today_black_24dp_1x.png'> 
@@ -468,11 +472,13 @@ class DURCMustacheGenerator extends DURCGenerator {
 			$maybe_readonly_html = '';
 		}
 
+		$nullable_class = self::_is_nullable($field_data) ? 'nullable' : '';
+
 		$field_html = "
   <div class='form-group row {{"."$column_name"."_row_class}}'>
     <label for='$column_name' class='col-sm-4 col-form-label'>$column_name</label>
     <div class='col-sm-7'>
-      <input type='text' class='form-control $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html>
+      <input type='text' class='form-control $nullable_class $is_invalid' id='$column_name' name='$column_name' placeholder='$default_value' value='{{"."$column_name"."}}' $maybe_readonly_html>
       <div class='invalid-feedback'>
           <ul>
           {{#errors.$column_name.messages}}<li>{{.}}</li>{{/errors.$column_name.messages}}
