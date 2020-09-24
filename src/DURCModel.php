@@ -154,7 +154,16 @@ class DURCModel extends Model{
      */
     public function validate()
     {
-        $v = $this->validator->make($this->attributes, static::$rules, static::$messages);
+        // Check the rules for timestamps, if we are using laravel's automatic handling
+        // of timestamps, remove the required validator
+        // we use "static" so that we are sure to reference the calling classes static attributes
+        $rules = static::$rules;
+        if ($this->timestamps === true) {
+            unset($rules[static::CREATED_AT]);
+            unset($rules[static::UPDATED_AT]);
+        }
+
+        $v = $this->validator->make($this->attributes, $rules, static::$messages);
 
         if ($v->passes())
         {
