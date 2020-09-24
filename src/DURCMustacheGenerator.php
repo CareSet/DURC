@@ -132,7 +132,7 @@ class DURCMustacheGenerator extends DURCGenerator {
 <script type='text/javascript'>
 \$(document).ready(function () {
     // Show the loader/spinner
-    $('#loader').modal();
+    add_to_loading_queue('{$column_name}');
     
     // Get the option element that is currently selected and it's foreign ID
     const element = $('#{$column_name} option:selected');
@@ -168,7 +168,7 @@ class DURCMustacheGenerator extends DURCGenerator {
         });
         
         // Hide the loader/spinner after the select2 has been built
-        $('#loader').modal('hide');
+        remove_from_loading_queue('{$column_name}');
     });
 });
 
