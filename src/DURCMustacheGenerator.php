@@ -137,6 +137,7 @@ class DURCMustacheGenerator extends DURCGenerator {
     // Get the option element that is currently selected and it's foreign ID
     const element = $('#{$column_name} option:selected');
     const {$foreign_table}Id = element.val();
+    let {$foreign_table}IdHasError = false;
     
     // Use the json API to get the text of the selected element. 
     // We do this dynamically so we don't have to figure out in the controller
@@ -144,12 +145,19 @@ class DURCMustacheGenerator extends DURCGenerator {
     \$.ajax({
         type: 'GET',
         url: '{$URLroot}json/{$foreign_table}/' + {$foreign_table}Id,
-    }).then(function (data) {
-
+    })
+    .done(function(data, textStatus, jqXHR) {
         // data.text has the same text string (formed from concatinating search fields) as
         // the elements in the select list
         element.html(data.text);
-    
+    })
+    .fail(function(xhr, status, error) {
+        // Display the error text
+        element.html(JSON.parse(xhr.responseText));
+        {$foreign_table}IdHasError = true;
+    })
+    .always(function (data) {
+        // Create the select2 dropdown    
         $('.select2_$column_name').select2({
           width: '100%',   
           ajax: {
@@ -165,10 +173,17 @@ class DURCMustacheGenerator extends DURCGenerator {
                   return query;
               }
           }
+        })
+        .change(function() {
+            // When we change the value, remove the danger class because we assume you pick a valid option.
+            $('#select2-{$column_name}-container').removeClass('text-danger');
         });
         
         // Hide the loader/spinner after the select2 has been built
         remove_from_loading_queue('{$column_name}');
+        if ({$foreign_table}IdHasError === true) {
+            $('#select2-{$column_name}-container').addClass('text-danger');
+        }
     });
 });
 

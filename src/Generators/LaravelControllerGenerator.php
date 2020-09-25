@@ -355,6 +355,9 @@ $with_summary_array_code
      */
     public function jsonone(Request \$request, \$$class_name"."_id){
 		\$$class_name = \App\\$class_name::find(\$$class_name"."_id);
+		if (\$$class_name === null) {
+            return response()->json(\"$class_name with id = {\$$class_name"."_id} Not Found\", 404);
+        }
 		\$$class_name = \$$class_name"."->fresh_with_relations(); //this is a custom function from DURCModel. you can control what gets autoloaded by modifying the DURC_selfish_with contents on your customized models
 		\$return_me_array = \$$class_name"."->toArray();
 		\$search_fields = \App\\$class_name::getSearchFields();
