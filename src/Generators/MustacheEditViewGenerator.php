@@ -6,6 +6,7 @@
 namespace CareSet\DURC\Generators;
 
 use CareSet\DURC\DURC;
+use Illuminate\Support\Str;
 
 class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 
@@ -83,7 +84,7 @@ class MustacheEditViewGenerator extends \CareSet\DURC\DURCMustacheGenerator {
 		//we are only supporting hard deletes
             // There is a deleted_at field, so add soft delete functionality to view
             $delete_alert_code = "<div id='delete-success-alert' class='alert alert-success' role='alert' style='display: none;'>
-                You have successfully deleted this record. This was a hard delete, no going back. But you can save again if you want.. 
+                You have successfully deleted this record. This was a hard delete, no going back. But you can save again if you want..
             </div>";
 
             $delete_code = "<div class='form-group row'>
@@ -181,7 +182,7 @@ $delete_alert_code
       <button type='submit' class='btn btn-primary'>Save Data</button>
     </div>
   </div>
-  
+
 </fieldset>
 </div></div>
 </form>
@@ -211,7 +212,7 @@ $delete_alert_code
            foreach ( $has_relationships as $label =>  $has_this ) {
            foreach ( $has_this as $full_relation => $relate_details ) {
 
-               $full_relation_snake = snake_case( $full_relation ); //because this is how eloquent converts relations with eager loading..
+               $full_relation_snake = Str::snake( $full_relation ); //because this is how eloquent converts relations with eager loading..
 
 
                $prefix = $relate_details[ 'prefix' ];
@@ -269,7 +270,7 @@ $delete_alert_code
                    }
                }
 
-               $template_text .= "		
+               $template_text .= "
 		{{/.}}
 	</tr>
 {{/$full_relation_snake}}
@@ -297,7 +298,7 @@ $delete_alert_code
 		//this section will add the tables of other-side data to the edit view for a given object.
                 foreach($belongs_to as $full_relation => $relate_details){
 
-			$full_relation_snake = snake_case($full_relation);
+			$full_relation_snake = Str::snake($full_relation);
 
                         $prefix = $relate_details['prefix'];
                         $type = $relate_details['type'];
@@ -355,7 +356,7 @@ $template_text .= "
 				}
 			}
 
-			$template_text .= "		
+			$template_text .= "
 		{{/.}}
 	</tr>
 {{/$full_relation_snake}}
@@ -372,9 +373,9 @@ $template_text .= "
 
 	$template_text .= "
 <br>
-    
+
     <script type='text/javascript'>
-    
+
         // These function control the spinner display when loading many remote entities
         let loading_queue = [];
         function add_to_loading_queue(element) {
@@ -393,13 +394,13 @@ $template_text .= "
                 $('#loader').modal('hide');
             }
         }
-        
+
     // This javascript controls the null checkboxes
         $(document).ready(function() {
-            
+
             // keep an assoc array of the last entered values
             let last_null_values = {};
-            
+
             $('.null-checkbox').change(function(e) {
 
                 // get the id of the element we're next to
@@ -418,7 +419,7 @@ $template_text .= "
                     $('#'+id).attr('readonly', false);
                 }
             });
-            
+
             // If a field with a nulllable class is clicked, unset the null checkbox and unlock field
             $('.nullable').click(function(e) {
                 let checkboxId = '#' + $(this).attr('id') + 'Null';
@@ -426,11 +427,11 @@ $template_text .= "
                     // Uncheck the null box and clear read-only by triggering change
                     $(checkboxId).prop('checked', '');
                     $(checkboxId).change();
-                }               
+                }
             });
-            
+
             // Trigger change on page load. If the null box is checked, mark field readonly
-            // If the null checkbox isn't checked, but the value is empty string, check null 
+            // If the null checkbox isn't checked, but the value is empty string, check null
             // checkbox and also mark readonly
             $('.null-checkbox').each(function() {
                 let id = $(this).attr('data-elem');
