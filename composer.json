@@ -22,9 +22,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
+
         "php" : "^8.1",
         "erusev/parsedown": "^1.7",
         "zordius/lightncandy": "dev-master"
+
     },
     "psr-4": {
             "App\\": "app/",
