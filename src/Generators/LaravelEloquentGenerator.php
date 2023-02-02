@@ -339,8 +339,8 @@ class LaravelEloquentGenerator extends \CareSet\DURC\DURCGenerator {
 	}
 		//STARTING DURC Parent CLASS
 
-	if($is_audited){ 
-		$audit_use_statement = ' use \OwenIt\Auditing\Auditable; // configured using is_auditable = 1 in config json';
+	if(false){ //Owen It is abandonded for php 8 
+		$audit_use_statement = ' use \Owen It\Auditing\Auditable; // configured using is_auditable = 1 in config json';
 		$audit_implements = ' implements Auditable ';
 	}else{
 		$audit_use_statement = ' //not auditable, configured using is_auditable = 0 in config json';
@@ -354,7 +354,7 @@ namespace $model_namespace\DURC\Models;
 $soft_delete_code_use_statememt
 use CareSet\DURC\DURCModel;
 use CareSet\DURC\DURC;
-use OwenIt\Auditing\Contracts\Auditable;
+//use Owen It\Auditing\Contracts\Auditable;
 /*
 	Note this class was auto-generated from 
 

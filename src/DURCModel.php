@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Validator;
 use CareSet\DURC\DURC;
-use OwenIt\Auditing\Contracts\Auditable;
-
+//use Owen It\Auditing\Contracts\Auditable;
+// Owen It is abandoned for php 8
 /*
 	This is where we put all of the functions that we want all DURC models to inherit
 */
